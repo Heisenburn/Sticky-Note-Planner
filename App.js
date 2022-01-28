@@ -1,5 +1,4 @@
 import { StatusBar } from "expo-status-bar";
-import { useState } from "react";
 import {
   StyleSheet,
   View,
@@ -10,7 +9,6 @@ import {
 } from "react-native";
 
 export default function App() {
-  const [exampleState, setExampleState] = useState("defaultValue");
   return (
     <SafeAreaView style={styles.container}>
       <View style={styles.container}>
