@@ -1,26 +1,48 @@
-import { StatusBar } from "expo-status-bar";
 import {
   StyleSheet,
   View,
   SafeAreaView,
   Alert,
   Pressable,
-  Text,
+  Text, FlatList,
 } from "react-native";
 
-export default function App() {
-  return (
-    <SafeAreaView style={styles.container}>
-      <View style={styles.container}>
-        <Pressable
+
+const DATA = [
+  {
+    id: 'bd7acbea-c1b1-46c2-aed5-3ad53abb28ba',
+    title: 'First Item',
+  },
+  {
+    id: '3ac68afc-c605-48d3-a4f8-fbd91aa97f63',
+    title: 'Second Item',
+  },
+  {
+    id: '58694a0f-3da1-471f-bd96-145571e29d72',
+    title: 'Third Item',
+  },
+];
+
+
+const Item = ({ title }) => (
+    <View style={styles.container}>
+      <Pressable
           style={styles.categoryButton}
           onPress={() => Alert.alert("test")}
-        >
-          <Text style={styles.heading}>TYDZIEŃ</Text>
-          <Text style={[styles.numberOfElements, styles.boxShadow]}>23</Text>
-        </Pressable>
-        <StatusBar style="auto" />
-      </View>
+      >
+        <Text style={styles.heading}>{title}</Text>
+        <Text style={[styles.numberOfElements, styles.boxShadow]}>23</Text>
+      </Pressable>
+    </View>
+);
+
+export default function App() {
+
+  const renderItem = ({ item }) => <Item title={item.title}  keyExtractor={item => item.id} />;
+
+  return (
+    <SafeAreaView style={styles.container}>
+      <FlatList data={DATA} renderItem={renderItem} />
     </SafeAreaView>
   );
 }
