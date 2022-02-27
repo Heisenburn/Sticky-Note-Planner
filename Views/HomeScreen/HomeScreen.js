@@ -8,6 +8,7 @@ import {
   FlatList,
   TouchableOpacity,
 } from "react-native";
+import { FloatingAction } from "react-native-floating-action";
 
 const generateColor = () => {
   const randomColor = Math.floor(Math.random() * 16777215)
@@ -23,7 +24,7 @@ const DATA = [
   },
   {
     id: "3ac68afc-c605-48d3-a4f8-fbd91aa97f63",
-    title: "Second Item",
+    title: "d Item",
   },
   {
     id: "58694a0f-3da1-471f-bd96-145571e29d72",
@@ -52,7 +53,6 @@ const ListItem = ({ title }) => (
 );
 
 const AddButton = ({ navigation }) => {
-  //moze uzyc tego? https://www.npmjs.com/package/react-native-floating-action
   return (
     <TouchableOpacity
       style={[styles.addButtonContainer, styles.boxShadow]}
@@ -63,6 +63,26 @@ const AddButton = ({ navigation }) => {
   );
 };
 
+// https://github.com/santomegonzalo/react-native-floating-action
+
+const actions = [
+  {
+    text: "Notatka",
+    name: "AddScreen",
+    position: 1,
+  },
+  {
+    text: "Kategoria",
+    name: "bt_language",
+    position: 2,
+  },
+  {
+    text: "Hashtag",
+    name: "bt_room",
+    position: 3,
+  },
+];
+
 export default function HomeScreen({ navigation }) {
   const renderItem = ({ item }) => (
     <ListItem title={item.title} keyExtractor={(item) => item.id} />
@@ -71,17 +91,20 @@ export default function HomeScreen({ navigation }) {
   return (
     <SafeAreaView style={styles.container}>
       <FlatList data={DATA} renderItem={renderItem} />
-      <AddButton navigation={navigation} />
+      {/* <AddButton navigation={navigation} /> */}
+      <FloatingAction
+        actions={actions}
+        onPressItem={(name) => navigation.navigate(name)}
+      />
     </SafeAreaView>
   );
 }
 
 const styles = StyleSheet.create({
   container: {
-    flex: 1,
     display: "flex",
     backgroundColor: "black",
-    alignItems: "center",
+    alignItems: "stretch",
   },
   heading: {
     color: "black",
@@ -108,6 +131,9 @@ const styles = StyleSheet.create({
     borderWidth: 8,
     borderColor: "white",
     padding: 70,
+    flex: 1,
+    marginVertical: 10,
+    marginHorizontal: 50,
   },
   addButtonContainer: {
     position: "absolute",

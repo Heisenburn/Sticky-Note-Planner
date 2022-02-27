@@ -1,10 +1,16 @@
-import { View, Text } from "react-native";
+import { View, Text, SafeAreaView, Button } from "react-native";
+import { backgroundColor } from "react-native/Libraries/Components/View/ReactNativeStyleAttributes";
 
-const AddScreen = () => {
+const AddScreen = ({ navigation }) => {
   return (
-    <View>
-      <Text>Test</Text>
-    </View>
+    <SafeAreaView>
+      <View>
+        <Text>Test</Text>
+        <Button title="back" onPress={() => navigation.navigate("HomeScreen")}>
+          <Text>Back</Text>
+        </Button>
+      </View>
+    </SafeAreaView>
   );
 };
 

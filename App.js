@@ -6,13 +6,14 @@ import { createNativeStackNavigator } from "@react-navigation/native-stack";
 const Stack = createNativeStackNavigator();
 
 export default function App() {
-  const renderItem = ({ item }) => (
-    <ListItem title={item.title} keyExtractor={(item) => item.id} />
-  );
   return (
     <NavigationContainer>
-      <Stack.Navigator>
-        <Stack.Screen name="Home" component={HomeScreen} />
+      <Stack.Navigator
+        screenOptions={{
+          headerShown: false,
+        }}
+      >
+        <Stack.Screen name="HomeScreen" component={HomeScreen} />
         <Stack.Screen name="AddScreen" component={AddScreen} />
       </Stack.Navigator>
     </NavigationContainer>
