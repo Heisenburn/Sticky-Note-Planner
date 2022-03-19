@@ -1,6 +1,7 @@
-import { Text, SafeAreaView, Button, TextInput } from "react-native";
+import { Text, SafeAreaView, TextInput, View, Pressable } from "react-native";
 import React, { useState } from "react";
 import AsyncStorage from "@react-native-async-storage/async-storage";
+import styles from "./AddScreen.styles";
 
 const storeData = async (value) => {
   try {
@@ -35,21 +36,32 @@ const AddScreen = ({ navigation }) => {
   });
 
   return (
-    <SafeAreaView>
-      <Text>Tytul</Text>
-      <TextInput
-        multiline={true}
-        placeholder="John Doe"
-        onChangeText={(value) => setName(value)}
-      />
+    <SafeAreaView style={styles.container}>
+      <View style={styles.innerContainer}>
+        <Text style={styles.heading}>Dodawanie notatki</Text>
+        <TextInput
+          multiline={true}
+          placeholder="Treść notatki..."
+          onChangeText={(value) => setName(value)}
+          style={styles.textInput}
+        />
 
-      <Button title="Submit" onPress={handleSubmit}>
-        Submit
-      </Button>
+        <Pressable
+          title="Submit"
+          onPress={handleSubmit}
+          style={[styles.buttonCommonStyles, styles.saveButton]}
+        >
+          <Text>Submit</Text>
+        </Pressable>
 
-      <Button title="back" onPress={() => navigation.navigate("HomeScreen")}>
-        <Text>Back</Text>
-      </Button>
+        <Pressable
+          title="back"
+          onPress={() => navigation.navigate("HomeScreen")}
+          style={[styles.buttonCommonStyles, styles.backButton]}
+        >
+          <Text>Back</Text>
+        </Pressable>
+      </View>
     </SafeAreaView>
   );
 };

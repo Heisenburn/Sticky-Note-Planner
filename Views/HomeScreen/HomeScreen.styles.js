@@ -4,7 +4,6 @@ const styles = StyleSheet.create({
   container: {
     display: "flex",
     backgroundColor: "black",
-    alignItems: "stretch",
   },
   heading: {
     color: "black",
@@ -34,7 +33,8 @@ const styles = StyleSheet.create({
     padding: 70,
     flex: 1,
     marginVertical: 10,
-    marginHorizontal: 50,
+    marginHorizontal: 20,
+    maxHeight: 300,
   },
   separator: {
     borderTopColor: "white",
