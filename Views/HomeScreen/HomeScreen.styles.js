@@ -36,6 +36,11 @@ const styles = StyleSheet.create({
     marginVertical: 10,
     marginHorizontal: 50,
   },
+  separator: {
+    width: 300,
+    height: 10,
+    backgroundColor: "red",
+  },
 });
 
 export default styles;
