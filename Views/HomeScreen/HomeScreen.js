@@ -6,8 +6,8 @@ import styles from "./HomeScreen.styles";
 export default function HomeScreen({ navigation }) {
   return (
     <SafeAreaView style={styles.container}>
-      <FloatingButton navigation={navigation} />
-      {/* <CategoriesList /> */}
+        <CategoriesList/>
+        <FloatingButton navigation={navigation}/>
     </SafeAreaView>
   );
 }

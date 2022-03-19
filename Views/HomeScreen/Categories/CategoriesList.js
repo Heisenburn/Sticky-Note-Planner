@@ -1,5 +1,5 @@
 import ListItem from "../ListItem/ListItem";
-import { FlatList, View } from "react-native";
+import { FlatList, View, Text } from "react-native";
 import styles from "../HomeScreen.styles";
 
 const PREDEFINED_CATEGORIES = [
@@ -32,8 +32,12 @@ const renderItem = ({ item }) => (
   <ListItem title={item.title} keyExtractor={(item) => item.id} />
 );
 
-const seperator = (e) => {
-  return e.leadingItem.id >= 2 ? <View style={styles.separator} /> : null;
+const separator = (e) => {
+  return e.leadingItem.id === "2" ? (
+    <View style={styles.separator}>
+      <Text style={{ color: "white" }}>Kategorie użytkownika</Text>
+    </View>
+  ) : null;
 };
 
 const CategoriesList = () => {
@@ -41,7 +45,7 @@ const CategoriesList = () => {
     <FlatList
       data={[...PREDEFINED_CATEGORIES, ...USER_CATEGORIES]}
       renderItem={renderItem}
-      // ItemSeparatorComponent={(e) => seperator(e)}
+      ItemSeparatorComponent={(e) => separator(e)}
     />
   );
 };

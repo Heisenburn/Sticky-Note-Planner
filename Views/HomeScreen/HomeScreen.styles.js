@@ -37,9 +37,10 @@ const styles = StyleSheet.create({
     marginHorizontal: 50,
   },
   separator: {
-    width: 300,
-    height: 10,
-    backgroundColor: "red",
+    borderTopColor: "white",
+    borderTopWidth: 2,
+    display: "flex",
+    alignItems: "center",
   },
 });
 

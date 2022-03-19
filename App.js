@@ -5,6 +5,8 @@ import { createNativeStackNavigator } from "@react-navigation/native-stack";
 
 const Stack = createNativeStackNavigator();
 
+//expo start
+
 export default function App() {
   return (
     <NavigationContainer>
