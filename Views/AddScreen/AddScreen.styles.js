@@ -17,22 +17,25 @@ const styles = StyleSheet.create({
     marginTop: 10,
     backgroundColor: "white",
     height: 300,
-    borderRadius: 20,
+    borderRadius: 10,
     padding: 20,
   },
   buttonCommonStyles: {
     marginTop: 10,
     padding: 20,
-    borderRadius: 20,
+    borderRadius: 10,
   },
   saveButton: {
     backgroundColor: "orange",
   },
   optionsButton: {
-    backgroundColor: "orange",
+    backgroundColor: "#662EC9",
+  },
+  optionsButtonText: {
+    color: "white",
   },
   backButton: {
-    backgroundColor: "orange",
+    backgroundColor: "gray",
   },
 });
 

@@ -1,4 +1,5 @@
 import { Text, SafeAreaView, TextInput, View, Pressable } from "react-native";
+import Toast from "react-native-toast-message";
 import React, { useState } from "react";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import styles from "./AddScreen.styles";
@@ -25,10 +26,15 @@ const getData = async () => {
 //mozna tez obiekt zapisywac https://react-native-async-storage.github.io/async-storage/docs/usage
 
 const AddScreen = ({ navigation }) => {
-  const [name, setName] = useState("");
+  const [noteValue, setNoteValue] = useState("");
 
   const handleSubmit = () => {
-    storeData(name);
+    Toast.show({
+      type: "success",
+      text1: "pomyślnie zapisano notatkę",
+      text2: `o treści ${noteValue} 👋`,
+    });
+    storeData(noteValue);
   };
 
   getData().then((value) => {
@@ -42,7 +48,7 @@ const AddScreen = ({ navigation }) => {
         <TextInput
           multiline={true}
           placeholder="Treść notatki..."
-          onChangeText={(value) => setName(value)}
+          onChangeText={(value) => setNoteValue(value)}
           style={styles.textInput}
         />
 
@@ -51,7 +57,15 @@ const AddScreen = ({ navigation }) => {
           onPress={handleSubmit}
           style={[styles.buttonCommonStyles, styles.saveButton]}
         >
-          <Text>Submit</Text>
+          <Text>Zapisz</Text>
+        </Pressable>
+
+        <Pressable
+          title="Submit"
+          onPress={() => navigation.navigate("MoreOptions")}
+          style={[styles.buttonCommonStyles, styles.optionsButton]}
+        >
+          <Text style={styles.optionsButtonText}>Więcej opcji</Text>
         </Pressable>
 
         <Pressable
@@ -59,8 +73,9 @@ const AddScreen = ({ navigation }) => {
           onPress={() => navigation.navigate("HomeScreen")}
           style={[styles.buttonCommonStyles, styles.backButton]}
         >
-          <Text>Back</Text>
+          <Text>Powrót</Text>
         </Pressable>
+        <Toast />
       </View>
     </SafeAreaView>
   );

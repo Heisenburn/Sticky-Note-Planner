@@ -2,7 +2,6 @@ import { NavigationContainer } from "@react-navigation/native";
 import AddScreen from "./Views/AddScreen/AddScreen";
 import HomeScreen from "./Views/HomeScreen/HomeScreen";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
-
 const Stack = createNativeStackNavigator();
 
 //expo start
