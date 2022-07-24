@@ -1,50 +1,31 @@
 import ListItem from "../ListItem/ListItem";
 import { FlatList, View, Text } from "react-native";
 import styles from "../HomeScreen.styles";
+import {PREDEFINED_CATEGORIES, USER_CATEGORIES} from "../../../shared/constants";
 
-const PREDEFINED_CATEGORIES = [
-  {
-    id: "1",
-    title: "Tydzień",
-  },
-  {
-    id: "2",
-    title: "Random",
-  },
-];
+const SEPARATOR_INDEX = "2";
 
-const USER_CATEGORIES = [
-  {
-    id: "3",
-    title: "Urodziny",
-  },
-  {
-    id: "4",
-    title: "Ksiazki do przeczytania",
-  },
-  {
-    id: "5",
-    title: "Filmy",
-  },
-];
-
-const renderItem = ({ item }) => (
-  <ListItem title={item.title} keyExtractor={(item) => item.id} />
+const renderItem = (item, navigation) => (
+  <ListItem
+    title={item.title}
+    keyExtractor={(item) => item.id}
+    navigation={navigation}
+  />
 );
 
 const separator = (e) => {
-  return e.leadingItem.id === "2" ? (
+  return e.leadingItem.id === SEPARATOR_INDEX ? (
     <View style={styles.separator}>
       <Text style={{ color: "white" }}>Kategorie użytkownika</Text>
     </View>
   ) : null;
 };
 
-const CategoriesList = () => {
+const CategoriesList = ({ navigation }) => {
   return (
     <FlatList
       data={[...PREDEFINED_CATEGORIES, ...USER_CATEGORIES]}
-      renderItem={renderItem}
+      renderItem={({ item }) => renderItem(item, navigation)}
       ItemSeparatorComponent={(e) => separator(e)}
     />
   );

@@ -1,4 +1,4 @@
-import { View, Alert, Pressable, Text } from "react-native";
+import { View, Pressable, Text } from "react-native";
 import styles from "../HomeScreen.styles";
 
 const generateColor = () => {
@@ -8,11 +8,15 @@ const generateColor = () => {
   return `#${randomColor}`;
 };
 
-const ListItem = ({ title }) => (
+const ListItem = ({ title, navigation }) => (
   <View style={styles.container}>
     <Pressable
       style={[styles.categoryButton, { backgroundColor: generateColor() }]}
-      onPress={() => Alert.alert(title)}
+      onPress={() => {
+        navigation.navigate("ListViewScreen", {
+          itemId: title,
+        });
+      }}
     >
       <Text style={styles.heading}>{title}</Text>
       <Text style={[styles.numberOfElements, styles.boxShadow]}>23</Text>

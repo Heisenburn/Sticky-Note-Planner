@@ -3,7 +3,7 @@ import { StyleSheet, Dimensions } from "react-native";
 const styles = StyleSheet.create({
   container: {
     display: "flex",
-    backgroundColor: "black",
+    backgroundColor: "white",
     alignItems: "stretch",
     height: Dimensions.get("window").height,
   },
@@ -13,7 +13,7 @@ const styles = StyleSheet.create({
   heading: {
     color: "white",
   },
-  noteInput: {
+  textInput: {
     marginTop: 10,
     backgroundColor: "white",
     height: 300,
@@ -31,13 +31,8 @@ const styles = StyleSheet.create({
   optionsButton: {
     backgroundColor: "#662EC9",
   },
-  categoryInput: {
+  optionsButtonText: {
     color: "white",
-    backgroundColor: "#662EC9",
-    height: 40,
-    margin: 12,
-    borderWidth: 1,
-    padding: 10,
   },
   backButton: {
     backgroundColor: "gray",
