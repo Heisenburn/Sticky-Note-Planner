@@ -5,39 +5,51 @@ import {
     View,
     Pressable,
     TouchableOpacity,
+    Alert,
 } from 'react-native'
-import Toast from 'react-native-toast-message'
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import AsyncStorage from '@react-native-async-storage/async-storage'
 import styles from './AddScreen.styles'
 import { PREDEFINED_CATEGORIES, USER_CATEGORIES } from '../../shared/constants'
 //https://www.npmjs.com/package/react-native-autocomplete-input
 import Autocomplete from 'react-native-autocomplete-input'
+import setData from '../../LocalStorage/setData'
 
-const storeData = async (value, category) => {
-    try {
-        await AsyncStorage.setItem('1', value)
-    } catch (e) {
-        // saving error
-    }
-}
+//struktura danych:
 
-//mozna tez obiekt zapisywac https://react-native-async-storage.github.io/async-storage/docs/usage
+//Ogólny store:
+//[
+// { Kategoria: 'nazwa', [notatki...] }
+// ]
+
+//1. Kategoria
+
+// Klucz: Kategoria
+// Wartosc: [wszystkie obiekty tu]
+
+//2. Notatka
+//klucz: ID elemetu
+//wartosc: obiekt : { kategoria: 'ksiazki', wartosc: 'hamlet' }
 
 const AddScreen = ({ navigation }) => {
     const [noteInput, setNoteInput] = useState('')
-    const [selectedValue, setSelectedValue] = useState({})
+    const [categoryInput, setCategoryInput] = useState(null)
     const [filteredCategories, setFilteredCategories] = useState([])
 
-    const handleSubmit = () => {
-        Toast.show({
-            type: 'success',
-            text1: 'pomyślnie zapisano notatkę',
-            text2: `o treści ${noteInput} 👋`,
-        })
-        // storeData(noteInput, categoryInput);
+    const handleSubmit = async () => {
+        const isNoteEmpty = !noteInput.trim().length
+
+        if (isNoteEmpty) {
+            Alert.alert('Notatka', 'treść notatki nie może być pusta')
+            return
+        }
+
+        await setData(noteInput, categoryInput)
+
+        navigation.navigate('HomeScreen')
     }
 
+    //TODO: to przeniesc do miejsca trzymajacego autocomplete
     const findCategory = (input) => {
         const data = [...PREDEFINED_CATEGORIES, ...USER_CATEGORIES]
 
@@ -75,20 +87,20 @@ const AddScreen = ({ navigation }) => {
                     autoCapitalize="none"
                     data={filteredCategories}
                     defaultValue={
-                        JSON.stringify(selectedValue) === '{}'
+                        JSON.stringify(categoryInput) === '{}'
                             ? ''
-                            : selectedValue
+                            : categoryInput
                     }
                     autoCorrect={false}
                     onChangeText={(input) => findCategory(input)}
-                    placeholder="Provide category..."
+                    placeholder="Kategoria..."
                     flatListProps={{
                         keyboardShouldPersistTaps: 'always',
                         keyExtractor: (_, idx) => idx,
                         renderItem: ({ item: { title } }) => (
                             <TouchableOpacity
                                 onPress={() => {
-                                    setSelectedValue(title)
+                                    setCategoryInput(title)
                                     setFilteredCategories([])
                                 }}
                             >
@@ -104,7 +116,6 @@ const AddScreen = ({ navigation }) => {
                 >
                     <Text>Powrót</Text>
                 </Pressable>
-                <Toast />
             </View>
         </SafeAreaView>
     )

@@ -1,30 +1,36 @@
-import { SafeAreaView } from "react-native";
-import { View, Text } from "react-native";
-import styles from "./ListViewScreen.style";
-
-//Deprecated asyncstorage
-const getData = async () => {
-  try {
-    const value = await AsyncStorage.getItem("1");
-    if (value !== null) {
-      return value;
-    }
-  } catch (e) {
-    // error reading value
-  }
-};
+import { SafeAreaView } from 'react-native'
+import { View, Text } from 'react-native'
+import styles from './ListViewScreen.style'
+import getData from '../../LocalStorage/getData'
+import { useEffect, useState } from 'react'
 
 export default function ListViewScreen({ route }) {
-  const { itemId } = route.params;
-  getData().then((value) => {
-    console.log("from listViewScreen: ", value);
-  });
-  return (
-    <SafeAreaView style={styles.container}>
-      <View>
-        <Text>Details Screen</Text>
-        <Text>itemId: {JSON.stringify(itemId)}</Text>
-      </View>
-    </SafeAreaView>
-  );
+    const [listItems, setListItems] = useState([])
+    const { itemId: category } = route.params
+
+    useEffect(() => {
+        getData(category).then((value) => {
+            if (!value.length) {
+                setListItems([value])
+            }
+        })
+    }, [])
+
+    return (
+        <SafeAreaView style={styles.container}>
+            <View>
+                <Text>Details Screen</Text>
+                <Text>itemId: {category}</Text>
+                {listItems.length > 0 ? (
+                    listItems.map((item) => {
+                        return <Text>* {item}</Text>
+                    })
+                ) : (
+                    <Text>
+                        Brak notatek w tej kategorii lub błąd z pobraniem
+                    </Text>
+                )}
+            </View>
+        </SafeAreaView>
+    )
 }
