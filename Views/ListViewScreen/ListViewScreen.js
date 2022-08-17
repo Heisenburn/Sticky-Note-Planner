@@ -3,7 +3,7 @@ import { View, Text } from 'react-native'
 import styles from './ListViewScreen.style'
 import getData from '../../LocalStorage/getData'
 import { useEffect, useState } from 'react'
-import SwipeableFlatList from 'react-native-swipeable-list'
+import TableviewListView from 'react-native-tableview-list'
 
 const ListViewScreen = ({ route, navigation }) => {
     const [listItems, setListItems] = useState([])
@@ -24,17 +24,11 @@ const ListViewScreen = ({ route, navigation }) => {
             <View>
                 <Text>Details Screen</Text>
                 <Text>itemId: {category}</Text>
-                {listItems.length !== 0 ? (
-                    <SwipeableFlatList
-                        data={listItems}
-                        renderItem={renderItem}
-                        keyExtractor={(item) => item.id}
-                    />
-                ) : (
-                    <Text>
-                        Brak notatek w tej kategorii lub błąd z pobraniem
-                    </Text>
-                )}
+                <TableviewListView
+                    sections={[{ title: 'title', key: 1, data: [1] }]}
+                    rowHeight={50}
+                    renderItem={renderItem}
+                />
                 <Button
                     title="Powrót"
                     onPress={() => navigation.navigate('HomeScreen')}

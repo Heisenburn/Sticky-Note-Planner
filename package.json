@@ -20,9 +20,10 @@
     "react-dom": "17.0.1",
     "react-native": "0.64.3",
     "react-native-autocomplete-input": "^5.1.0",
+    "react-native-reanimated": "^2.9.1",
     "react-native-safe-area-context": "3.3.2",
     "react-native-screens": "~3.10.1",
-    "react-native-swipeable-list": "^0.1.2",
+    "react-native-tableview-list": "^0.1.0",
     "react-native-toast-message": "^2.1.2",
     "react-native-web": "0.17.1"
   },
