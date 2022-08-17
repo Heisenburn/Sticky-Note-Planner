@@ -4490,6 +4490,11 @@ react-native-screens@~3.10.1:
     react-freeze "^1.0.0"
     warn-once "^0.1.0"
 
+react-native-swipeable-list@^0.1.2:
+  version "0.1.2"
+  resolved "https://registry.yarnpkg.com/react-native-swipeable-list/-/react-native-swipeable-list-0.1.2.tgz#829b89fb08e978c47383395d315f102be855e7da"
+  integrity sha512-FDeFLByUep3m3xuwS/ZkktxL7Xzg90XnKoo+KLTF04jiddyVZQMnXTHG8O4pyiEtg/swcBlT6XUktV+/KTVNXQ==
+
 react-native-toast-message@^2.1.2:
   version "2.1.2"
   resolved "https://registry.npmjs.org/react-native-toast-message/-/react-native-toast-message-2.1.2.tgz"

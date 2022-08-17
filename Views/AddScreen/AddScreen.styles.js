@@ -13,34 +13,25 @@ const styles = StyleSheet.create({
     heading: {
         color: 'white',
     },
+    buttonCommonStyles: {
+        marginTop: 10,
+    },
     noteInput: {
         marginTop: 10,
-        backgroundColor: 'white',
+        marginBottom: 10,
         height: 300,
         borderRadius: 10,
         padding: 20,
-    },
-    buttonCommonStyles: {
-        marginTop: 10,
-        padding: 20,
-        borderRadius: 10,
-    },
-    saveButton: {
-        backgroundColor: 'orange',
-    },
-    optionsButton: {
-        backgroundColor: '#662EC9',
+        borderWidth: 1,
+        backgroundColor: '#ffffff',
     },
     categoryInput: {
         color: 'white',
         backgroundColor: '#662EC9',
         height: 40,
-        margin: 12,
+        margin: 20,
         borderWidth: 1,
         padding: 10,
-    },
-    backButton: {
-        backgroundColor: 'gray',
     },
 })
 
