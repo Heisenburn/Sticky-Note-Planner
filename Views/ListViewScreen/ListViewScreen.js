@@ -1,41 +1,221 @@
-import { Button, SafeAreaView } from 'react-native'
-import { View, Text } from 'react-native'
-import styles from './ListViewScreen.style'
-import getData from '../../LocalStorage/getData'
-import { useEffect, useState } from 'react'
-import TableviewListView from 'react-native-tableview-list'
+// import { Button, SafeAreaView } from 'react-native'
+// import { View, Text } from 'react-native'
+// import styles from './ListViewScreen.style'
+// import getData from '../../LocalStorage/getData'
+// import { useEffect, useState } from 'react'
+//
+// const ListViewScreen = ({ route, navigation }) => {
+//     const [listItems, setListItems] = useState([])
+//     const { itemId: category } = route.params
+//
+//     useEffect(() => {
+//         getData(category).then((response) => {
+//             if (response) {
+//                 setListItems(response)
+//             }
+//         })
+//     }, [])
+//
+//     const renderItem = ({ item }) => <Text key={item.id}>{item.text}</Text>
+//
+//     return (
+//         <SafeAreaView style={styles.container}>
+//             <View>
+//                 <Text>Details Screen</Text>
+//                 <Text>itemId: {category}</Text>
+//
+//                 <Button
+//                     title="Powrót"
+//                     onPress={() => navigation.navigate('HomeScreen')}
+//                 />
+//             </View>
+//         </SafeAreaView>
+//     )
+// }
+//
+
+import React, { useState, useRef, useCallback } from 'react'
+import {
+    Text,
+    View,
+    StyleSheet,
+    FlatList,
+    LayoutAnimation,
+    TouchableOpacity,
+    Platform,
+    UIManager,
+} from 'react-native'
+import Animated, { useAnimatedStyle } from 'react-native-reanimated'
+import SwipeableItem, {
+    useSwipeableItemParams,
+    OpenDirection,
+} from 'react-native-swipeable-item'
+import DraggableFlatList, {
+    RenderItemParams,
+    ScaleDecorator,
+} from 'react-native-draggable-flatlist'
 
 const ListViewScreen = ({ route, navigation }) => {
-    const [listItems, setListItems] = useState([])
-    const { itemId: category } = route.params
+    //     const [listItems, setListItems] = useState([])
+    //     const { itemId: category } = route.params
+    //
+    //     useEffect(() => {
+    //         getData(category).then((response) => {
+    //             if (response) {
+    //                 setListItems(response)
+    //             }
+    //         })
+    //     }, [])
+    //
+    //     const renderItem = ({ item }) => <Text key={item.id}>{item.text}</Text>
 
-    useEffect(() => {
-        getData(category).then((response) => {
-            if (response) {
-                setListItems(response)
-            }
-        })
+    const [data, setData] = useState(initialData)
+    const itemRefs = useRef(new Map())
+
+    const renderItem = useCallback((params) => {
+        return <RowItem {...params} itemRefs={itemRefs} />
     }, [])
 
-    const renderItem = ({ item }) => <Text key={item.id}>{item.text}</Text>
-
     return (
-        <SafeAreaView style={styles.container}>
-            <View>
-                <Text>Details Screen</Text>
-                <Text>itemId: {category}</Text>
-                <TableviewListView
-                    sections={[{ title: 'title', key: 1, data: [1] }]}
-                    rowHeight={50}
-                    renderItem={renderItem}
-                />
-                <Button
-                    title="Powrót"
-                    onPress={() => navigation.navigate('HomeScreen')}
-                />
-            </View>
-        </SafeAreaView>
+        <View style={styles.container}>
+            <DraggableFlatList
+                keyExtractor={(item) => item.key}
+                data={data}
+                renderItem={renderItem}
+                onDragEnd={({ data }) => setData(data)}
+                activationDistance={20}
+            />
+        </View>
     )
 }
+
+const { multiply, sub } = Animated
+
+if (Platform.OS === 'android') {
+    UIManager.setLayoutAnimationEnabledExperimental &&
+        UIManager.setLayoutAnimationEnabledExperimental(true)
+}
+const OVERSWIPE_DIST = 20
+const NUM_ITEMS = 20
+
+function getColor(i) {
+    const multiplier = 255 / (NUM_ITEMS - 1)
+    const colorVal = i * multiplier
+    return `rgb(${colorVal}, ${Math.abs(128 - colorVal)}, ${255 - colorVal})`
+}
+
+const initialData = [...Array(NUM_ITEMS)].fill(0).map((d, index) => {
+    const backgroundColor = getColor(index)
+    return {
+        text: `row ${index}d`,
+        key: `key-${backgroundColor}`,
+        backgroundColor,
+        height: 100,
+    }
+})
+
+function RowItem({ item, itemRefs, drag }) {
+    return (
+        <ScaleDecorator>
+            <SwipeableItem
+                key={item.key}
+                item={item}
+                ref={(ref) => {
+                    if (ref && !itemRefs.current.get(item.key)) {
+                        itemRefs.current.set(item.key, ref)
+                    }
+                }}
+                onChange={({ openDirection }) => {
+                    if (openDirection !== OpenDirection.NONE) {
+                        // Close all other open items
+                        ;[...itemRefs.current.entries()].forEach(
+                            ([key, ref]) => {
+                                if (key !== item.key && ref) ref.close()
+                            }
+                        )
+                    }
+                }}
+                overSwipe={OVERSWIPE_DIST}
+                renderUnderlayLeft={() => <UnderlayLeft drag={drag} />}
+                renderUnderlayRight={() => <UnderlayRight />}
+                snapPointsLeft={[50, 150, 175]}
+                snapPointsRight={[175]}
+            >
+                <View
+                    style={[
+                        styles.row,
+                        {
+                            backgroundColor: item.backgroundColor,
+                            height: item.height,
+                        },
+                    ]}
+                >
+                    <TouchableOpacity onPressIn={drag}>
+                        <Text style={styles.text}>{item.text}</Text>
+                    </TouchableOpacity>
+                </View>
+            </SwipeableItem>
+        </ScaleDecorator>
+    )
+}
+
+const UnderlayLeft = ({ drag }) => {
+    const { item, percentOpen } = useSwipeableItemParams()
+    const animStyle = useAnimatedStyle(
+        () => ({
+            opacity: percentOpen.value,
+        }),
+        [percentOpen]
+    )
+
+    return (
+        <Animated.View
+            style={[styles.row, styles.underlayLeft, animStyle]} // Fade in on open
+        >
+            <TouchableOpacity onPressIn={drag}>
+                <Text style={styles.text}>{`[drag]`}</Text>
+            </TouchableOpacity>
+        </Animated.View>
+    )
+}
+
+function UnderlayRight() {
+    const { close } = useSwipeableItemParams()
+    return (
+        <Animated.View style={[styles.row, styles.underlayRight]}>
+            <TouchableOpacity onPressOut={close}>
+                <Text style={styles.text}>CLOSE</Text>
+            </TouchableOpacity>
+        </Animated.View>
+    )
+}
+
+const styles = StyleSheet.create({
+    container: {
+        flex: 1,
+    },
+    row: {
+        flexDirection: 'row',
+        flex: 1,
+        alignItems: 'center',
+        justifyContent: 'center',
+        padding: 15,
+    },
+    text: {
+        fontWeight: 'bold',
+        color: 'white',
+        fontSize: 32,
+    },
+    underlayRight: {
+        flex: 1,
+        backgroundColor: 'teal',
+        justifyContent: 'flex-start',
+    },
+    underlayLeft: {
+        flex: 1,
+        backgroundColor: 'tomato',
+        justifyContent: 'flex-end',
+    },
+})
 
 export default ListViewScreen
