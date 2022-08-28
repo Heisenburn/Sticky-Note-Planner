@@ -3,23 +3,15 @@ import {
     SafeAreaView,
     TextInput,
     View,
-    Pressable,
-    TouchableOpacity,
     Alert,
     Button,
 } from 'react-native'
-import React, { useEffect, useState } from 'react'
-import AsyncStorage from '@react-native-async-storage/async-storage'
+import React, { useState } from 'react'
 import styles from './AddScreen.styles'
-import { PREDEFINED_CATEGORIES, USER_CATEGORIES } from '../../shared/constants'
-//https://www.npmjs.com/package/react-native-autocomplete-input
-import Autocomplete from 'react-native-autocomplete-input'
 import setData from '../../LocalStorage/setData'
 import AutocompleteCategory from './AutocompleteCategory/AutocompleteCategory'
 
-//struktura danych:
-
-const AddScreen = ({ navigation }) => {
+const AddScreenBase = ({ navigation }) => {
     const [noteInput, setNoteInput] = useState('')
     const [categoryInput, setCategoryInput] = useState(null)
 
@@ -69,4 +61,4 @@ const AddScreen = ({ navigation }) => {
     )
 }
 
-export default AddScreen
+export default AddScreenBase

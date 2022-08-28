@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef, useCallback } from 'react'
+import { useState, useEffect, useRef, useCallback } from 'react'
 import {
     Text,
     View,
@@ -17,6 +17,7 @@ import DraggableFlatList, {
 } from 'react-native-draggable-flatlist'
 import getData from '../../LocalStorage/getData'
 import styles from './ListViewScreen.style'
+import withSaveAreaView from '../../shared/HoC/WithSaveAreaView'
 
 if (Platform.OS === 'android') {
     UIManager.setLayoutAnimationEnabledExperimental &&
@@ -32,7 +33,7 @@ const getColor = (i) => {
     return `rgb(${colorVal}, ${Math.abs(128 - colorVal)}, ${255 - colorVal})`
 }
 
-const ListViewScreen = ({ route, navigation }) => {
+const ListViewScreenBase = ({ route, navigation }) => {
     const [listItems, setListItems] = useState([])
     const { itemId: category } = route.params
 
@@ -157,4 +158,4 @@ const UnderlayRight = () => {
     )
 }
 
-export default ListViewScreen
+export default ListViewScreenBase
