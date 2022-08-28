@@ -33,6 +33,7 @@ const AutocompleteCategory = ({
         <Autocomplete
             autoCapitalize="none"
             data={filteredCategories}
+            //TODO: Refactor ponizszego
             defaultValue={
                 JSON.stringify(categoryInput) === '{}'
                     ? ''
@@ -40,7 +41,7 @@ const AutocompleteCategory = ({
             }
             autoCorrect={false}
             onChangeText={(input) => findCategory(input)}
-            placeholder="Kategoria..."
+            placeholder="Default category: RANDOM"
             flatListProps={{
                 keyboardShouldPersistTaps: 'always',
                 keyExtractor: (_, idx) => idx,
