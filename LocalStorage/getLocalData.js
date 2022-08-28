@@ -1,7 +1,7 @@
 import AsyncStorage from '@react-native-async-storage/async-storage'
 import { Alert } from 'react-native'
 
-const getData = async (category) => {
+const getLocalData = async (category) => {
     try {
         const jsonValue = await AsyncStorage.getItem(category)
         return jsonValue != null ? JSON.parse(jsonValue) : null
@@ -9,4 +9,4 @@ const getData = async (category) => {
         Alert.alert(`error: ${error}`)
     }
 }
-export default getData
+export default getLocalData
