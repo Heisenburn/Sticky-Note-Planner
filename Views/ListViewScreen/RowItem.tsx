@@ -32,7 +32,7 @@ const RowItem = ({ item, itemRefs, drag, removeItem }) => {
                 }}
                 overSwipe={OVERSWIPE_DIST}
                 renderUnderlayLeft={() => (
-                    <UnderlayLeft drag={drag} removeItem={removeItem} />
+                    <UnderlayLeft removeItem={removeItem} />
                 )}
                 renderUnderlayRight={() => <UnderlayRight />}
                 snapPointsLeft={[50, 150, 175]}
@@ -44,11 +44,25 @@ const RowItem = ({ item, itemRefs, drag, removeItem }) => {
                         {
                             backgroundColor: item.backgroundColor,
                             height: item.height,
+                            display: 'flex',
+                            justifyContent: 'space-between',
                         },
                     ]}
                 >
-                    <TouchableOpacity onPressIn={drag}>
+                    <TouchableOpacity>
                         <Text style={styles.text}>{item.text}</Text>
+                    </TouchableOpacity>
+                    <TouchableOpacity onLongPress={drag}>
+                        <Text
+                            style={[
+                                styles.text,
+                                {
+                                    fontSize: 30,
+                                },
+                            ]}
+                        >
+                            :::
+                        </Text>
                     </TouchableOpacity>
                 </View>
             </SwipeableItem>
@@ -56,7 +70,7 @@ const RowItem = ({ item, itemRefs, drag, removeItem }) => {
     )
 }
 
-const UnderlayLeft = ({ drag, removeItem }) => {
+const UnderlayLeft = ({ removeItem }) => {
     const { percentOpen, item } = useSwipeableItemParams()
     const animStyle = useAnimatedStyle(
         () => ({

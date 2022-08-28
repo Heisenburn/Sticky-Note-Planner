@@ -13,7 +13,7 @@ import { Alert } from 'react-native'
 //     text: 'lorem ipsum'
 // }
 
-const saveNoteToCategory = async (noteValue, categoryValue) => {
+const saveNoteToCategory = async (noteValue: string, categoryValue: string) => {
     try {
         const category = categoryValue || 'RANDOM'
 

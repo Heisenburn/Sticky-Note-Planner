@@ -4,7 +4,7 @@ import DraggableFlatList from 'react-native-draggable-flatlist'
 import getLocalData from '../../LocalStorage/getNotesForCategory'
 import styles from './ListViewScreen.style'
 import RowItem from './RowItem'
-import removeFromLocalCategory from '../../LocalStorage/removeFromLocalCategory'
+import setNotesInCategory from '../../LocalStorage/setNotesInCategory'
 import FloatingButton from '../../shared/FloatingButton/FloatingButton'
 
 if (Platform.OS === 'android') {
@@ -29,10 +29,15 @@ const ListViewScreenBase = ({ route, navigation }) => {
             (item) => item.id !== idToBeRemoved
         )
 
-        await removeFromLocalCategory(category.toString(), filteredItems)
+        await setNotesInCategory(category.toString(), filteredItems)
         setListItems(filteredItems)
     }
 
+    const handleDragEnd = async (data) => {
+        //save data with new order
+        setListItems(data)
+        await setNotesInCategory(category.toString(), data)
+    }
     useEffect(() => {
         getLocalData(category).then((response) => {
             if (response) {
@@ -69,7 +74,7 @@ const ListViewScreenBase = ({ route, navigation }) => {
                         data={listItems}
                         renderItem={renderItem}
                         //TODO: tutaj update kolejnosci
-                        // onDragEnd={({ data }) => saveNoteToCategory(data)}
+                        onDragEnd={({ data }) => handleDragEnd(data)}
                         activationDistance={20}
                     />
                 ) : (

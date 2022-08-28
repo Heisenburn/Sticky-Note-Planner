@@ -1,17 +1,17 @@
 import AsyncStorage from '@react-native-async-storage/async-storage'
 import { Alert } from 'react-native'
 
-const removeFromLocalCategory = async (category, arrayWithoutRemovedItem) => {
+const setNotesInCategory = async (category, arrayWithoutRemovedItem) => {
     try {
         await AsyncStorage.setItem(
             category,
             JSON.stringify(arrayWithoutRemovedItem)
         )
 
-        Alert.alert('Notatka', 'Usunięto! ✅')
+        Alert.alert(`${category}`, 'Zaaktualizowano! ✅')
     } catch (error) {
         Alert.alert(`error: ${error}`)
     }
 }
 
-export default removeFromLocalCategory
+export default setNotesInCategory
