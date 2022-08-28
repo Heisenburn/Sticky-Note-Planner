@@ -31,7 +31,7 @@ const saveNoteToCategory = async (noteValue: string, categoryValue: string) => {
             AsyncStorage.setItem(category, JSON.stringify(arrayOfNotes))
         })
 
-        Alert.alert('Notatka', 'Zapisano! ✅')
+        // Alert.alert('Notatka', 'Zapisano! ✅')
     } catch (error) {
         Alert.alert(`error: ${error}`)
     }

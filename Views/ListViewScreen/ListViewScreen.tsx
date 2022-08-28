@@ -1,7 +1,7 @@
 import { useState, useEffect, useRef, useCallback } from 'react'
 import { View, Platform, UIManager, Button, Text } from 'react-native'
 import DraggableFlatList from 'react-native-draggable-flatlist'
-import getLocalData from '../../LocalStorage/getNotesForCategory'
+import getNotesForCategory from '../../LocalStorage/getNotesForCategory'
 import styles from './ListViewScreen.style'
 import RowItem from './RowItem'
 import setNotesInCategory from '../../LocalStorage/setNotesInCategory'
@@ -38,8 +38,9 @@ const ListViewScreenBase = ({ route, navigation }) => {
         setListItems(data)
         await setNotesInCategory(category.toString(), data)
     }
+
     useEffect(() => {
-        getLocalData(category).then((response) => {
+        getNotesForCategory(category).then((response) => {
             if (response) {
                 const mappedData = response.map(({ text, id }, index) => {
                     const backgroundColor = getColor(index)

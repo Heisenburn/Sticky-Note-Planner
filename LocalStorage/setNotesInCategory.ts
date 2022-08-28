@@ -7,8 +7,6 @@ const setNotesInCategory = async (category, arrayWithoutRemovedItem) => {
             category,
             JSON.stringify(arrayWithoutRemovedItem)
         )
-
-        Alert.alert(`${category}`, 'Zaaktualizowano! ✅')
     } catch (error) {
         Alert.alert(`error: ${error}`)
     }
