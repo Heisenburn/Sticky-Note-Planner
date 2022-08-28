@@ -1,49 +1,11 @@
-// import { Button, SafeAreaView } from 'react-native'
-// import { View, Text } from 'react-native'
-// import styles from './ListViewScreen.style'
-// import getData from '../../LocalStorage/getData'
-// import { useEffect, useState } from 'react'
-//
-// const ListViewScreen = ({ route, navigation }) => {
-//     const [listItems, setListItems] = useState([])
-//     const { itemId: category } = route.params
-//
-//     useEffect(() => {
-//         getData(category).then((response) => {
-//             if (response) {
-//                 setListItems(response)
-//             }
-//         })
-//     }, [])
-//
-//     const renderItem = ({ item }) => <Text key={item.id}>{item.text}</Text>
-//
-//     return (
-//         <SafeAreaView style={styles.container}>
-//             <View>
-//                 <Text>Details Screen</Text>
-//                 <Text>itemId: {category}</Text>
-//
-//                 <Button
-//                     title="Powrót"
-//                     onPress={() => navigation.navigate('HomeScreen')}
-//                 />
-//             </View>
-//         </SafeAreaView>
-//     )
-// }
-//
-
-import React, { useState, useRef, useCallback } from 'react'
+import React, { useState, useEffect, useRef, useCallback } from 'react'
 import {
     Text,
     View,
-    StyleSheet,
-    FlatList,
-    LayoutAnimation,
     TouchableOpacity,
     Platform,
     UIManager,
+    Button,
 } from 'react-native'
 import Animated, { useAnimatedStyle } from 'react-native-reanimated'
 import SwipeableItem, {
@@ -51,25 +13,46 @@ import SwipeableItem, {
     OpenDirection,
 } from 'react-native-swipeable-item'
 import DraggableFlatList, {
-    RenderItemParams,
     ScaleDecorator,
 } from 'react-native-draggable-flatlist'
+import getData from '../../LocalStorage/getData'
+import styles from './ListViewScreen.style'
+
+if (Platform.OS === 'android') {
+    UIManager.setLayoutAnimationEnabledExperimental &&
+        UIManager.setLayoutAnimationEnabledExperimental(true)
+}
+
+const OVERSWIPE_DIST = 20
+const NUM_ITEMS = 20
+
+const getColor = (i) => {
+    const multiplier = 255 / (NUM_ITEMS - 1)
+    const colorVal = i * multiplier
+    return `rgb(${colorVal}, ${Math.abs(128 - colorVal)}, ${255 - colorVal})`
+}
 
 const ListViewScreen = ({ route, navigation }) => {
-    //     const [listItems, setListItems] = useState([])
-    //     const { itemId: category } = route.params
-    //
-    //     useEffect(() => {
-    //         getData(category).then((response) => {
-    //             if (response) {
-    //                 setListItems(response)
-    //             }
-    //         })
-    //     }, [])
-    //
-    //     const renderItem = ({ item }) => <Text key={item.id}>{item.text}</Text>
+    const [listItems, setListItems] = useState([])
+    const { itemId: category } = route.params
 
-    const [data, setData] = useState(initialData)
+    useEffect(() => {
+        getData(category).then((response) => {
+            if (response) {
+                const mappedData = response.map(({ text }, index) => {
+                    const backgroundColor = getColor(index)
+                    return {
+                        text: text,
+                        key: `key-${backgroundColor}`,
+                        backgroundColor,
+                        height: 100,
+                    }
+                })
+                setListItems(mappedData)
+            }
+        })
+    }, [])
+
     const itemRefs = useRef(new Map())
 
     const renderItem = useCallback((params) => {
@@ -77,44 +60,28 @@ const ListViewScreen = ({ route, navigation }) => {
     }, [])
 
     return (
-        <View style={styles.container}>
-            <DraggableFlatList
-                keyExtractor={(item) => item.key}
-                data={data}
-                renderItem={renderItem}
-                onDragEnd={({ data }) => setData(data)}
-                activationDistance={20}
-            />
-        </View>
+        <>
+            <View style={styles.container}>
+                <DraggableFlatList
+                    keyExtractor={(item) => item.key}
+                    data={listItems}
+                    renderItem={renderItem}
+                    //TODO: tutaj update kolejnosci
+                    // onDragEnd={({ data }) => setData(data)}
+                    activationDistance={20}
+                />
+            </View>
+            <View style={styles.buttonCommonStyles}>
+                <Button
+                    title="Powrót"
+                    onPress={() => navigation.navigate('HomeScreen')}
+                />
+            </View>
+        </>
     )
 }
 
-const { multiply, sub } = Animated
-
-if (Platform.OS === 'android') {
-    UIManager.setLayoutAnimationEnabledExperimental &&
-        UIManager.setLayoutAnimationEnabledExperimental(true)
-}
-const OVERSWIPE_DIST = 20
-const NUM_ITEMS = 20
-
-function getColor(i) {
-    const multiplier = 255 / (NUM_ITEMS - 1)
-    const colorVal = i * multiplier
-    return `rgb(${colorVal}, ${Math.abs(128 - colorVal)}, ${255 - colorVal})`
-}
-
-const initialData = [...Array(NUM_ITEMS)].fill(0).map((d, index) => {
-    const backgroundColor = getColor(index)
-    return {
-        text: `row ${index}d`,
-        key: `key-${backgroundColor}`,
-        backgroundColor,
-        height: 100,
-    }
-})
-
-function RowItem({ item, itemRefs, drag }) {
+const RowItem = ({ item, itemRefs, drag }) => {
     return (
         <ScaleDecorator>
             <SwipeableItem
@@ -160,7 +127,7 @@ function RowItem({ item, itemRefs, drag }) {
 }
 
 const UnderlayLeft = ({ drag }) => {
-    const { item, percentOpen } = useSwipeableItemParams()
+    const { percentOpen } = useSwipeableItemParams()
     const animStyle = useAnimatedStyle(
         () => ({
             opacity: percentOpen.value,
@@ -179,7 +146,7 @@ const UnderlayLeft = ({ drag }) => {
     )
 }
 
-function UnderlayRight() {
+const UnderlayRight = () => {
     const { close } = useSwipeableItemParams()
     return (
         <Animated.View style={[styles.row, styles.underlayRight]}>
@@ -189,33 +156,5 @@ function UnderlayRight() {
         </Animated.View>
     )
 }
-
-const styles = StyleSheet.create({
-    container: {
-        flex: 1,
-    },
-    row: {
-        flexDirection: 'row',
-        flex: 1,
-        alignItems: 'center',
-        justifyContent: 'center',
-        padding: 15,
-    },
-    text: {
-        fontWeight: 'bold',
-        color: 'white',
-        fontSize: 32,
-    },
-    underlayRight: {
-        flex: 1,
-        backgroundColor: 'teal',
-        justifyContent: 'flex-start',
-    },
-    underlayLeft: {
-        flex: 1,
-        backgroundColor: 'tomato',
-        justifyContent: 'flex-end',
-    },
-})
 
 export default ListViewScreen

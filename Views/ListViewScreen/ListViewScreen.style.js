@@ -1,42 +1,31 @@
-import { StyleSheet, Dimensions } from "react-native";
+import { StyleSheet } from 'react-native'
 
 const styles = StyleSheet.create({
-  container: {
-    display: "flex",
-    backgroundColor: "white",
-    alignItems: "stretch",
-    height: Dimensions.get("window").height,
-  },
-  innerContainer: {
-    marginHorizontal: 30,
-  },
-  heading: {
-    color: "white",
-  },
-  textInput: {
-    marginTop: 10,
-    backgroundColor: "white",
-    height: 300,
-    borderRadius: 10,
-    padding: 20,
-  },
-  buttonCommonStyles: {
-    marginTop: 10,
-    padding: 20,
-    borderRadius: 10,
-  },
-  saveButton: {
-    backgroundColor: "orange",
-  },
-  optionsButton: {
-    backgroundColor: "#662EC9",
-  },
-  optionsButtonText: {
-    color: "white",
-  },
-  backButton: {
-    backgroundColor: "gray",
-  },
-});
+    container: {
+        flex: 1,
+    },
+    row: {
+        flexDirection: 'row',
+        flex: 1,
+        alignItems: 'center',
+        justifyContent: 'center',
+        padding: 15,
+    },
+    text: {
+        fontWeight: 'bold',
+        color: 'white',
+        fontSize: 32,
+    },
+    underlayRight: {
+        flex: 1,
+        backgroundColor: 'teal',
+        justifyContent: 'flex-start',
+    },
+    underlayLeft: {
+        flex: 1,
+        backgroundColor: 'tomato',
+        justifyContent: 'flex-end',
+    },
+})
 
-export default styles;
+export default styles
