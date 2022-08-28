@@ -11,9 +11,11 @@ import styles from './AddScreen.styles'
 import saveNoteToCategory from '../../LocalStorage/saveNoteToCategory'
 import AutocompleteCategory from './AutocompleteCategory/AutocompleteCategory'
 
-const AddScreenBase = ({ navigation }) => {
+const AddScreenBase = ({ route, navigation }) => {
     const [noteInput, setNoteInput] = useState('')
     const [categoryInput, setCategoryInput] = useState(null)
+
+    const { clickedCategory } = route.params
 
     const handleSubmit = async () => {
         const isNoteEmpty = !noteInput.trim().length
@@ -23,7 +25,7 @@ const AddScreenBase = ({ navigation }) => {
             return
         }
 
-        await saveNoteToCategory(noteInput, categoryInput)
+        await saveNoteToCategory(noteInput, categoryInput || clickedCategory)
 
         navigation.navigate('HomeScreen')
     }
@@ -42,6 +44,7 @@ const AddScreenBase = ({ navigation }) => {
                 <AutocompleteCategory
                     categoryInput={categoryInput}
                     setCategoryInput={setCategoryInput}
+                    clickedCategory={clickedCategory}
                 />
                 <View style={styles.buttonCommonStyles}>
                     <Button

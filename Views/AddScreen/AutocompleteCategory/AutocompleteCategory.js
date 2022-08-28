@@ -6,7 +6,11 @@ import Autocomplete from 'react-native-autocomplete-input'
 import { Text, TouchableOpacity } from 'react-native'
 import { useState } from 'react'
 
-const AutocompleteCategory = ({ categoryInput, setCategoryInput }) => {
+const AutocompleteCategory = ({
+    categoryInput,
+    setCategoryInput,
+    clickedCategory,
+}) => {
     const [filteredCategories, setFilteredCategories] = useState([])
 
     const findCategory = (input) => {
@@ -30,7 +34,9 @@ const AutocompleteCategory = ({ categoryInput, setCategoryInput }) => {
             autoCapitalize="none"
             data={filteredCategories}
             defaultValue={
-                JSON.stringify(categoryInput) === '{}' ? '' : categoryInput
+                JSON.stringify(categoryInput) === '{}'
+                    ? ''
+                    : categoryInput || clickedCategory
             }
             autoCorrect={false}
             onChangeText={(input) => findCategory(input)}

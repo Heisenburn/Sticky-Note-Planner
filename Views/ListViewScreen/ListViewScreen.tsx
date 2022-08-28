@@ -5,6 +5,7 @@ import getLocalData from '../../LocalStorage/getNotesForCategory'
 import styles from './ListViewScreen.style'
 import RowItem from './RowItem'
 import removeFromLocalCategory from '../../LocalStorage/removeFromLocalCategory'
+import FloatingButton from '../HomeScreen/FloatingButton/FloatingButton'
 
 if (Platform.OS === 'android') {
     UIManager.setLayoutAnimationEnabledExperimental &&
@@ -23,7 +24,6 @@ const ListViewScreenBase = ({ route, navigation }) => {
     const [listItems, setListItems] = useState([])
     const { itemId: category } = route.params
 
-    // console.log('listItems', listItems)
     const removeItem = async (idToBeRemoved) => {
         const filteredItems = listItems.filter(
             (item) => item.id !== idToBeRemoved
@@ -74,6 +74,10 @@ const ListViewScreenBase = ({ route, navigation }) => {
             <Button
                 title="Powrót"
                 onPress={() => navigation.navigate('HomeScreen')}
+            />
+            <FloatingButton
+                navigation={navigation}
+                clickedCategory={category}
             />
         </>
     )
