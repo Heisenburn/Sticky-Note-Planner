@@ -1,5 +1,5 @@
 import { useState, useEffect, useRef, useCallback } from 'react'
-import { View, Platform, UIManager, Button } from 'react-native'
+import { View, Platform, UIManager, Button, Text } from 'react-native'
 import DraggableFlatList from 'react-native-draggable-flatlist'
 import getLocalData from '../../LocalStorage/getNotesForCategory'
 import styles from './ListViewScreen.style'
@@ -28,6 +28,7 @@ const ListViewScreenBase = ({ route, navigation }) => {
         const filteredItems = listItems.filter(
             (item) => item.id !== idToBeRemoved
         )
+
         await removeFromLocalCategory(category.toString(), filteredItems)
         setListItems(filteredItems)
     }
@@ -53,23 +54,27 @@ const ListViewScreenBase = ({ route, navigation }) => {
 
     const itemRefs = useRef(new Map())
 
-    const renderItem = useCallback((params) => {
+    const renderItem = (params) => {
         return (
             <RowItem {...params} itemRefs={itemRefs} removeItem={removeItem} />
         )
-    }, [])
+    }
 
     return (
         <>
             <View style={styles.container}>
-                <DraggableFlatList
-                    keyExtractor={(item) => item.key}
-                    data={listItems}
-                    renderItem={renderItem}
-                    //TODO: tutaj update kolejnosci
-                    // onDragEnd={({ data }) => saveNoteToCategory(data)}
-                    activationDistance={20}
-                />
+                {listItems.length ? (
+                    <DraggableFlatList
+                        keyExtractor={(item) => item.key}
+                        data={listItems}
+                        renderItem={renderItem}
+                        //TODO: tutaj update kolejnosci
+                        // onDragEnd={({ data }) => saveNoteToCategory(data)}
+                        activationDistance={20}
+                    />
+                ) : (
+                    <Text>Brak notatek</Text>
+                )}
             </View>
             <Button
                 title="Powrót"
