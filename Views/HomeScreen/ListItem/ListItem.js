@@ -1,27 +1,31 @@
-import { View, Pressable, Text } from "react-native";
-import styles from "../HomeScreen.styles";
+import { View, Pressable, Text } from 'react-native'
+import styles from '../HomeScreen.styles'
 
 const generateColor = () => {
-  const randomColor = Math.floor(Math.random() * 16777215)
-    .toString(16)
-    .padStart(6, "0");
-  return `#${randomColor}`;
-};
+    const randomColor = Math.floor(Math.random() * 16777215)
+        .toString(16)
+        .padStart(6, '0')
+    return `#${randomColor}`
+}
 
 const ListItem = ({ title, navigation }) => (
-  <View style={styles.container}>
-    <Pressable
-      style={[styles.categoryButton, { backgroundColor: generateColor() }]}
-      onPress={() => {
-        navigation.navigate("ListViewScreen", {
-          itemId: title,
-        });
-      }}
-    >
-      <Text style={styles.heading}>{title}</Text>
-      <Text style={[styles.numberOfElements, styles.boxShadow]}>23</Text>
-    </Pressable>
-  </View>
-);
+    <View style={styles.container}>
+        <Pressable
+            style={[
+                styles.categoryButton,
+                styles.boxShadow,
+                { backgroundColor: generateColor() },
+            ]}
+            onPress={() => {
+                navigation.navigate('ListViewScreen', {
+                    itemId: title,
+                })
+            }}
+        >
+            <Text style={styles.heading}>{title}</Text>
+            <Text style={[styles.numberOfElements, styles.boxShadow]}>23</Text>
+        </Pressable>
+    </View>
+)
 
-export default ListItem;
+export default ListItem

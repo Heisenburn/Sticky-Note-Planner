@@ -5,7 +5,7 @@ import getLocalData from '../../LocalStorage/getNotesForCategory'
 import styles from './ListViewScreen.style'
 import RowItem from './RowItem'
 import removeFromLocalCategory from '../../LocalStorage/removeFromLocalCategory'
-import FloatingButton from '../HomeScreen/FloatingButton/FloatingButton'
+import FloatingButton from '../../shared/FloatingButton/FloatingButton'
 
 if (Platform.OS === 'android') {
     UIManager.setLayoutAnimationEnabledExperimental &&
