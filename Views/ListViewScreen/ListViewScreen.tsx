@@ -1,9 +1,10 @@
 import { useState, useEffect, useRef, useCallback } from 'react'
 import { View, Platform, UIManager, Button } from 'react-native'
 import DraggableFlatList from 'react-native-draggable-flatlist'
-import getLocalData from '../../LocalStorage/getLocalData'
+import getLocalData from '../../LocalStorage/getNotesForCategory'
 import styles from './ListViewScreen.style'
 import RowItem from './RowItem'
+import removeFromLocalCategory from '../../LocalStorage/removeFromLocalCategory'
 
 if (Platform.OS === 'android') {
     UIManager.setLayoutAnimationEnabledExperimental &&
@@ -22,13 +23,24 @@ const ListViewScreenBase = ({ route, navigation }) => {
     const [listItems, setListItems] = useState([])
     const { itemId: category } = route.params
 
+    // console.log('listItems', listItems)
+    const removeItem = async (idToBeRemoved) => {
+        const filteredItems = listItems.filter(
+            (item) => item.id !== idToBeRemoved
+        )
+        await removeFromLocalCategory(category.toString(), filteredItems)
+        setListItems(filteredItems)
+    }
+
     useEffect(() => {
         getLocalData(category).then((response) => {
             if (response) {
-                const mappedData = response.map(({ text }, index) => {
+                const mappedData = response.map(({ text, id }, index) => {
                     const backgroundColor = getColor(index)
                     return {
+                        id,
                         text: text,
+                        //TODO: key mozna zastapic id?
                         key: `key-${backgroundColor}`,
                         backgroundColor,
                         height: 100,
@@ -42,7 +54,9 @@ const ListViewScreenBase = ({ route, navigation }) => {
     const itemRefs = useRef(new Map())
 
     const renderItem = useCallback((params) => {
-        return <RowItem {...params} itemRefs={itemRefs} />
+        return (
+            <RowItem {...params} itemRefs={itemRefs} removeItem={removeItem} />
+        )
     }, [])
 
     return (
@@ -53,7 +67,7 @@ const ListViewScreenBase = ({ route, navigation }) => {
                     data={listItems}
                     renderItem={renderItem}
                     //TODO: tutaj update kolejnosci
-                    // onDragEnd={({ data }) => setLocalData(data)}
+                    // onDragEnd={({ data }) => saveNoteToCategory(data)}
                     activationDistance={20}
                 />
             </View>

@@ -13,7 +13,7 @@ import { Alert } from 'react-native'
 //     text: 'lorem ipsum'
 // }
 
-const setLocalData = async (noteValue, categoryValue) => {
+const saveNoteToCategory = async (noteValue, categoryValue) => {
     try {
         const category = categoryValue || 'RANDOM'
 
@@ -37,4 +37,4 @@ const setLocalData = async (noteValue, categoryValue) => {
     }
 }
 
-export default setLocalData
+export default saveNoteToCategory

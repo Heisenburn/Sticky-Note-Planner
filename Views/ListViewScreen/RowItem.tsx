@@ -9,7 +9,7 @@ import Animated, { useAnimatedStyle } from 'react-native-reanimated'
 
 const OVERSWIPE_DIST = 20
 
-const RowItem = ({ item, itemRefs, drag }) => {
+const RowItem = ({ item, itemRefs, drag, removeItem }) => {
     return (
         <ScaleDecorator>
             <SwipeableItem
@@ -31,7 +31,9 @@ const RowItem = ({ item, itemRefs, drag }) => {
                     }
                 }}
                 overSwipe={OVERSWIPE_DIST}
-                renderUnderlayLeft={() => <UnderlayLeft drag={drag} />}
+                renderUnderlayLeft={() => (
+                    <UnderlayLeft drag={drag} removeItem={removeItem} />
+                )}
                 renderUnderlayRight={() => <UnderlayRight />}
                 snapPointsLeft={[50, 150, 175]}
                 snapPointsRight={[175]}
@@ -54,8 +56,8 @@ const RowItem = ({ item, itemRefs, drag }) => {
     )
 }
 
-const UnderlayLeft = ({ drag }) => {
-    const { percentOpen } = useSwipeableItemParams()
+const UnderlayLeft = ({ drag, removeItem }) => {
+    const { percentOpen, item } = useSwipeableItemParams()
     const animStyle = useAnimatedStyle(
         () => ({
             opacity: percentOpen.value,
@@ -67,8 +69,8 @@ const UnderlayLeft = ({ drag }) => {
         <Animated.View
             style={[styles.row, styles.underlayLeft, animStyle]} // Fade in on open
         >
-            <TouchableOpacity onPressIn={drag}>
-                <Text style={styles.text}>{`[drag]`}</Text>
+            <TouchableOpacity onPress={() => removeItem(item.id)}>
+                <Text style={styles.text}>DELETE</Text>
             </TouchableOpacity>
         </Animated.View>
     )

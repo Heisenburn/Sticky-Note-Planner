@@ -8,7 +8,7 @@ import {
 } from 'react-native'
 import React, { useState } from 'react'
 import styles from './AddScreen.styles'
-import setLocalData from '../../LocalStorage/setLocalData'
+import saveNoteToCategory from '../../LocalStorage/saveNoteToCategory'
 import AutocompleteCategory from './AutocompleteCategory/AutocompleteCategory'
 
 const AddScreenBase = ({ navigation }) => {
@@ -23,7 +23,7 @@ const AddScreenBase = ({ navigation }) => {
             return
         }
 
-        await setLocalData(noteInput, categoryInput)
+        await saveNoteToCategory(noteInput, categoryInput)
 
         navigation.navigate('HomeScreen')
     }
