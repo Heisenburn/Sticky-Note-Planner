@@ -12,6 +12,7 @@ import saveNoteToCategory from '../../LocalStorage/saveNoteToCategory'
 import AutocompleteCategory from './AutocompleteCategory/AutocompleteCategory'
 import setNotesInCategory from '../../LocalStorage/setNotesInCategory'
 import getNotesForCategory from '../../LocalStorage/getNotesForCategory'
+import { CommonActions } from '@react-navigation/native'
 
 const AddScreenBase = ({ route, navigation }) => {
     const {
@@ -79,13 +80,24 @@ const AddScreenBase = ({ route, navigation }) => {
             )
         }
 
-        navigation.navigate('HomeScreen')
+        // navigation.navigate('ListViewScreen', {
+        //     itemId: categoryInput,
+        // })
+        // navigation.goBack()
+
+        navigation.navigate({
+            name: 'ListViewScreen',
+            params: { itemId: categoryInput, shouldRefetch: true },
+            merge: true,
+        })
+
+        // navigation.navigate('HomeScreen')
     }
 
     return (
         <SafeAreaView style={styles.container}>
             <View style={styles.innerContainer}>
-                <Text style={styles.heading}>
+                <Text style={editedItem ? styles.editMode : styles.heading}>
                     {editedItem ? 'Tryb edycji notatki' : 'Dodaj notatke'}
                 </Text>
                 <TextInput
@@ -119,7 +131,7 @@ const AddScreenBase = ({ route, navigation }) => {
                 <View style={styles.buttonCommonStyles}>
                     <Button
                         title="Powrót"
-                        onPress={() => navigation.navigate('HomeScreen')}
+                        onPress={() => navigation.goBack()}
                     />
                 </View>
             </View>

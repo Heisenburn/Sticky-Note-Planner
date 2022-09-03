@@ -5,6 +5,7 @@ import { createNativeStackNavigator } from '@react-navigation/native-stack'
 import ListViewScreenBase from './Views/ListViewScreen/ListViewScreen'
 import { SafeAreaProvider } from 'react-native-safe-area-context'
 import withSaveAreaView from './shared/HoC/WithSaveAreaView'
+import { useEffect } from 'react'
 
 const Stack = createNativeStackNavigator()
 

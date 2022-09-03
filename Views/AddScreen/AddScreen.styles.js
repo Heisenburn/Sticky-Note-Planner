@@ -16,6 +16,13 @@ const styles = StyleSheet.create({
         marginBottom: 10,
         fontWeight: 'bold',
     },
+    editMode: {
+        color: 'red',
+        marginTop: 10,
+        marginBottom: 10,
+        fontWeight: 'bold',
+        fontSize: 20,
+    },
     categoryInfo: {
         color: 'gray',
         marginBottom: 10,

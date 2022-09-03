@@ -6,6 +6,7 @@ const setNotesInCategory = async (category, array) => {
         await AsyncStorage.setItem(category, JSON.stringify(array))
     } catch (error) {
         Alert.alert(`error: ${error}`)
+        throw error
     }
 }
 

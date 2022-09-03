@@ -34,6 +34,7 @@ const saveNoteToCategory = async (noteValue: string, categoryValue: string) => {
         // Alert.alert('Notatka', 'Zapisano! ✅')
     } catch (error) {
         Alert.alert(`error: ${error}`)
+        throw error
     }
 }
 

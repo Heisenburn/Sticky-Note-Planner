@@ -1,17 +1,13 @@
-import { useState, useEffect, useRef, useCallback } from 'react'
-import { View, Platform, UIManager, Button, Text } from 'react-native'
+import { useState, useRef, useEffect } from 'react'
+import { View, Button, Text } from 'react-native'
 import DraggableFlatList from 'react-native-draggable-flatlist'
 import getNotesForCategory from '../../LocalStorage/getNotesForCategory'
 import styles from './ListViewScreen.style'
 import RowItem from './RowItem/RowItem'
 import setNotesInCategory from '../../LocalStorage/setNotesInCategory'
 import FloatingButton from '../../shared/FloatingButton/FloatingButton'
-import { getListWithoutElementById } from '../../shared/API/helpers/removeItemInCategory'
-
-// if (Platform.OS === 'android') {
-//     UIManager.setLayoutAnimationEnabledExperimental &&
-//         UIManager.setLayoutAnimationEnabledExperimental(true)
-// }
+import { useIsFocused } from '@react-navigation/native'
+import AsyncStorage from '@react-native-async-storage/async-storage'
 
 const NUM_ITEMS = 20
 
@@ -23,7 +19,7 @@ const getColor = (i) => {
 
 const ListViewScreenBase = ({ route, navigation }) => {
     const [listItems, setListItems] = useState([])
-    const { itemId: category } = route.params
+    const { itemId: category, shouldRefetch = false } = route.params
 
     const removeItem = async (idToBeRemoved) => {
         const filteredItems = listItems.filter(
@@ -40,6 +36,7 @@ const ListViewScreenBase = ({ route, navigation }) => {
         await setNotesInCategory(category.toString(), data)
     }
 
+    //run refresh list items each team view is visible
     useEffect(() => {
         getNotesForCategory(category).then((response) => {
             if (response) {
@@ -57,10 +54,9 @@ const ListViewScreenBase = ({ route, navigation }) => {
                 setListItems(mappedData)
             }
         })
-    }, [])
+    }, [shouldRefetch])
 
     const itemRefs = useRef(new Map())
-
     const renderItem = (params) => {
         return (
             <RowItem
@@ -76,8 +72,9 @@ const ListViewScreenBase = ({ route, navigation }) => {
 
     return (
         <>
+            <Text>{newItem}</Text>
             <View style={styles.container}>
-                {listItems.length ? (
+                {listItems?.length ? (
                     <DraggableFlatList
                         keyExtractor={(item) => item.key}
                         data={listItems}

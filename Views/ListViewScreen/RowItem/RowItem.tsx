@@ -23,7 +23,7 @@ const RowItem = ({
         navigation.navigate('AddScreen', {
             clickedCategory: category,
             editedItem: item,
-            listItems: listItems,
+            listItems,
         })
     }
 

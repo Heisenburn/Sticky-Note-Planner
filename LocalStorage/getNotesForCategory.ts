@@ -7,6 +7,7 @@ const getNotesForCategory = async (category) => {
         return jsonValue != null ? JSON.parse(jsonValue) : null
     } catch (error) {
         Alert.alert(`error: ${error}`)
+        throw error
     }
 }
 export default getNotesForCategory
