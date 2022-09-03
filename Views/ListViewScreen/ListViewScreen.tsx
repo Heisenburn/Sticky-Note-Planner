@@ -3,14 +3,15 @@ import { View, Platform, UIManager, Button, Text } from 'react-native'
 import DraggableFlatList from 'react-native-draggable-flatlist'
 import getNotesForCategory from '../../LocalStorage/getNotesForCategory'
 import styles from './ListViewScreen.style'
-import RowItem from './RowItem'
+import RowItem from './RowItem/RowItem'
 import setNotesInCategory from '../../LocalStorage/setNotesInCategory'
 import FloatingButton from '../../shared/FloatingButton/FloatingButton'
+import { getListWithoutElementById } from '../../shared/API/helpers/removeItemInCategory'
 
-if (Platform.OS === 'android') {
-    UIManager.setLayoutAnimationEnabledExperimental &&
-        UIManager.setLayoutAnimationEnabledExperimental(true)
-}
+// if (Platform.OS === 'android') {
+//     UIManager.setLayoutAnimationEnabledExperimental &&
+//         UIManager.setLayoutAnimationEnabledExperimental(true)
+// }
 
 const NUM_ITEMS = 20
 
@@ -62,7 +63,14 @@ const ListViewScreenBase = ({ route, navigation }) => {
 
     const renderItem = (params) => {
         return (
-            <RowItem {...params} itemRefs={itemRefs} removeItem={removeItem} />
+            <RowItem
+                {...params}
+                itemRefs={itemRefs}
+                removeItem={removeItem}
+                navigation={navigation}
+                category={category}
+                listItems={listItems}
+            />
         )
     }
 
@@ -74,7 +82,6 @@ const ListViewScreenBase = ({ route, navigation }) => {
                         keyExtractor={(item) => item.key}
                         data={listItems}
                         renderItem={renderItem}
-                        //TODO: tutaj update kolejnosci
                         onDragEnd={({ data }) => handleDragEnd(data)}
                         activationDistance={20}
                     />

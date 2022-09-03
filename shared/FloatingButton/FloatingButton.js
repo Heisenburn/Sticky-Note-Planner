@@ -1,4 +1,4 @@
-import { View, Pressable, Text } from 'react-native'
+import { Pressable, Text } from 'react-native'
 import styles from './FloatingButton.styles'
 
 const FloatingButton = ({ navigation, clickedCategory }) => {

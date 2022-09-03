@@ -7,22 +7,22 @@ import getNotesForCategory from '../../LocalStorage/getNotesForCategory'
 import { useEffect, useState } from 'react'
 
 export default function HomeScreenBase({ navigation }) {
-    // const [numberOfElementsForCategory, setNumberOfElementsForCategory] =
-    //     useState(null)
-    //
-    // const isFocused = useIsFocused()
-    //
-    // useEffect(() => {
-    //
-    //     getNotesForCategory(title).then((response) => {
-    //         if (response) {
-    //             setNumberOfElementsForCategory({
-    //                 nameOfCategory: title,
-    //                 numberOfElements: response.length,
-    //             })
-    //         }
-    //     })
-    // }, [isFocused])
+    const isFocused = useIsFocused()
+
+    //AsyncStorage: jedyne zrodło prawdy o kategoriach (COUNT)
+
+    useEffect(() => {
+        //TODO: title nie jest unikalne!
+        // getNotesForCategory(title).then((response) => {
+        //     if (response) {
+        //         setNumberOfElementsForCategory({
+        //             nameOfCategory: title,
+        //             numberOfElements: response.length,
+        //         })
+        //     }
+        // })
+        // console.log({ isFocused })
+    }, [isFocused])
 
     return (
         <SafeAreaView style={styles.container}>

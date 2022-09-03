@@ -11,7 +11,14 @@ const styles = StyleSheet.create({
         marginHorizontal: 30,
     },
     heading: {
-        color: 'white',
+        color: 'black',
+        marginTop: 10,
+        marginBottom: 10,
+        fontWeight: 'bold',
+    },
+    categoryInfo: {
+        color: 'gray',
+        marginBottom: 10,
     },
     buttonCommonStyles: {
         marginTop: 10,

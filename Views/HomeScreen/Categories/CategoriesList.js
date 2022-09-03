@@ -9,7 +9,6 @@ import {
 const SEPARATOR_INDEX = '2'
 
 const renderItem = (item, navigation) => {
-    console.log('item', item)
     return (
         <ListItem
             title={item.title}
