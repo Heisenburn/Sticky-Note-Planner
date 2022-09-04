@@ -16,16 +16,17 @@ import { CommonActions } from '@react-navigation/native'
 
 const AddScreenBase = ({ route, navigation }) => {
     const {
-        clickedCategory,
+        clickedCategory = null,
         editedItem = null,
         listItems = null,
     } = route.params
 
     const [noteInput, setNoteInput] = useState<string>(editedItem?.text || '')
-    const [categoryInput, setCategoryInput] = useState(null)
+    const [categoryInput, setCategoryInput] = useState(clickedCategory || '')
 
     const handleSubmit = async () => {
         const isNoteEmpty = !noteInput.trim().length
+        let response = null
 
         if (isNoteEmpty) {
             Alert.alert('Notatka', 'Treść notatki nie może być pusta')
@@ -47,7 +48,7 @@ const AddScreenBase = ({ route, navigation }) => {
                 )
 
                 //2. add element to target list
-                await getNotesForCategory(categoryInput).then(
+                response = await getNotesForCategory(categoryInput).then(
                     async (response) => {
                         if (response) {
                             await setNotesInCategory(categoryInput, [
@@ -67,31 +68,24 @@ const AddScreenBase = ({ route, navigation }) => {
                     }
                 })
 
-                await setNotesInCategory(
+                response = await setNotesInCategory(
                     categoryInput,
                     originListWithEditedItem
                 )
             }
         } else {
             //Scenario: User enter AddScreen without EDIT option
-            await saveNoteToCategory(
+            response = await saveNoteToCategory(
                 noteInput,
                 categoryInput || clickedCategory
             )
         }
 
-        // navigation.navigate('ListViewScreen', {
-        //     itemId: categoryInput,
-        // })
-        // navigation.goBack()
-
-        navigation.navigate({
-            name: 'ListViewScreen',
-            params: { itemId: categoryInput, shouldRefetch: true },
-            merge: true,
-        })
-
-        // navigation.navigate('HomeScreen')
+        if (response) {
+            navigation.navigate('ListViewScreen', {
+                itemId: categoryInput,
+            })
+        }
     }
 
     return (

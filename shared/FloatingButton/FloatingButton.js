@@ -1,11 +1,7 @@
 import { Pressable, Text } from 'react-native'
 import styles from './FloatingButton.styles'
 
-const FloatingButton = ({
-    navigation,
-    clickedCategory = null,
-    setShouldFetch,
-}) => {
+const FloatingButton = ({ navigation, clickedCategory = null }) => {
     return (
         <Pressable
             style={[styles.container, styles.boxShadow]}

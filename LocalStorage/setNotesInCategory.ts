@@ -3,7 +3,7 @@ import { Alert } from 'react-native'
 
 const setNotesInCategory = async (category, array) => {
     try {
-        await AsyncStorage.setItem(category, JSON.stringify(array))
+        return await AsyncStorage.setItem(category, JSON.stringify(array))
     } catch (error) {
         Alert.alert(`error: ${error}`)
         throw error

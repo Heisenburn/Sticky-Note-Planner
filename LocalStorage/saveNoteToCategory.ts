@@ -18,18 +18,27 @@ const saveNoteToCategory = async (noteValue: string, categoryValue: string) => {
         const category = categoryValue || 'RANDOM'
 
         //append if there are existing notes for this category
-        AsyncStorage.getItem(category).then((notesInCategory) => {
-            const arrayOfNotes = notesInCategory
-                ? JSON.parse(notesInCategory)
-                : []
+        const response = await AsyncStorage.getItem(category).then(
+            (notesInCategory) => {
+                const arrayOfNotes = notesInCategory
+                    ? JSON.parse(notesInCategory)
+                    : []
 
-            arrayOfNotes.push({
-                text: noteValue,
-                id: arrayOfNotes.length > 0 ? arrayOfNotes.at(-1).id + 1 : 1,
-            })
+                arrayOfNotes.push({
+                    text: noteValue,
+                    id:
+                        arrayOfNotes.length > 0
+                            ? arrayOfNotes.at(-1).id + 1
+                            : 1,
+                })
 
-            AsyncStorage.setItem(category, JSON.stringify(arrayOfNotes))
-        })
+                AsyncStorage.setItem(category, JSON.stringify(arrayOfNotes))
+            }
+        )
+
+        if (response !== null) {
+            return true
+        }
 
         // Alert.alert('Notatka', 'Zapisano! ✅')
     } catch (error) {
