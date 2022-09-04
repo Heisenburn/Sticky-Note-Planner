@@ -71,7 +71,6 @@ const AddScreenBase = ({ route, navigation }) => {
                 })
             }
         } else {
-            console.log('zwykly add ')
             //Scenario: User enter AddScreen without EDIT option
             response = await saveNoteToCategory(
                 noteInput,
@@ -86,11 +85,15 @@ const AddScreenBase = ({ route, navigation }) => {
         }
     }
 
+    const shouldDisplayCategoryInput = !clickedCategory || editedItem
+
     return (
         <SafeAreaView style={styles.container}>
             <View style={styles.innerContainer}>
                 <Text style={editedItem ? styles.editMode : styles.heading}>
-                    {editedItem ? 'Tryb edycji notatki' : 'Dodaj notatke'}
+                    {editedItem
+                        ? 'Tryb edycji notatki'
+                        : `Dodawanie notatki w kategorii: ->> ${clickedCategory}`}
                 </Text>
                 <TextInput
                     multiline={true}
@@ -100,7 +103,9 @@ const AddScreenBase = ({ route, navigation }) => {
                     value={noteInput}
                 />
 
-                <Text style={styles.heading}>Kategoria</Text>
+                {shouldDisplayCategoryInput ? (
+                    <Text style={styles.heading}>Kategoria</Text>
+                ) : null}
 
                 {editedItem ? (
                     <Text style={styles.categoryInfo}>
@@ -108,11 +113,14 @@ const AddScreenBase = ({ route, navigation }) => {
                     </Text>
                 ) : null}
 
-                <AutocompleteCategory
-                    categoryInput={categoryInput}
-                    setCategoryInput={setCategoryInput}
-                    clickedCategory={clickedCategory}
-                />
+                {shouldDisplayCategoryInput ? (
+                    <AutocompleteCategory
+                        categoryInput={categoryInput}
+                        setCategoryInput={setCategoryInput}
+                        clickedCategory={clickedCategory}
+                    />
+                ) : null}
+
                 <View style={styles.buttonCommonStyles}>
                     <Button
                         title="Zapisz"
