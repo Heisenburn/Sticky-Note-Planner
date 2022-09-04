@@ -16,6 +16,11 @@ const styles = StyleSheet.create({
         color: 'white',
         fontSize: 22,
     },
+    heading: {
+        fontWeight: 'bold',
+        color: 'black',
+        fontSize: 30,
+    },
     underlayRight: {
         flex: 1,
         backgroundColor: 'teal',

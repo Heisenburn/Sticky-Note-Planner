@@ -7,6 +7,7 @@ import RowItem from './RowItem/RowItem'
 import setNotesInCategory from '../../LocalStorage/setNotesInCategory'
 import FloatingButton from '../../shared/FloatingButton/FloatingButton'
 import { useIsFocused } from '@react-navigation/native'
+import AsyncStorage from '@react-native-async-storage/async-storage'
 
 const NUM_ITEMS = 20
 
@@ -41,18 +42,20 @@ const ListViewScreenBase = ({ route, navigation }) => {
     useEffect(() => {
         if (isFocused) {
             getNotesForCategory(category).then((response) => {
-                const mappedData = response.map(({ text, id }, index) => {
-                    const backgroundColor = getColor(index)
-                    return {
-                        id,
-                        text: text,
-                        //TODO: key mozna zastapic id?
-                        key: `key-${backgroundColor}`,
-                        backgroundColor,
-                        height: 100,
-                    }
-                })
-                setListItems(mappedData)
+                if (response) {
+                    const mappedData = response.map(({ text, id }, index) => {
+                        const backgroundColor = getColor(index)
+                        return {
+                            id,
+                            text: text,
+                            //TODO: key mozna zastapic id?
+                            key: `key-${backgroundColor}`,
+                            backgroundColor,
+                            height: 100,
+                        }
+                    })
+                    setListItems(mappedData)
+                }
             })
         }
     }, [isFocused])
@@ -73,6 +76,7 @@ const ListViewScreenBase = ({ route, navigation }) => {
 
     return (
         <>
+            <Text style={styles.heading}>{category}</Text>
             <View style={styles.container}>
                 {listItems?.length ? (
                     <DraggableFlatList

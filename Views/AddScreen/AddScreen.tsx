@@ -48,15 +48,9 @@ const AddScreenBase = ({ route, navigation }) => {
                 )
 
                 //2. add element to target list
-                response = await getNotesForCategory(categoryInput).then(
-                    async (response) => {
-                        if (response) {
-                            await setNotesInCategory(categoryInput, [
-                                ...response,
-                                editedItem,
-                            ])
-                        }
-                    }
+                response = await saveNoteToCategory(
+                    editedItem.text,
+                    categoryInput
                 )
             } else {
                 //only note value was edited
@@ -72,8 +66,12 @@ const AddScreenBase = ({ route, navigation }) => {
                     categoryInput,
                     originListWithEditedItem
                 )
+                navigation.navigate('ListViewScreen', {
+                    itemId: categoryInput,
+                })
             }
         } else {
+            console.log('zwykly add ')
             //Scenario: User enter AddScreen without EDIT option
             response = await saveNoteToCategory(
                 noteInput,
@@ -83,7 +81,7 @@ const AddScreenBase = ({ route, navigation }) => {
 
         if (response) {
             navigation.navigate('ListViewScreen', {
-                itemId: categoryInput,
+                itemId: categoryInput || 'RANDOM',
             })
         }
     }
