@@ -1,7 +1,7 @@
 import React, { useState, useRef, useEffect } from 'react'
 import { View, Button, Text } from 'react-native'
 import DraggableFlatList from 'react-native-draggable-flatlist'
-import getNotesForCategory from '../../LocalStorage/getNotesForCategory'
+import getElementsForKey from '../../LocalStorage/getElementsForKey'
 import styles from './ListViewScreen.style'
 import RowItem from './RowItem/RowItem'
 import setNotesInCategory from '../../LocalStorage/setNotesInCategory'
@@ -41,7 +41,7 @@ const ListViewScreenBase = ({ route, navigation }) => {
     //run refresh list items each team view is visible
     useEffect(() => {
         if (isFocused) {
-            getNotesForCategory(category).then((response) => {
+            getElementsForKey(category).then((response) => {
                 if (response) {
                     const mappedData = response.map(({ text, id }, index) => {
                         const backgroundColor = getColor(index)

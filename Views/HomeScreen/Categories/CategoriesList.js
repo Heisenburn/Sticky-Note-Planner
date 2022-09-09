@@ -1,10 +1,7 @@
 import ListItem from '../ListItem/ListItem'
 import { FlatList, View, Text } from 'react-native'
 import styles from '../HomeScreen.styles'
-import {
-    PREDEFINED_CATEGORIES,
-    USER_CATEGORIES,
-} from '../../../shared/constants'
+import { PREDEFINED_CATEGORIES } from '../../../shared/constants'
 
 const SEPARATOR_INDEX = '2'
 
@@ -26,12 +23,13 @@ const separator = (e) => {
     ) : null
 }
 
-const CategoriesList = ({ navigation }) => {
+const CategoriesList = ({ navigation, categories: USER_CATEGORIES }) => {
     return (
         <FlatList
             data={[...PREDEFINED_CATEGORIES, ...USER_CATEGORIES]}
             renderItem={({ item }) => renderItem(item, navigation)}
             ItemSeparatorComponent={(e) => separator(e)}
+            keyExtractor={(item) => item.id}
         />
     )
 }

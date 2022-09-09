@@ -1,7 +1,7 @@
 import { View, Pressable, Text } from 'react-native'
 import styles from '../HomeScreen.styles'
 import { useEffect, useState } from 'react'
-import getNotesForCategory from '../../../LocalStorage/getNotesForCategory'
+import getElementsForKey from '../../../LocalStorage/getElementsForKey'
 import { useIsFocused } from '@react-navigation/native'
 
 const generateColor = () => {

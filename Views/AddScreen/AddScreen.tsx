@@ -11,9 +11,10 @@ import styles from './AddScreen.styles'
 import saveNoteToCategory from '../../LocalStorage/saveNoteToCategory'
 import AutocompleteCategory from './AutocompleteCategory/AutocompleteCategory'
 import setNotesInCategory from '../../LocalStorage/setNotesInCategory'
-import getNotesForCategory from '../../LocalStorage/getNotesForCategory'
+import getElementsForKey from '../../LocalStorage/getElementsForKey'
 import { CommonActions } from '@react-navigation/native'
 import { ACTIONS_NAME } from '../../shared/FloatingButton/FloatingButton'
+import { setCategory } from '../../LocalStorage/setCategory'
 
 const AddScreenBase = ({ route, navigation }) => {
     const {
@@ -23,8 +24,11 @@ const AddScreenBase = ({ route, navigation }) => {
         action = null,
     } = route.params
 
-    const [noteInput, setNoteInput] = useState<string>(editedItem?.text || '')
+    const [textFieldInput, setTextFieldInput] = useState<string>(
+        editedItem?.text || ''
+    )
     const [categoryInput, setCategoryInput] = useState(clickedCategory || '')
+    const isAddingCategoryMode = action === ACTIONS_NAME.CATEGORY
 
     const PHRASES = {
         AddingCategory: 'Dodawanie kategorii',
@@ -48,7 +52,7 @@ const AddScreenBase = ({ route, navigation }) => {
     }
 
     const handleSubmit = async () => {
-        const isNoteEmpty = !noteInput.trim().length
+        const isNoteEmpty = !textFieldInput.trim().length
         let response = null
 
         if (isNoteEmpty) {
@@ -57,6 +61,17 @@ const AddScreenBase = ({ route, navigation }) => {
         }
         const shouldSaveEditItem = editedItem && listItems
         const shouldUpdateCategory = categoryInput !== clickedCategory
+
+        if (isAddingCategoryMode) {
+            const response = await setCategory(textFieldInput)
+
+            if (response) {
+                return navigation.navigate('HomeScreen')
+                // navigation.navigate('ListViewScreen', {
+                //     itemId: textFieldInput,
+                // })
+            }
+        }
 
         if (shouldSaveEditItem) {
             if (shouldUpdateCategory) {
@@ -79,7 +94,7 @@ const AddScreenBase = ({ route, navigation }) => {
                 //only note value was edited
                 const originListWithEditedItem = listItems.map((item) => {
                     if (item.id === editedItem.id) {
-                        return { ...item, text: noteInput }
+                        return { ...item, text: textFieldInput }
                     } else {
                         return item
                     }
@@ -96,7 +111,7 @@ const AddScreenBase = ({ route, navigation }) => {
         } else {
             //Scenario: User enter AddScreen without EDIT option
             response = await saveNoteToCategory(
-                noteInput,
+                textFieldInput,
                 categoryInput || clickedCategory
             )
         }
@@ -120,9 +135,9 @@ const AddScreenBase = ({ route, navigation }) => {
                 <TextInput
                     multiline={true}
                     placeholder="Treść notatki..."
-                    onChangeText={(value) => setNoteInput(value)}
+                    onChangeText={(value) => setTextFieldInput(value)}
                     style={styles.noteInput}
-                    value={noteInput}
+                    value={textFieldInput}
                 />
 
                 {shouldDisplayCategoryInput ? (
