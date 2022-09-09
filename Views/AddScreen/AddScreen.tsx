@@ -13,16 +13,39 @@ import AutocompleteCategory from './AutocompleteCategory/AutocompleteCategory'
 import setNotesInCategory from '../../LocalStorage/setNotesInCategory'
 import getNotesForCategory from '../../LocalStorage/getNotesForCategory'
 import { CommonActions } from '@react-navigation/native'
+import { ACTIONS_NAME } from '../../shared/FloatingButton/FloatingButton'
 
 const AddScreenBase = ({ route, navigation }) => {
     const {
         clickedCategory = null,
         editedItem = null,
         listItems = null,
+        action = null,
     } = route.params
 
     const [noteInput, setNoteInput] = useState<string>(editedItem?.text || '')
     const [categoryInput, setCategoryInput] = useState(clickedCategory || '')
+
+    const PHRASES = {
+        AddingCategory: 'Dodawanie kategorii',
+        AddingNote: 'Dodawanie notatki',
+        EditingNote: 'Edytowanie notatki',
+    }
+
+    const getHeading = () => {
+        //TODO: tu moglby byc switch zwracajacy odpowiedni heading
+
+        switch (action) {
+            case ACTIONS_NAME.EDIT:
+                return PHRASES.EditingNote
+            case ACTIONS_NAME.CATEGORY:
+                return PHRASES.AddingCategory
+            case ACTIONS_NAME.NOTE:
+                return `${PHRASES.AddingNote} ${
+                    clickedCategory ? 'w kategorii: ' + clickedCategory : ''
+                }`
+        }
+    }
 
     const handleSubmit = async () => {
         const isNoteEmpty = !noteInput.trim().length
@@ -85,15 +108,14 @@ const AddScreenBase = ({ route, navigation }) => {
         }
     }
 
-    const shouldDisplayCategoryInput = !clickedCategory || editedItem
+    const shouldDisplayCategoryInput =
+        (!clickedCategory || editedItem) && action !== ACTIONS_NAME.CATEGORY
 
     return (
         <SafeAreaView style={styles.container}>
             <View style={styles.innerContainer}>
                 <Text style={editedItem ? styles.editMode : styles.heading}>
-                    {editedItem
-                        ? 'Tryb edycji notatki'
-                        : `Dodawanie notatki w kategorii: ->> ${clickedCategory}`}
+                    {getHeading()}
                 </Text>
                 <TextInput
                     multiline={true}
@@ -107,7 +129,7 @@ const AddScreenBase = ({ route, navigation }) => {
                     <Text style={styles.heading}>Kategoria</Text>
                 ) : null}
 
-                {editedItem ? (
+                {action == ACTIONS_NAME.EDIT ? (
                     <Text style={styles.categoryInfo}>
                         Wybierz inną kategorię aby przenieść notatke
                     </Text>

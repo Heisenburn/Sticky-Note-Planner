@@ -30,7 +30,7 @@ const ListViewScreenBase = ({ route, navigation }) => {
         setListItems(filteredItems)
     }
 
-    const handleDragEnd = async (data) => {
+    const handleDragUpAndDown = async (data) => {
         //save data with new order
         setListItems(data)
         await setNotesInCategory(category.toString(), data)
@@ -83,7 +83,7 @@ const ListViewScreenBase = ({ route, navigation }) => {
                         keyExtractor={(item) => item.key}
                         data={listItems}
                         renderItem={renderItem}
-                        onDragEnd={({ data }) => handleDragEnd(data)}
+                        onDragEnd={({ data }) => handleDragUpAndDown(data)}
                         activationDistance={20}
                     />
                 ) : (

@@ -1,12 +1,13 @@
 import { ScaleDecorator } from 'react-native-draggable-flatlist'
-import { Button, Pressable, Text, TouchableOpacity, View } from 'react-native'
+import { Pressable, Text, TouchableOpacity, View } from 'react-native'
 import styles from '../ListViewScreen.style'
 import SwipeableItem, {
-    useSwipeableItemParams,
     OpenDirection,
+    useSwipeableItemParams,
 } from 'react-native-swipeable-item'
 import Animated, { useAnimatedStyle } from 'react-native-reanimated'
 import { RowItemStyles } from './RowItem.style'
+import { ACTIONS_NAME } from '../../../shared/FloatingButton/FloatingButton'
 
 const OVERSWIPE_DIST = 20
 
@@ -23,7 +24,7 @@ const RowItem = ({
         navigation.navigate('AddScreen', {
             clickedCategory: category,
             editedItem: item,
-            listItems,
+            action: ACTIONS_NAME.EDIT,
         })
     }
 
@@ -37,7 +38,7 @@ const RowItem = ({
                         itemRefs.current.set(item.key, ref)
                     }
                 }}
-                onChange={({ openDirection }) => {
+                onChange={({ openDirection, snapPoint }) => {
                     if (openDirection !== OpenDirection.NONE) {
                         // Close all other open items
                         ;[...itemRefs.current.entries()].forEach(
@@ -46,11 +47,15 @@ const RowItem = ({
                             }
                         )
                     }
+                    const shouldRemoveElement =
+                        openDirection === OpenDirection.LEFT &&
+                        snapPoint === 175
+                    if (shouldRemoveElement) {
+                        removeItem(item.id)
+                    }
                 }}
                 overSwipe={OVERSWIPE_DIST}
-                renderUnderlayLeft={() => (
-                    <UnderlayLeft removeItem={removeItem} />
-                )}
+                renderUnderlayLeft={() => <UnderlayLeft />}
                 renderUnderlayRight={() => <UnderlayRight />}
                 snapPointsLeft={[50, 150, 175]}
                 snapPointsRight={[175]}
@@ -98,7 +103,7 @@ const RowItem = ({
     )
 }
 
-const UnderlayLeft = ({ removeItem }) => {
+const UnderlayLeft = () => {
     const { percentOpen, item } = useSwipeableItemParams()
     const animStyle = useAnimatedStyle(
         () => ({
@@ -111,7 +116,7 @@ const UnderlayLeft = ({ removeItem }) => {
         <Animated.View
             style={[styles.row, styles.underlayLeft, animStyle]} // Fade in on open
         >
-            <TouchableOpacity onPress={() => removeItem(item.id)}>
+            <TouchableOpacity>
                 <Text style={styles.text}>DELETE</Text>
             </TouchableOpacity>
         </Animated.View>
