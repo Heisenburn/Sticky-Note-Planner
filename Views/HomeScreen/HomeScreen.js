@@ -24,17 +24,47 @@ export default function HomeScreenBase({ navigation }) {
     const isFocused = useIsFocused()
     const [categories, setCategories] = useState([])
 
+    //TODO: trzymanie PREDEFINED_CATEGORIES w AsyncStorage?
+
+    const getMultiple = async (array) => {
+        let values
+        try {
+            values = await AsyncStorage.multiGet(array)
+            values = values.map((item) => {
+                return {
+                    title: item[0],
+                    items: JSON.parse(item[1]),
+                }
+            })
+
+            return values
+        } catch (e) {
+            throw e
+        }
+    }
+
     // run refresh list items each team view is visible
     useEffect(() => {
         if (isFocused) {
-            getElementsForKey(ALL_CATEGORIES_KEY).then((response) => {
-                if (response) {
-                    setCategories(response)
+            //get all categories
+            getElementsForKey(ALL_CATEGORIES_KEY).then(
+                async (availableCategories) => {
+                    if (availableCategories) {
+                        //todo: powinnismy uzywac ID a nie title, bo mogą być dwie takie same kategorie typie xD
+
+                        //get items for each category
+                        const categoriesWithItems = await getMultiple(
+                            availableCategories
+                        )
+
+                        setCategories(categoriesWithItems)
+                    }
                 }
-            })
+            )
         }
     }, [isFocused])
 
+    console.log({ categories })
     return (
         <SafeAreaView style={styles.container}>
             <FloatingButton navigation={navigation} />

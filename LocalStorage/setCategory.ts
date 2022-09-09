@@ -23,7 +23,6 @@ export const setCategory = async (input) => {
                     title: input,
                 })
 
-                console.log({ arrayOfCategories })
                 AsyncStorage.setItem(
                     ALL_CATEGORIES_KEY,
                     JSON.stringify(arrayOfCategories)

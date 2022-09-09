@@ -11,7 +11,8 @@ const generateColor = () => {
     return `#${randomColor}`
 }
 
-const ListItem = ({ title, navigation }) => {
+const ListItem = ({ item, navigation }) => {
+    const { title } = item
     return (
         <View style={styles.container}>
             <Pressable
@@ -28,7 +29,7 @@ const ListItem = ({ title, navigation }) => {
             >
                 <Text style={styles.heading}>{title}</Text>
                 <Text style={[styles.numberOfElements, styles.boxShadow]}>
-                    {10}
+                    {/*{ttitle.length}*/}
                 </Text>
             </Pressable>
         </View>
