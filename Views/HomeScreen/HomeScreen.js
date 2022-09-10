@@ -3,22 +3,26 @@ import CategoriesList from './Categories/CategoriesList'
 import FloatingButton from '../../shared/FloatingButton/FloatingButton'
 import styles from './HomeScreen.styles'
 import { useIsFocused } from '@react-navigation/native'
-import getElementsForKey from '../../LocalStorage/getElementsForKey'
 import { useEffect, useState } from 'react'
-import { ALL_CATEGORIES_KEY } from '../../LocalStorage/setCategory'
 import AsyncStorage from '@react-native-async-storage/async-storage'
+import { CATEGORY_KEY_PREFIX } from '../../shared/constants'
+import { getAllKeys } from '../../LocalStorage/saveNoteToCategory'
 
-// const clearAll = async () => {
-//     try {
-//         await AsyncStorage.clear()
-//     } catch (e) {
-//         // clear error
-//     }
+// Do wyciągania wszystkiego
+// const keys = await AsyncStorage.getAllKeys()
+// const stores = await AsyncStorage.multiGet(keys)
 //
-//     console.log('Done.')
-// }
-//
-// await clearAll()
+// console.log(stores)
+
+const clearAll = async () => {
+    try {
+        await AsyncStorage.clear()
+    } catch (e) {
+        // clear error
+    }
+
+    console.log('Done.')
+}
 
 export default function HomeScreenBase({ navigation }) {
     const isFocused = useIsFocused()
@@ -26,17 +30,10 @@ export default function HomeScreenBase({ navigation }) {
 
     //TODO: trzymanie PREDEFINED_CATEGORIES w AsyncStorage?
 
-    const getMultiple = async (array) => {
+    const getItemsForCategories = async (array) => {
         let values
         try {
             values = await AsyncStorage.multiGet(array)
-            values = values.map((item) => {
-                return {
-                    title: item[0],
-                    items: JSON.parse(item[1]),
-                }
-            })
-
             return values
         } catch (e) {
             throw e
@@ -44,27 +41,23 @@ export default function HomeScreenBase({ navigation }) {
     }
 
     // run refresh list items each team view is visible
-    useEffect(() => {
+    useEffect(async () => {
         if (isFocused) {
-            //get all categories
-            getElementsForKey(ALL_CATEGORIES_KEY).then(
-                async (availableCategories) => {
-                    if (availableCategories) {
-                        //todo: powinnismy uzywac ID a nie title, bo mogą być dwie takie same kategorie typie xD
-
-                        //get items for each category
-                        const categoriesWithItems = await getMultiple(
-                            availableCategories
-                        )
-
-                        setCategories(categoriesWithItems)
-                    }
-                }
+            // get available categories and their items
+            const availableKeys = await getAllKeys()
+            const keysWithCategoryKeyword = availableKeys.filter((item) =>
+                item.includes(CATEGORY_KEY_PREFIX)
             )
+
+            getItemsForCategories(keysWithCategoryKeyword).then((response) => {
+                if (response) {
+                    // console.log({ response })
+                    setCategories(response)
+                }
+            })
         }
     }, [isFocused])
 
-    console.log({ categories })
     return (
         <SafeAreaView style={styles.container}>
             <FloatingButton navigation={navigation} />

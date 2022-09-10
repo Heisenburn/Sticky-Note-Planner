@@ -63,7 +63,11 @@ const AddScreenBase = ({ route, navigation }) => {
         const shouldUpdateCategory = categoryInput !== clickedCategory
 
         if (isAddingCategoryMode) {
-            const response = await setCategory(textFieldInput)
+            // const response = await setCategory(textFieldInput)
+            const response = await saveNoteToCategory({
+                noteValue: null,
+                categoryValue: textFieldInput,
+            })
 
             if (response) {
                 return navigation.navigate('HomeScreen')
@@ -86,10 +90,10 @@ const AddScreenBase = ({ route, navigation }) => {
                 )
 
                 //2. add element to target list
-                response = await saveNoteToCategory(
-                    editedItem.text,
-                    categoryInput
-                )
+                response = await saveNoteToCategory({
+                    noteValue: editedItem.text,
+                    categoryValue: categoryInput,
+                })
             } else {
                 //only note value was edited
                 const originListWithEditedItem = listItems.map((item) => {
@@ -110,10 +114,10 @@ const AddScreenBase = ({ route, navigation }) => {
             }
         } else {
             //Scenario: User enter AddScreen without EDIT option
-            response = await saveNoteToCategory(
-                textFieldInput,
-                categoryInput || clickedCategory
-            )
+            response = await saveNoteToCategory({
+                noteValue: textFieldInput,
+                categoryValue: clickedCategory,
+            })
         }
 
         if (response) {

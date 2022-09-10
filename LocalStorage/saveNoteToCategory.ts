@@ -1,46 +1,73 @@
 import AsyncStorage from '@react-native-async-storage/async-storage'
 import { Alert } from 'react-native'
+import { CATEGORY_KEY_PREFIX } from '../shared/constants'
 
-//Ogolne klucze wartosci to kategoria i notatki do niej przypisane :
-// { Kategoria: 'tydzien' : [notatki...] }
-// { Kategoria: 'random' : [notatki...] }
-// { ... }
+export const getAllKeys = async () => {
+    let keys = []
+    try {
+        keys = await AsyncStorage.getAllKeys()
+        return keys
+    } catch (e) {
+        // read key error
+    }
 
-// Notatka
+    // example console.log result:
+    // ['@MyApp_user', '@MyApp_key']
+}
 
-// {
-//     id: 1
-//     text: 'lorem ipsum'
-// }
-
-const saveNoteToCategory = async (noteValue: string, categoryValue: string) => {
+const saveNoteToCategory = async ({
+    noteValue,
+    categoryValue,
+}: {
+    noteValue: null | string
+    categoryValue: null | string
+}) => {
     try {
         const category = categoryValue || 'RANDOM'
+        let response = null
 
-        //append if there are existing notes for this category
-        const response = await AsyncStorage.getItem(category).then(
-            (notesInCategory) => {
-                const arrayOfNotes = notesInCategory
-                    ? JSON.parse(notesInCategory)
-                    : []
+        //1. saving note to category
+        if (noteValue) {
+            //append if there are existing notes for this category
+            response = await AsyncStorage.getItem(category).then((response) => {
+                let arrayOfNotes = response ? JSON.parse(response) : []
 
-                arrayOfNotes.push({
-                    text: noteValue,
-                    id:
-                        arrayOfNotes.length > 0
-                            ? arrayOfNotes.at(-1).id + 1
-                            : 1,
-                })
+                arrayOfNotes.items.push(noteValue)
 
                 AsyncStorage.setItem(category, JSON.stringify(arrayOfNotes))
-            }
-        )
+            })
+            //2. saving category
+        } else {
+            //first get all keys with category in key
+            //then get last ID to be used when creating new category
+            const availableKeys = await getAllKeys()
+            const keysWithCategoryKeyword = availableKeys.filter((item) =>
+                item.includes(CATEGORY_KEY_PREFIX)
+            )
 
-        if (response !== null) {
-            return true
+            const categoryDetails = {
+                categoryTitle: categoryValue,
+                items: [],
+            }
+
+            const categoryId = keysWithCategoryKeyword.length + 1
+
+            //remove whitespaces and add prefix + suffix
+            const categoryKey = `${CATEGORY_KEY_PREFIX}${category.replace(
+                /\s+/,
+                ' '
+            )}-ID${categoryId}`
+
+            response = AsyncStorage.setItem(
+                categoryKey,
+                JSON.stringify(categoryDetails)
+            )
         }
 
-        // Alert.alert('Notatka', 'Zapisano! ✅')
+        if (response !== null) {
+            Alert.alert('Notatka', 'Zapisano! ✅')
+            return true
+        }
     } catch (error) {
         Alert.alert(`error: ${error}`)
         throw error

@@ -14,6 +14,7 @@ const AutocompleteCategory = ({
     const [filteredCategories, setFilteredCategories] = useState([])
 
     const findCategory = (input) => {
+        //TODO: znowu odpalenie czytania asyncStorage - lepiej to bedzie wszystko odpalac na starcie i uzywac contextu
         const data = [...PREDEFINED_CATEGORIES, ...USER_CATEGORIES]
 
         setFilteredCategories(

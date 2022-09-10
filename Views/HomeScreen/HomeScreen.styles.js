@@ -4,6 +4,7 @@ const styles = StyleSheet.create({
     container: {
         display: 'flex',
         backgroundColor: 'white',
+        minHeight: '90%',
     },
     heading: {
         color: 'black',

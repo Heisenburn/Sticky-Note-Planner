@@ -1,12 +1,14 @@
 export const PREDEFINED_CATEGORIES = [
     {
-        id: '1',
-        title: 'Tydzień',
+        categoryId: 1,
+        categoryTitle: 'Tydzień',
         items: [],
     },
     {
-        id: '2',
-        title: 'RANDOM',
+        categoryId: 2,
+        categoryTitle: 'RANDOM',
         items: [],
     },
 ]
+
+export const CATEGORY_KEY_PREFIX = '@CATEGORY-'

@@ -19,6 +19,7 @@ const getColor = (i) => {
 
 const ListViewScreenBase = ({ route, navigation }) => {
     const [listItems, setListItems] = useState([])
+    //TODO: tutaj też mogą być dwie kategorie o takiej samej nazwie, wiec musimy to robic w oparicu o ID
     const { itemId: category } = route.params
 
     const removeItem = async (idToBeRemoved) => {
@@ -43,11 +44,13 @@ const ListViewScreenBase = ({ route, navigation }) => {
         if (isFocused) {
             getElementsForKey(category).then((response) => {
                 if (response) {
-                    const mappedData = response.map(({ text, id }, index) => {
+                    const { items } = response
+
+                    const mappedData = items.map((note, index) => {
                         const backgroundColor = getColor(index)
                         return {
-                            id,
-                            text: text,
+                            id: index,
+                            text: note,
                             //TODO: key mozna zastapic id?
                             key: `key-${backgroundColor}`,
                             backgroundColor,
