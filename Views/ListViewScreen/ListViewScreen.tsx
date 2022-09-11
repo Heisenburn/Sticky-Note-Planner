@@ -1,11 +1,11 @@
 import React, { useState, useRef, useEffect } from 'react'
 import { View, Button, Text } from 'react-native'
 import DraggableFlatList from 'react-native-draggable-flatlist'
-import getElementsForKey from '../../LocalStorage/getElementsForKey'
+import getElementsForKey from '../../AsyncStorage/getElementsForKey'
 import styles from './ListViewScreen.style'
 import RowItem from './RowItem/RowItem'
-import setNotesInCategory from '../../LocalStorage/setNotesInCategory'
-import FloatingButton from '../../shared/FloatingButton/FloatingButton'
+import setNotesInCategory from '../../AsyncStorage/setNotesInCategory'
+import FloatingButton from '../../Shared/FloatingButton/FloatingButton'
 import { useIsFocused } from '@react-navigation/native'
 import AsyncStorage from '@react-native-async-storage/async-storage'
 
@@ -20,7 +20,7 @@ const getColor = (i) => {
 const ListViewScreenBase = ({ route, navigation }) => {
     const [listItems, setListItems] = useState([])
     //TODO: tutaj też mogą być dwie kategorie o takiej samej nazwie, wiec musimy to robic w oparicu o ID
-    const { itemId: category } = route.params
+    const { itemId: category, categories } = route.params
 
     const removeItem = async (idToBeRemoved) => {
         const filteredItems = listItems.filter(

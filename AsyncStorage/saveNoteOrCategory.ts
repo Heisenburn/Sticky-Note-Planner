@@ -1,6 +1,6 @@
 import AsyncStorage from '@react-native-async-storage/async-storage'
 import { Alert } from 'react-native'
-import { CATEGORY_KEY_PREFIX } from '../shared/constants'
+import { CATEGORY_KEY_PREFIX } from '../Shared/constants'
 
 export const getAllKeys = async () => {
     let keys = []
@@ -15,7 +15,7 @@ export const getAllKeys = async () => {
     // ['@MyApp_user', '@MyApp_key']
 }
 
-const saveNoteToCategory = async ({
+const saveNoteOrCategory = async ({
     noteValue,
     categoryValue,
 }: {
@@ -65,7 +65,7 @@ const saveNoteToCategory = async ({
         }
 
         if (response !== null) {
-            Alert.alert('Notatka', 'Zapisano! ✅')
+            // Alert.alert('Notatka', 'Zapisano! ✅')
             return true
         }
     } catch (error) {
@@ -74,4 +74,4 @@ const saveNoteToCategory = async ({
     }
 }
 
-export default saveNoteToCategory
+export default saveNoteOrCategory

@@ -7,7 +7,7 @@ import SwipeableItem, {
 } from 'react-native-swipeable-item'
 import Animated, { useAnimatedStyle } from 'react-native-reanimated'
 import { RowItemStyles } from './RowItem.style'
-import { ACTIONS_NAME } from '../../../shared/FloatingButton/FloatingButton'
+import { ACTIONS_NAME } from '../../../Shared/FloatingButton/FloatingButton'
 
 const OVERSWIPE_DIST = 20
 

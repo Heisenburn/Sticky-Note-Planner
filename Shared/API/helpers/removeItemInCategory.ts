@@ -1,4 +1,4 @@
-import setNotesInCategory from '../../../LocalStorage/setNotesInCategory'
+import setNotesInCategory from '../../../AsyncStorage/setNotesInCategory'
 
 export const getListWithoutElementById = async (
     listItems,

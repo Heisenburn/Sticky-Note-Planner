@@ -1,7 +1,7 @@
 import CategoryItem from '../ListItem/CategoryItem'
 import { FlatList, View, Text } from 'react-native'
 import styles from '../HomeScreen.styles'
-import { PREDEFINED_CATEGORIES } from '../../../shared/constants'
+import { PREDEFINED_CATEGORIES } from '../../../Shared/constants'
 
 const SEPARATOR_INDEX = '2'
 

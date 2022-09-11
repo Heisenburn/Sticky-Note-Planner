@@ -1,7 +1,7 @@
 import { View, Pressable, Text } from 'react-native'
 import styles from '../HomeScreen.styles'
 import { useEffect, useState } from 'react'
-import getElementsForKey from '../../../LocalStorage/getElementsForKey'
+import getElementsForKey from '../../../AsyncStorage/getElementsForKey'
 import { useIsFocused } from '@react-navigation/native'
 
 const generateColor = () => {
@@ -30,7 +30,7 @@ const CategoryItem = ({ item, navigation }) => {
         >
             <Text style={styles.heading}>{categoryTitle}</Text>
             <Text style={[styles.numberOfElements, styles.boxShadow]}>
-                {items.length}
+                {items?.length}
             </Text>
         </Pressable>
     )

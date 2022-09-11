@@ -1,12 +1,13 @@
 import { SafeAreaView } from 'react-native'
 import CategoriesList from './Categories/CategoriesList'
-import FloatingButton from '../../shared/FloatingButton/FloatingButton'
+import FloatingButton from '../../Shared/FloatingButton/FloatingButton'
 import styles from './HomeScreen.styles'
 import { useIsFocused } from '@react-navigation/native'
-import { useEffect, useState } from 'react'
+import { useContext, useEffect, useState } from 'react'
 import AsyncStorage from '@react-native-async-storage/async-storage'
-import { CATEGORY_KEY_PREFIX } from '../../shared/constants'
-import { getAllKeys } from '../../LocalStorage/saveNoteToCategory'
+import { CATEGORY_KEY_PREFIX } from '../../Shared/constants'
+import { getAllKeys } from '../../AsyncStorage/saveNoteOrCategory'
+import { CategoriesWithNotesContext } from '../../Context/CategoriesWithNotesContext'
 
 // Do wyciągania wszystkiego
 // const keys = await AsyncStorage.getAllKeys()
@@ -27,34 +28,13 @@ const clearAll = async () => {
 export default function HomeScreenBase({ navigation }) {
     const isFocused = useIsFocused()
     const [categories, setCategories] = useState([])
-
-    //TODO: trzymanie PREDEFINED_CATEGORIES w AsyncStorage?
-
-    const getItemsForCategories = async (array) => {
-        let values
-        try {
-            values = await AsyncStorage.multiGet(array)
-            return values
-        } catch (e) {
-            throw e
-        }
-    }
+    const { getData } = useContext(CategoriesWithNotesContext)
 
     // run refresh list items each team view is visible
     useEffect(async () => {
         if (isFocused) {
-            // get available categories and their items
-            const availableKeys = await getAllKeys()
-            const keysWithCategoryKeyword = availableKeys.filter((item) =>
-                item.includes(CATEGORY_KEY_PREFIX)
-            )
-
-            getItemsForCategories(keysWithCategoryKeyword).then((response) => {
-                if (response) {
-                    // console.log({ response })
-                    setCategories(response)
-                }
-            })
+            // const test = getData()
+            // console.log({ test })
         }
     }, [isFocused])
 

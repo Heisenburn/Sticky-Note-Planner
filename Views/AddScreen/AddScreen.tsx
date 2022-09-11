@@ -8,13 +8,13 @@ import {
 } from 'react-native'
 import React, { useEffect, useState } from 'react'
 import styles from './AddScreen.styles'
-import saveNoteToCategory from '../../LocalStorage/saveNoteToCategory'
+import saveNoteOrCategory from '../../AsyncStorage/saveNoteOrCategory'
 import AutocompleteCategory from './AutocompleteCategory/AutocompleteCategory'
-import setNotesInCategory from '../../LocalStorage/setNotesInCategory'
-import getElementsForKey from '../../LocalStorage/getElementsForKey'
+import setNotesInCategory from '../../AsyncStorage/setNotesInCategory'
+import getElementsForKey from '../../AsyncStorage/getElementsForKey'
 import { CommonActions } from '@react-navigation/native'
-import { ACTIONS_NAME } from '../../shared/FloatingButton/FloatingButton'
-import { setCategory } from '../../LocalStorage/setCategory'
+import { ACTIONS_NAME } from '../../Shared/FloatingButton/FloatingButton'
+import { setCategory } from '../../AsyncStorage/setCategory'
 
 const AddScreenBase = ({ route, navigation }) => {
     const {
@@ -64,7 +64,7 @@ const AddScreenBase = ({ route, navigation }) => {
 
         if (isAddingCategoryMode) {
             // const response = await setCategory(textFieldInput)
-            const response = await saveNoteToCategory({
+            const response = await saveNoteOrCategory({
                 noteValue: null,
                 categoryValue: textFieldInput,
             })
@@ -90,7 +90,7 @@ const AddScreenBase = ({ route, navigation }) => {
                 )
 
                 //2. add element to target list
-                response = await saveNoteToCategory({
+                response = await saveNoteOrCategory({
                     noteValue: editedItem.text,
                     categoryValue: categoryInput,
                 })
@@ -114,7 +114,7 @@ const AddScreenBase = ({ route, navigation }) => {
             }
         } else {
             //Scenario: User enter AddScreen without EDIT option
-            response = await saveNoteToCategory({
+            response = await saveNoteOrCategory({
                 noteValue: textFieldInput,
                 categoryValue: clickedCategory,
             })
