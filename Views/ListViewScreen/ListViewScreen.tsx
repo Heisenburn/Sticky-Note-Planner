@@ -25,7 +25,7 @@ const ListViewScreenBase = ({ route, navigation }) => {
 
     const data = getData()
     const categoryItem = data.find((item) => item.categoryId === categoryId)
-    const { items } = categoryItem.details
+    const { items } = categoryItem.details || {}
 
     const removeItem = async (idToBeRemoved) => {
         const filteredItems = categoryItem.details.items.filter(
@@ -53,22 +53,20 @@ const ListViewScreenBase = ({ route, navigation }) => {
 
     //run refresh list items each team view is visible
     useEffect(() => {
-        if (isFocused) {
-            //structure of data expected by DraggableFlatList library
-            const mappedData = items.map((note, index) => {
-                const backgroundColor = getColor(index)
-                return {
-                    id: index,
-                    text: note,
-                    key: `key-${backgroundColor}`,
-                    backgroundColor,
-                    height: 100,
-                }
-            })
+        //structure of data expected by DraggableFlatList library
+        const mappedData = items.map((note, index) => {
+            const backgroundColor = getColor(index)
+            return {
+                id: index,
+                text: note,
+                key: `key-${backgroundColor}`,
+                backgroundColor,
+                height: 100,
+            }
+        })
 
-            setListItems(mappedData)
-        }
-    }, [isFocused])
+        setListItems(mappedData)
+    }, [data])
 
     const itemRefs = useRef(new Map())
     const renderItem = (params) => {
