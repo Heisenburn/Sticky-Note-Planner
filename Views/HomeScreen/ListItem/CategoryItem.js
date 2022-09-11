@@ -12,9 +12,9 @@ const generateColor = () => {
 }
 
 const CategoryItem = ({ item, navigation }) => {
-    console.log({ item })
     const { categoryId, details } = item
     const { categoryTitle, items } = details
+
     return (
         <Pressable
             style={[
@@ -24,7 +24,8 @@ const CategoryItem = ({ item, navigation }) => {
             ]}
             onPress={() => {
                 navigation.navigate('ListViewScreen', {
-                    itemId: categoryId,
+                    categoryId,
+                    categoryTitle,
                 })
             }}
         >

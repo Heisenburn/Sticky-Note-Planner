@@ -34,16 +34,12 @@ const separator = (e) => {
 }
 
 const CategoriesList = ({ navigation, categories }) => {
-    // const data = [...PREDEFINED_CATEGORIES, ...USER_CATEGORIES]
-
-    // console.log({ USER_CATEGORIES })
-
     return (
         <FlatList
             data={categories}
             renderItem={({ item }) => renderItem(item, navigation)}
             ItemSeparatorComponent={(e) => separator(e)}
-            // keyExtractor={(item) => JSON.parse(item[1]).categoryTitle}
+            keyExtractor={(item) => item.categoryId}
         />
     )
 }

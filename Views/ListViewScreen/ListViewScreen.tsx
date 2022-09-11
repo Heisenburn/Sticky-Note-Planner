@@ -1,4 +1,4 @@
-import React, { useState, useRef, useEffect } from 'react'
+import React, { useState, useRef, useEffect, useContext } from 'react'
 import { View, Button, Text } from 'react-native'
 import DraggableFlatList from 'react-native-draggable-flatlist'
 import getElementsForKey from '../../AsyncStorage/getElementsForKey'
@@ -8,6 +8,7 @@ import setNotesInCategory from '../../AsyncStorage/setNotesInCategory'
 import FloatingButton from '../../Shared/FloatingButton/FloatingButton'
 import { useIsFocused } from '@react-navigation/native'
 import AsyncStorage from '@react-native-async-storage/async-storage'
+import { CategoriesWithNotesContext } from '../../Context/CategoriesWithNotesContext'
 
 const NUM_ITEMS = 20
 
@@ -19,22 +20,33 @@ const getColor = (i) => {
 
 const ListViewScreenBase = ({ route, navigation }) => {
     const [listItems, setListItems] = useState([])
-    //TODO: tutaj też mogą być dwie kategorie o takiej samej nazwie, wiec musimy to robic w oparicu o ID
-    const { itemId: category, categories } = route.params
+    const { categoryId, categoryTitle } = route.params
+    const { getData, updateData } = useContext(CategoriesWithNotesContext)
+
+    const data = getData()
+    const categoryItem = data.find((item) => item.categoryId === categoryId)
+    const { items } = categoryItem.details
 
     const removeItem = async (idToBeRemoved) => {
-        const filteredItems = listItems.filter(
-            (item) => item.id !== idToBeRemoved
+        const filteredItems = categoryItem.details.items.filter(
+            (item, index) => index !== idToBeRemoved
         )
 
-        await setNotesInCategory(category.toString(), filteredItems)
+        const dataWithRemovedElement = data.filter((item) => {
+            if (item.categoryId === categoryId) {
+                item.details.items = filteredItems
+            }
+            return item
+        })
+
+        updateData(dataWithRemovedElement)
         setListItems(filteredItems)
     }
 
     const handleDragUpAndDown = async (data) => {
         //save data with new order
         setListItems(data)
-        await setNotesInCategory(category.toString(), data)
+        await setNotesInCategory(categoryId.toString(), data)
     }
 
     const isFocused = useIsFocused()
@@ -42,24 +54,19 @@ const ListViewScreenBase = ({ route, navigation }) => {
     //run refresh list items each team view is visible
     useEffect(() => {
         if (isFocused) {
-            getElementsForKey(category).then((response) => {
-                if (response) {
-                    const { items } = response
-
-                    const mappedData = items.map((note, index) => {
-                        const backgroundColor = getColor(index)
-                        return {
-                            id: index,
-                            text: note,
-                            //TODO: key mozna zastapic id?
-                            key: `key-${backgroundColor}`,
-                            backgroundColor,
-                            height: 100,
-                        }
-                    })
-                    setListItems(mappedData)
+            //structure of data expected by DraggableFlatList library
+            const mappedData = items.map((note, index) => {
+                const backgroundColor = getColor(index)
+                return {
+                    id: index,
+                    text: note,
+                    key: `key-${backgroundColor}`,
+                    backgroundColor,
+                    height: 100,
                 }
             })
+
+            setListItems(mappedData)
         }
     }, [isFocused])
 
@@ -71,7 +78,7 @@ const ListViewScreenBase = ({ route, navigation }) => {
                 itemRefs={itemRefs}
                 removeItem={removeItem}
                 navigation={navigation}
-                category={category}
+                category={categoryTitle}
                 listItems={listItems}
             />
         )
@@ -79,7 +86,7 @@ const ListViewScreenBase = ({ route, navigation }) => {
 
     return (
         <>
-            <Text style={styles.heading}>{category}</Text>
+            <Text style={styles.heading}>{categoryTitle}</Text>
             <View style={styles.container}>
                 {listItems?.length ? (
                     <DraggableFlatList
@@ -99,7 +106,7 @@ const ListViewScreenBase = ({ route, navigation }) => {
             />
             <FloatingButton
                 navigation={navigation}
-                clickedCategory={category}
+                clickedCategory={categoryId}
             />
         </>
     )

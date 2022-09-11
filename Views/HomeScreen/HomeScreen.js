@@ -27,21 +27,21 @@ const clearAll = async () => {
 
 export default function HomeScreenBase({ navigation }) {
     const isFocused = useIsFocused()
-    const [categories, setCategories] = useState([])
     const { getData } = useContext(CategoriesWithNotesContext)
+    const data = getData()
+    // const [categories, setCategories] = useState(getData())
 
     // run refresh list items each team view is visible
-    useEffect(async () => {
-        if (isFocused) {
-            const data = getData()
-            setCategories(data)
-        }
-    }, [isFocused])
+    // useEffect(() => {
+    //     if (isFocused && data) {
+    //         setCategories(getData())
+    //     }
+    // }, [isFocused, data])
 
     return (
         <SafeAreaView style={styles.container}>
             <FloatingButton navigation={navigation} />
-            <CategoriesList navigation={navigation} categories={categories} />
+            <CategoriesList navigation={navigation} categories={data} />
         </SafeAreaView>
     )
 }
