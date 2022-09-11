@@ -33,8 +33,8 @@ export default function HomeScreenBase({ navigation }) {
     // run refresh list items each team view is visible
     useEffect(async () => {
         if (isFocused) {
-            // const test = getData()
-            // console.log({ test })
+            const data = getData()
+            setCategories(data)
         }
     }, [isFocused])
 

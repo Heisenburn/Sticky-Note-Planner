@@ -12,9 +12,9 @@ const generateColor = () => {
 }
 
 const CategoryItem = ({ item, navigation }) => {
-    const categoryId = item[0]
-    const { categoryTitle, items } = JSON.parse(item[1])
-
+    console.log({ item })
+    const { categoryId, details } = item
+    const { categoryTitle, items } = details
     return (
         <Pressable
             style={[

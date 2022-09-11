@@ -8,7 +8,7 @@ import setNotesInCategory from '../AsyncStorage/setNotesInCategory'
 
 type CategoriesWithNotesType = {
     categoryId: string
-    items: {
+    details: {
         categoryTitle: string
         items: string[]
     }
@@ -47,6 +47,7 @@ export const CategoriesWithNotesContextProvider = ({ children }) => {
         // })()
     }, [categoriesWithNotes])
 
+    //get initial data
     useEffect(() => {
         //IIFE format - run func immediately
         ;(async () => {
@@ -60,13 +61,12 @@ export const CategoriesWithNotesContextProvider = ({ children }) => {
             const data = await AsyncStorage.multiGet(keysWithCategoryKeyword)
             const mappedData = data.map((item) => {
                 return {
-                    categoryTitle: item[0],
-                    items: JSON.parse(item[1]),
+                    categoryId: item[0],
+                    details: JSON.parse(item[1]),
                 }
             })
-            console.log(mappedData)
             //update state
-            // setCategoriesWithNotes(data)
+            setCategoriesWithNotes(mappedData)
         })()
     }, [])
 
