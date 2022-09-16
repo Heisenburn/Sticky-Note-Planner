@@ -1,8 +1,5 @@
-import { View, Pressable, Text } from 'react-native'
+import { Pressable, Text } from 'react-native'
 import styles from '../HomeScreen.styles'
-import { useEffect, useState } from 'react'
-import getElementsForKey from '../../../AsyncStorage/getElementsForKey'
-import { useIsFocused } from '@react-navigation/native'
 
 const generateColor = () => {
     const randomColor = Math.floor(Math.random() * 16777215)
@@ -12,8 +9,8 @@ const generateColor = () => {
 }
 
 const CategoryItem = ({ item, navigation }) => {
-    const { categoryId, details } = item
-    const { categoryTitle, items } = details
+    const { categoryId = '', details = [] } = item
+    const { categoryTitle = '', items = [] } = details
 
     return (
         <Pressable

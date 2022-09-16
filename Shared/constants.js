@@ -12,3 +12,9 @@ export const PREDEFINED_CATEGORIES = [
 ]
 
 export const CATEGORY_KEY_PREFIX = '@CATEGORY-'
+
+export const ACTION_PHRASES = {
+    AddingCategory: 'Dodawanie kategorii',
+    AddingNote: 'Dodawanie notatki',
+    EditingNote: 'Edytowanie notatki',
+}

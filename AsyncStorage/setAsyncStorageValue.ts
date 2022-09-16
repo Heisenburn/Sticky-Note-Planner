@@ -1,13 +1,13 @@
 import AsyncStorage from '@react-native-async-storage/async-storage'
 import { Alert } from 'react-native'
 
-const setNotesInCategory = async (category, array) => {
+const setAsyncStorageValue = async (key, value) => {
     try {
-        return await AsyncStorage.setItem(category, JSON.stringify(array))
+        return await AsyncStorage.setItem(key, JSON.stringify(value))
     } catch (error) {
         Alert.alert(`error: ${error}`)
         throw error
     }
 }
 
-export default setNotesInCategory
+export default setAsyncStorageValue

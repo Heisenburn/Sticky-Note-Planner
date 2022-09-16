@@ -1,7 +1,7 @@
 import Autocomplete from 'react-native-autocomplete-input'
 import { Button, Pressable, Text, TouchableOpacity } from 'react-native'
 import { useEffect, useMemo, useState } from 'react'
-import { getAllKeys } from '../../../AsyncStorage/saveNoteOrCategory'
+import { getAllKeys } from '../../../AsyncStorage/getDataAfterAddingNoteOrCategory'
 import { CATEGORY_KEY_PREFIX } from '../../../Shared/constants'
 
 const AutocompleteCategory = ({

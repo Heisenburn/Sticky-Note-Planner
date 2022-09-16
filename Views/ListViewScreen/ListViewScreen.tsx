@@ -1,13 +1,10 @@
 import React, { useState, useRef, useEffect, useContext } from 'react'
 import { View, Button, Text } from 'react-native'
 import DraggableFlatList from 'react-native-draggable-flatlist'
-import getElementsForKey from '../../AsyncStorage/getElementsForKey'
 import styles from './ListViewScreen.style'
 import RowItem from './RowItem/RowItem'
-import setNotesInCategory from '../../AsyncStorage/setNotesInCategory'
+import setAsyncStorageValue from '../../AsyncStorage/setAsyncStorageValue'
 import FloatingButton from '../../Shared/FloatingButton/FloatingButton'
-import { useIsFocused } from '@react-navigation/native'
-import AsyncStorage from '@react-native-async-storage/async-storage'
 import { CategoriesWithNotesContext } from '../../Context/CategoriesWithNotesContext'
 
 const NUM_ITEMS = 20
@@ -25,10 +22,10 @@ const ListViewScreenBase = ({ route, navigation }) => {
 
     const data = getData()
     const categoryItem = data.find((item) => item.categoryId === categoryId)
-    const { items } = categoryItem.details || {}
+    const { items } = categoryItem?.details || []
 
     const removeItem = async (idToBeRemoved) => {
-        const filteredItems = categoryItem.details.items.filter(
+        const filteredItems = items.filter(
             (item, index) => index !== idToBeRemoved
         )
 
@@ -43,15 +40,18 @@ const ListViewScreenBase = ({ route, navigation }) => {
         setListItems(filteredItems)
     }
 
-    const handleDragUpAndDown = async (data) => {
+    const handleDragUpAndDown = async (listItemsAfterDrag) => {
         //save data with new order
-        setListItems(data)
-        await setNotesInCategory(categoryId.toString(), data)
+        const dataWithNewOrder = data.filter((item) => {
+            if (item.categoryId === categoryId) {
+                item.details.items = listItemsAfterDrag.map((item)=> item.text)
+            }
+            return item
+        })
+
+        updateData(dataWithNewOrder)
     }
 
-    const isFocused = useIsFocused()
-
-    //run refresh list items each team view is visible
     useEffect(() => {
         //structure of data expected by DraggableFlatList library
         const mappedData = items.map((note, index) => {

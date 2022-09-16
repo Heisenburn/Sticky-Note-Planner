@@ -6,15 +6,18 @@ import {
     Alert,
     Button,
 } from 'react-native'
-import React, { useEffect, useState } from 'react'
+import React, { useContext, useEffect, useState } from 'react'
 import styles from './AddScreen.styles'
-import saveNoteOrCategory from '../../AsyncStorage/saveNoteOrCategory'
 import AutocompleteCategory from './AutocompleteCategory/AutocompleteCategory'
-import setNotesInCategory from '../../AsyncStorage/setNotesInCategory'
+import setAsyncStorageValue from '../../AsyncStorage/setAsyncStorageValue'
 import getElementsForKey from '../../AsyncStorage/getElementsForKey'
 import { CommonActions } from '@react-navigation/native'
 import { ACTIONS_NAME } from '../../Shared/FloatingButton/FloatingButton'
 import { setCategory } from '../../AsyncStorage/setCategory'
+import { CategoriesWithNotesContext } from '../../Context/CategoriesWithNotesContext'
+import { ACTION_PHRASES } from '../../Shared/constants'
+import { CategoryWithNotesType } from '../../types/types'
+import getDataAfterAddingNoteOrCategory from '../../AsyncStorage/getDataAfterAddingNoteOrCategory'
 
 const AddScreenBase = ({ route, navigation }) => {
     const {
@@ -29,23 +32,19 @@ const AddScreenBase = ({ route, navigation }) => {
     )
     const [categoryInput, setCategoryInput] = useState(clickedCategory || '')
     const isAddingCategoryMode = action === ACTIONS_NAME.CATEGORY
-
-    const PHRASES = {
-        AddingCategory: 'Dodawanie kategorii',
-        AddingNote: 'Dodawanie notatki',
-        EditingNote: 'Edytowanie notatki',
-    }
+    const { getData, updateData } = useContext(CategoriesWithNotesContext)
+    const data = getData()
 
     const getHeading = () => {
         //TODO: tu moglby byc switch zwracajacy odpowiedni heading
 
         switch (action) {
             case ACTIONS_NAME.EDIT:
-                return PHRASES.EditingNote
+                return ACTION_PHRASES.EditingNote
             case ACTIONS_NAME.CATEGORY:
-                return PHRASES.AddingCategory
+                return ACTION_PHRASES.AddingCategory
             case ACTIONS_NAME.NOTE:
-                return `${PHRASES.AddingNote} ${
+                return `${ACTION_PHRASES.AddingNote} ${
                     clickedCategory ? 'w kategorii: ' + clickedCategory : ''
                 }`
         }
@@ -64,17 +63,20 @@ const AddScreenBase = ({ route, navigation }) => {
 
         if (isAddingCategoryMode) {
             // const response = await setCategory(textFieldInput)
-            const response = await saveNoteOrCategory({
-                noteValue: null,
-                categoryValue: textFieldInput,
-            })
 
-            if (response) {
-                return navigation.navigate('HomeScreen')
-                // navigation.navigate('ListViewScreen', {
-                //     itemId: textFieldInput,
-                // })
-            }
+            const filteredArray = getDataAfterAddingNoteOrCategory({
+                noteValue: null,
+                categoryId: textFieldInput,
+                existingData: data,
+            })
+            updateData(filteredArray)
+            //
+            // if (response) {
+            //     return navigation.navigate('HomeScreen')
+            //     // navigation.navigate('ListViewScreen', {
+            //     //     itemId: textFieldInput,
+            //     // })
+            // }
         }
 
         if (shouldSaveEditItem) {
@@ -84,13 +86,13 @@ const AddScreenBase = ({ route, navigation }) => {
                 )
 
                 //1. remove element from origin list
-                await setNotesInCategory(
+                await setAsyncStorageValue(
                     clickedCategory,
                     originListWithRemovedElement
                 )
 
                 //2. add element to target list
-                response = await saveNoteOrCategory({
+                response = await getDataAfterAddingNoteOrCategory({
                     noteValue: editedItem.text,
                     categoryValue: categoryInput,
                 })
@@ -104,7 +106,7 @@ const AddScreenBase = ({ route, navigation }) => {
                     }
                 })
 
-                response = await setNotesInCategory(
+                response = await setAsyncStorageValue(
                     categoryInput,
                     originListWithEditedItem
                 )
@@ -114,10 +116,12 @@ const AddScreenBase = ({ route, navigation }) => {
             }
         } else {
             //Scenario: User enter AddScreen without EDIT option
-            response = await saveNoteOrCategory({
+            const filteredArray = getDataAfterAddingNoteOrCategory({
                 noteValue: textFieldInput,
-                categoryValue: clickedCategory,
+                categoryId: clickedCategory,
+                existingData: data,
             })
+            updateData(filteredArray)
         }
 
         if (response) {
