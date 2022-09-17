@@ -2,30 +2,30 @@ import styles from './FloatingButton.styles'
 import { FloatingAction } from 'react-native-floating-action'
 import { View } from 'react-native'
 import { useRef } from 'react'
-import { ACTIONS_NAME } from '../constants'
+import { ACTION_PHRASES, ACTIONS } from '../constants'
 
-const ACTIONS = [
+const FLOATING_BUTTON_ACTIONS = [
     {
-        text: ACTIONS_NAME.NOTE,
+        text: ACTION_PHRASES[ACTIONS.ADD_NOTE],
         // icon: require('./images/ic_accessibility_white.png'),
-        name: ACTIONS_NAME.NOTE,
+        name: ACTIONS.ADD_NOTE,
         position: 1,
     },
     {
-        text: ACTIONS_NAME.CATEGORY,
+        text: ACTION_PHRASES[ACTIONS.ADD_CATEGORY],
         // icon: require('./images/ic_language_white.png'),
-        name: ACTIONS_NAME.CATEGORY,
+        name: ACTIONS.ADD_CATEGORY,
         position: 2,
     },
 ]
 
-const FloatingButton = ({ navigation, clickedCategory = null }) => {
+const FloatingButton = ({ navigation, categoryId = null }) => {
     const floatingButtonRef = useRef(null)
 
     return (
         <View style={styles.container}>
             <FloatingAction
-                actions={ACTIONS}
+                actions={FLOATING_BUTTON_ACTIONS}
                 ref={floatingButtonRef}
                 showBackground={true}
                 color={'#6638f0'}
@@ -36,8 +36,10 @@ const FloatingButton = ({ navigation, clickedCategory = null }) => {
                     if (clickedCategory) {
                         floatingButtonRef.current.reset()
                         navigation.navigate('AddScreen', {
-                            clickedCategory,
-                            action: ACTIONS_NAME.NOTE,
+                            passedPropsFromPreviousScreen: {
+                                categoryId: categoryId,
+                                action: ACTIONS.ADD_NOTE,
+                            },
                         })
                     }
                 }}

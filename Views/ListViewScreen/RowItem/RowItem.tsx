@@ -7,7 +7,7 @@ import SwipeableItem, {
 } from 'react-native-swipeable-item'
 import Animated, { useAnimatedStyle } from 'react-native-reanimated'
 import { RowItemStyles } from './RowItem.style'
-import { ACTIONS_NAME } from '../../../Shared/constants'
+import { ACTIONS } from '../../../Shared/constants'
 
 const OVERSWIPE_DIST = 20
 
@@ -18,13 +18,14 @@ const RowItem = ({
     removeItem,
     navigation,
     category,
-    listItems,
 }) => {
     const handleEditClick = () => {
         navigation.navigate('AddScreen', {
-            clickedCategory: category,
-            editedItem: item,
-            action: ACTIONS_NAME.EDIT,
+            passedPropsFromPreviousScreen: {
+                clickedCategory: category,
+                editedItem: item,
+                action: ACTIONS.EDIT_NOTE,
+            },
         })
     }
 

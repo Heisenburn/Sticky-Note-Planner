@@ -11,116 +11,67 @@ import styles from './AddScreen.styles'
 import AutocompleteCategory from './AutocompleteCategory/AutocompleteCategory'
 import setAsyncStorageValue from '../../AsyncStorage/setAsyncStorageValue'
 import { CategoriesWithNotesContext } from '../../Context/CategoriesWithNotesContext'
-import { ACTION_PHRASES, ACTIONS_NAME } from '../../Shared/constants'
+import { ACTION_PHRASES, ACTIONS } from '../../Shared/constants'
 import { getDataAfterAddingNoteOrCategory } from '../../AsyncStorage/getDataAfterAddingNoteOrCategory'
+import { updateDataAndGoToScreen } from './helpers/updateDataAndGoToScreen'
+
+const getHeading = (action, clickedCategory) => {
+    switch (action) {
+        case ACTIONS.EDIT_NOTE:
+            return ACTION_PHRASES[ACTIONS.EDIT_NOTE]
+        case ACTIONS.ADD_CATEGORY:
+            return ACTION_PHRASES[ACTIONS.ADD_CATEGORY]
+        case ACTIONS.ADD_NOTE:
+            return `${ACTION_PHRASES[ACTIONS.ADD_NOTE]} ${
+                clickedCategory ? 'w kategorii: ' + clickedCategory : ''
+            }`
+    }
+}
 
 const AddScreenBase = ({ route, navigation }) => {
+    const { passedPropsFromPreviousScreen } = route.params
     const {
         clickedCategory = null,
         editedItem = null,
         listItems = null,
         action = null,
-    } = route.params
+    } = passedPropsFromPreviousScreen
 
     const [textFieldInput, setTextFieldInput] = useState<string>(
         editedItem?.text || ''
     )
     const [categoryInput, setCategoryInput] = useState(clickedCategory || '')
-    const isAddingCategoryMode = action === ACTIONS_NAME.CATEGORY
+
     const { getData, updateData } = useContext(CategoriesWithNotesContext)
     const data = getData()
 
-    const getHeading = () => {
-        //TODO: tu moglby byc switch zwracajacy odpowiedni heading
-
-        switch (action) {
-            case ACTIONS_NAME.EDIT:
-                return ACTION_PHRASES.EditingNote
-            case ACTIONS_NAME.CATEGORY:
-                return ACTION_PHRASES.AddingCategory
-            case ACTIONS_NAME.NOTE:
-                return `${ACTION_PHRASES.AddingNote} ${
-                    clickedCategory ? 'w kategorii: ' + clickedCategory : ''
-                }`
-        }
-    }
-
     const handleSubmit = async () => {
         const isNoteEmpty = !textFieldInput.trim().length
-
         if (isNoteEmpty) {
             Alert.alert('Notatka', 'Treść notatki nie może być pusta')
             return
         }
-        const shouldSaveEditItem = editedItem && listItems
-        const shouldUpdateCategory = categoryInput !== clickedCategory
-
-        if (isAddingCategoryMode) {
-            const filteredArray = await getDataAfterAddingNoteOrCategory({
-                noteValue: null,
-                categoryId: textFieldInput,
-                existingData: data,
-            })
-            updateData(filteredArray)
-            // return navigation.navigate('ListViewScreen', {
-            //     categoryTitle: textFieldInput,
-            //     categoryId: filteredArray.pop().categoryId,
-            // })
-            return navigation.navigate('HomeScreen')
-        }
-
-        if (shouldSaveEditItem) {
-            if (shouldUpdateCategory) {
-                const originListWithRemovedElement = listItems.filter(
-                    (item) => item.id !== editedItem.id
-                )
-
-                console.log({ originListWithRemovedElement })
-                return
-            } else {
-                //only note value was edited
-                const originListWithEditedItem = listItems.map((item) => {
-                    if (item.id === editedItem.id) {
-                        return { ...item, text: textFieldInput }
-                    } else {
-                        return item
-                    }
-                })
-
-                // const filteredArray = await getDataAfterAddingNoteOrCategory({
-                //     noteValue: textFieldInput,
-                //     categoryId: clickedCategory,
-                //     existingData: data,
-                // })
-                // updateData(filteredArray.final)
-
-                navigation.navigate('ListViewScreen', {
-                    itemId: categoryInput,
-                })
-            }
-        } else {
-            //Scenario: User enter AddScreen without EDIT option
-            const filteredArray = await getDataAfterAddingNoteOrCategory({
-                noteValue: textFieldInput,
-                categoryId: clickedCategory,
-                existingData: data,
-            })
-            updateData(filteredArray)
-        }
-
-        return navigation.navigate('ListViewScreen', {
-            itemId: categoryInput || 'RANDOM',
-        })
+        await updateDataAndGoToScreen(
+            action,
+            updateData,
+            navigation,
+            textFieldInput,
+            categoryInput,
+            clickedCategory,
+            data,
+            listItems,
+            editedItem
+        )
     }
 
     const shouldDisplayCategoryInput =
-        (!clickedCategory || editedItem) && action !== ACTIONS_NAME.CATEGORY
+        (!clickedCategory || editedItem) && action !== ACTIONS.ADD_CATEGORY
 
     return (
         <SafeAreaView style={styles.container}>
             <View style={styles.innerContainer}>
                 <Text style={editedItem ? styles.editMode : styles.heading}>
-                    {getHeading()}
+                    {getHeading(action, clickedCategory)}
                 </Text>
                 <TextInput
                     multiline={true}
@@ -134,7 +85,7 @@ const AddScreenBase = ({ route, navigation }) => {
                     <Text style={styles.heading}>Kategoria</Text>
                 ) : null}
 
-                {action == ACTIONS_NAME.EDIT ? (
+                {action == ACTIONS.EDIT_NOTE ? (
                     <Text style={styles.categoryInfo}>
                         Wybierz inną kategorię aby przenieść notatke
                     </Text>

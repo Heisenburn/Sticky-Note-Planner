@@ -8,9 +8,11 @@ const AutocompleteCategory = ({ setCategoryInput, categoryInput }) => {
 
     useEffect(async () => {
         const availableKeys = await getAllKeys()
-        const keysWithCategoryKeyword = availableKeys.filter((item) =>
-            item.includes(CATEGORY_KEY_PREFIX)
-        )
+        const keysWithCategoryKeyword = availableKeys.filter((item) => {
+            if (item !== categoryInput && item.includes(CATEGORY_KEY_PREFIX)) {
+                return item
+            }
+        })
         setCategories(keysWithCategoryKeyword)
     }, [])
 

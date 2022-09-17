@@ -13,14 +13,14 @@ export const PREDEFINED_CATEGORIES = [
 
 export const CATEGORY_KEY_PREFIX = '@CATEGORY-'
 
-export const ACTION_PHRASES = {
-    AddingCategory: 'Dodawanie kategorii',
-    AddingNote: 'Dodawanie notatki',
-    EditingNote: 'Edytowanie notatki',
+export enum ACTIONS {
+    ADD_NOTE,
+    ADD_CATEGORY,
+    EDIT_NOTE,
 }
 
-export const ACTIONS_NAME = {
-    NOTE: 'Note',
-    CATEGORY: 'Category',
-    EDIT: 'Edit',
+export const ACTION_PHRASES = {
+    [ACTIONS.ADD_CATEGORY]: 'Dodawanie kategorii',
+    [ACTIONS.ADD_NOTE]: 'Dodawanie notatki',
+    [ACTIONS.EDIT_NOTE]: 'Edytowanie notatki',
 }

@@ -3,7 +3,6 @@ import { View, Button, Text } from 'react-native'
 import DraggableFlatList from 'react-native-draggable-flatlist'
 import styles from './ListViewScreen.style'
 import RowItem from './RowItem/RowItem'
-import setAsyncStorageValue from '../../AsyncStorage/setAsyncStorageValue'
 import FloatingButton from '../../Shared/FloatingButton/FloatingButton'
 import { CategoriesWithNotesContext } from '../../Context/CategoriesWithNotesContext'
 
@@ -16,13 +15,15 @@ const getColor = (i) => {
 }
 
 const ListViewScreenBase = ({ route, navigation }) => {
+    const { passedPropsFromPreviousScreen } = route.params
+    const { categoryTitle, categoryId } = passedPropsFromPreviousScreen
+
     const [listItems, setListItems] = useState([])
-    const { categoryId, categoryTitle } = route.params
     const { getData, updateData } = useContext(CategoriesWithNotesContext)
 
     const data = getData()
     const categoryItem = data.find((item) => item.categoryId === categoryId)
-    const { items } = categoryItem?.details || []
+    const { items } = categoryItem.details
 
     const removeItem = async (idToBeRemoved) => {
         const filteredItems = items.filter(
@@ -77,7 +78,7 @@ const ListViewScreenBase = ({ route, navigation }) => {
                 itemRefs={itemRefs}
                 removeItem={removeItem}
                 navigation={navigation}
-                category={categoryTitle}
+                category={categoryId}
                 listItems={listItems}
             />
         )
@@ -103,10 +104,7 @@ const ListViewScreenBase = ({ route, navigation }) => {
                 title="Powrót"
                 onPress={() => navigation.navigate('HomeScreen')}
             />
-            <FloatingButton
-                navigation={navigation}
-                clickedCategory={categoryId}
-            />
+            <FloatingButton navigation={navigation} categoryId={categoryId} />
         </>
     )
 }

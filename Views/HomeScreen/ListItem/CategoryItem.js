@@ -1,5 +1,6 @@
 import { Pressable, Text } from 'react-native'
 import styles from '../HomeScreen.styles'
+import { ACTIONS } from '../../../Shared/constants'
 
 const generateColor = () => {
     const randomColor = Math.floor(Math.random() * 16777215)
@@ -9,8 +10,7 @@ const generateColor = () => {
 }
 
 const CategoryItem = ({ item, navigation }) => {
-    const { categoryId = '', details = [] } = item
-    const { categoryTitle = '', items = [] } = details
+    const { categoryTitle, items } = item.details
 
     return (
         <Pressable
@@ -21,8 +21,10 @@ const CategoryItem = ({ item, navigation }) => {
             ]}
             onPress={() => {
                 navigation.navigate('ListViewScreen', {
-                    categoryId,
-                    categoryTitle,
+                    passedPropsFromPreviousScreen: {
+                        categoryTitle,
+                        categoryId: item.categoryId,
+                    },
                 })
             }}
         >
