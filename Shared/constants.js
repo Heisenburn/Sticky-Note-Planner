@@ -18,3 +18,9 @@ export const ACTION_PHRASES = {
     AddingNote: 'Dodawanie notatki',
     EditingNote: 'Edytowanie notatki',
 }
+
+export const ACTIONS_NAME = {
+    NOTE: 'Note',
+    CATEGORY: 'Category',
+    EDIT: 'Edit',
+}

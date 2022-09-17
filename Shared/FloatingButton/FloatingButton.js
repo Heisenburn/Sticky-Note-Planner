@@ -1,13 +1,8 @@
 import styles from './FloatingButton.styles'
 import { FloatingAction } from 'react-native-floating-action'
-import { View, Text } from 'react-native'
+import { View } from 'react-native'
 import { useRef } from 'react'
-
-export const ACTIONS_NAME = {
-    NOTE: 'note',
-    CATEGORY: 'category',
-    EDIT: 'edit',
-}
+import { ACTIONS_NAME } from '../constants'
 
 const ACTIONS = [
     {

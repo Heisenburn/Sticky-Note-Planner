@@ -6,18 +6,13 @@ import {
     Alert,
     Button,
 } from 'react-native'
-import React, { useContext, useEffect, useState } from 'react'
+import React, { useContext, useState } from 'react'
 import styles from './AddScreen.styles'
 import AutocompleteCategory from './AutocompleteCategory/AutocompleteCategory'
 import setAsyncStorageValue from '../../AsyncStorage/setAsyncStorageValue'
-import getElementsForKey from '../../AsyncStorage/getElementsForKey'
-import { CommonActions } from '@react-navigation/native'
-import { ACTIONS_NAME } from '../../Shared/FloatingButton/FloatingButton'
-import { setCategory } from '../../AsyncStorage/setCategory'
 import { CategoriesWithNotesContext } from '../../Context/CategoriesWithNotesContext'
-import { ACTION_PHRASES } from '../../Shared/constants'
-import { CategoryWithNotesType } from '../../types/types'
-import getDataAfterAddingNoteOrCategory from '../../AsyncStorage/getDataAfterAddingNoteOrCategory'
+import { ACTION_PHRASES, ACTIONS_NAME } from '../../Shared/constants'
+import { getDataAfterAddingNoteOrCategory } from '../../AsyncStorage/getDataAfterAddingNoteOrCategory'
 
 const AddScreenBase = ({ route, navigation }) => {
     const {
@@ -62,14 +57,12 @@ const AddScreenBase = ({ route, navigation }) => {
         const shouldUpdateCategory = categoryInput !== clickedCategory
 
         if (isAddingCategoryMode) {
-            // const response = await setCategory(textFieldInput)
-
-            const filteredArray = getDataAfterAddingNoteOrCategory({
+            const filteredArray = await getDataAfterAddingNoteOrCategory({
                 noteValue: null,
                 categoryId: textFieldInput,
                 existingData: data,
             })
-            updateData(filteredArray)
+            return updateData(filteredArray)
             //
             // if (response) {
             //     return navigation.navigate('HomeScreen')

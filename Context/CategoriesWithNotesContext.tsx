@@ -1,10 +1,10 @@
-import { createContext, useEffect, useState } from 'react'
+import { createContext, useEffect, useRef, useState } from 'react'
 import AsyncStorage from '@react-native-async-storage/async-storage'
 import { CategoryWithNotesType } from '../types/types'
 import { getKeysForExistingCategories } from './helpers/getKeysForExistingCategories'
 import { removeMultipleAsyncStorageElements } from '../AsyncStorage/removeMultipleAsyncStorageElements'
-import setAsyncStorageValue from '../AsyncStorage/setAsyncStorageValue'
 import { Alert } from 'react-native'
+import setAsyncStorageValue from '../AsyncStorage/setAsyncStorageValue'
 
 interface Props {
     updateData: (newState: CategoryWithNotesType[]) => void
@@ -27,53 +27,46 @@ export const CategoriesWithNotesContextProvider = ({ children }) => {
 
     const getData = (): CategoryWithNotesType[] => categoriesWithNotes
 
-    //each time data change
     useEffect(() => {
         if (categoriesWithNotes) {
             ;(async () => {
                 //first remove old data
-                const keysWithCategoryKeyword =
-                    await getKeysForExistingCategories()
+                const arrayOfCategories = await getKeysForExistingCategories()
 
-                await removeMultipleAsyncStorageElements(
-                    keysWithCategoryKeyword
-                )
-                //then save new data
+                await removeMultipleAsyncStorageElements(arrayOfCategories)
 
-                const mappedData = categoriesWithNotes.map((item) => {
-                    return [item.categoryId, JSON.stringify(item)]
-                })
+                // // then save new data
+                // const mappedData = categoriesWithNotes.map((item) => {
+                //     return [item.categoryId, JSON.stringify(item)]
+                // })
+                //
+                // const test = categoriesWithNotes.map((item) => {
+                //     return [item.categoryId, item]
+                // })
+                //
+                // console.log({ categoriesWithNotes })
 
-                console.log({ mappedData })
-                // if (mappedData.length > 0) {
-                //     //TODO: to wynieść do osobnej funkcji
-                //     try {
-                //         await AsyncStorage.multiSet(mappedData)
-                //     } catch (error) {
-                //         Alert.alert(`error: ${error}`)
-                //         throw error
-                //     }
-                // }
+                if (categoriesWithNotes.length > 0) {
+                    for (const item of categoriesWithNotes) {
+                        const key = item.categoryId
+                        const value = item
+                        await setAsyncStorageValue(key, value)
+                    }
+                }
             })()
         }
     }, [categoriesWithNotes])
 
     //get initial data
     useEffect(() => {
-        //TODO: dodać refa, który mówiłby o tym czy ma się odpalić
-
         //TODO: tutaj można byłoby odpalać dodawać PREDEFINED_CATEGORIES
         //IIFE format to avoid adding async to useEffect
         ;(async () => {
             const keysWithCategoryKeyword = await getKeysForExistingCategories()
             //get values of the category keys
             const data = await AsyncStorage.multiGet(keysWithCategoryKeyword)
-            const mappedData = data.map((item) => {
-                return {
-                    categoryId: item[0],
-                    details: JSON.parse(item[1]),
-                }
-            })
+            const mappedData = data.map((item) => JSON.parse(item[1]))
+
             console.log({ mappedData })
             //update state
             setCategoriesWithNotes(mappedData)

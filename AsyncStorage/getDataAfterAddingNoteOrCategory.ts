@@ -17,7 +17,7 @@ export const getAllKeys = async () => {
     // ['@MyApp_user', '@MyApp_key']
 }
 
-function getNewCategoryKeyWithId(category) {
+const getNewCategoryKeyWithId = async (category) => {
     //first get all keys with category in key
     //then get last ID to be used when creating new category
     const keysWithCategoryKeyword = await getKeysForExistingCategories()
@@ -30,7 +30,7 @@ function getNewCategoryKeyWithId(category) {
     )}-ID${categoryId}`
 }
 
-export const getDataAfterAddingNoteOrCategory = ({
+export const getDataAfterAddingNoteOrCategory = async ({
     noteValue,
     categoryId,
     existingData,
@@ -38,7 +38,7 @@ export const getDataAfterAddingNoteOrCategory = ({
     noteValue: null | string
     categoryId: null | string
     existingData: CategoryWithNotesType[]
-}): CategoryWithNotesType[] => {
+}): Promise<CategoryWithNotesType[]> => {
     const category = categoryId || 'RANDOM'
 
     //1. saving note to category
@@ -50,11 +50,8 @@ export const getDataAfterAddingNoteOrCategory = ({
         )
         let newElement = null
 
-        //empty array
-        if (categoryWithNotes.details.items.length > 0) {
-            categoryWithNotes.details.items.push(noteValue)
-        } else {
-            const categoryKeyId = getNewCategoryKeyWithId(category)
+        if (!categoryWithNotes) {
+            const categoryKeyId = await getNewCategoryKeyWithId(category)
 
             newElement = {
                 categoryId: categoryKeyId,
@@ -66,11 +63,13 @@ export const getDataAfterAddingNoteOrCategory = ({
 
             const existingDataWithNewElement = [...existingData, newElement]
             return existingDataWithNewElement
+        } else {
+            categoryWithNotes.details.items.push(noteValue)
         }
 
         //2. saving category
     } else {
-        const categoryKeyId = getNewCategoryKeyWithId(category)
+        const categoryKeyId = await getNewCategoryKeyWithId(category)
 
         const newElement = {
             categoryId: categoryKeyId,
