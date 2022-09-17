@@ -44,7 +44,7 @@ const ListViewScreenBase = ({ route, navigation }) => {
         //save data with new order
         const dataWithNewOrder = data.filter((item) => {
             if (item.categoryId === categoryId) {
-                item.details.items = listItemsAfterDrag.map((item)=> item.text)
+                item.details.items = listItemsAfterDrag.map((item) => item.text)
             }
             return item
         })
@@ -54,6 +54,7 @@ const ListViewScreenBase = ({ route, navigation }) => {
 
     useEffect(() => {
         //structure of data expected by DraggableFlatList library
+        if (!items) return setListItems([])
         const mappedData = items.map((note, index) => {
             const backgroundColor = getColor(index)
             return {

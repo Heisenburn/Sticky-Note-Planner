@@ -31,26 +31,32 @@ export const CategoriesWithNotesContextProvider = ({ children }) => {
         if (categoriesWithNotes) {
             ;(async () => {
                 //first remove old data
-                const arrayOfCategories = await getKeysForExistingCategories()
-
-                await removeMultipleAsyncStorageElements(arrayOfCategories)
-
-                // // then save new data
-                // const mappedData = categoriesWithNotes.map((item) => {
-                //     return [item.categoryId, JSON.stringify(item)]
-                // })
+                // const arrayOfCategories = await getKeysForExistingCategories()
                 //
+                // await removeMultipleAsyncStorageElements(arrayOfCategories)
+
+                // then save new data
+                const mappedData = categoriesWithNotes.map((item) => {
+                    return [item.categoryId, JSON.stringify(item)]
+                })
+
                 // const test = categoriesWithNotes.map((item) => {
                 //     return [item.categoryId, item]
                 // })
                 //
-                // console.log({ categoriesWithNotes })
+                console.log({ categoriesWithNotes })
 
                 if (categoriesWithNotes.length > 0) {
-                    for (const item of categoriesWithNotes) {
-                        const key = item.categoryId
-                        const value = item
-                        await setAsyncStorageValue(key, value)
+                    // for (const item of categoriesWithNotes) {
+                    //     const key = item.categoryId
+                    //     const value = item
+                    //     await setAsyncStorageValue(key, value)
+                    // }
+
+                    try {
+                        await AsyncStorage.multiSet(mappedData)
+                    } catch (e) {
+                        //save error
                     }
                 }
             })()
@@ -67,7 +73,6 @@ export const CategoriesWithNotesContextProvider = ({ children }) => {
             const data = await AsyncStorage.multiGet(keysWithCategoryKeyword)
             const mappedData = data.map((item) => JSON.parse(item[1]))
 
-            console.log({ mappedData })
             //update state
             setCategoriesWithNotes(mappedData)
         })()

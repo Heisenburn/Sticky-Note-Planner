@@ -45,27 +45,17 @@ export const getDataAfterAddingNoteOrCategory = async ({
     if (noteValue) {
         //append if there are existing notes for this category
 
-        const categoryWithNotes = existingData.find(
-            (item) => item.categoryId === categoryId
-        )
-        let newElement = null
-
-        if (!categoryWithNotes) {
-            const categoryKeyId = await getNewCategoryKeyWithId(category)
-
-            newElement = {
-                categoryId: categoryKeyId,
-                details: {
-                    categoryTitle: category,
-                    items: [noteValue],
-                },
+        const existingDataWithNewNoteInCategory = existingData.filter(
+            (item) => {
+                if (item.categoryId === categoryId) {
+                    item.details.items.push(noteValue)
+                    return item
+                }
+                return item
             }
+        )
 
-            const existingDataWithNewElement = [...existingData, newElement]
-            return existingDataWithNewElement
-        } else {
-            categoryWithNotes.details.items.push(noteValue)
-        }
+        return existingDataWithNewNoteInCategory
 
         //2. saving category
     } else {
@@ -79,7 +69,6 @@ export const getDataAfterAddingNoteOrCategory = async ({
             },
         }
 
-        const existingDataWithNewElement = [...existingData, newElement]
-        return existingDataWithNewElement
+        return [...existingData, newElement]
     }
 }

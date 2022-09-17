@@ -47,7 +47,6 @@ const AddScreenBase = ({ route, navigation }) => {
 
     const handleSubmit = async () => {
         const isNoteEmpty = !textFieldInput.trim().length
-        let response = null
 
         if (isNoteEmpty) {
             Alert.alert('Notatka', 'Treść notatki nie może być pusta')
@@ -62,14 +61,12 @@ const AddScreenBase = ({ route, navigation }) => {
                 categoryId: textFieldInput,
                 existingData: data,
             })
-            return updateData(filteredArray)
-            //
-            // if (response) {
-            //     return navigation.navigate('HomeScreen')
-            //     // navigation.navigate('ListViewScreen', {
-            //     //     itemId: textFieldInput,
-            //     // })
-            // }
+            updateData(filteredArray)
+            // return navigation.navigate('ListViewScreen', {
+            //     categoryTitle: textFieldInput,
+            //     categoryId: filteredArray.pop().categoryId,
+            // })
+            return navigation.navigate('HomeScreen')
         }
 
         if (shouldSaveEditItem) {
@@ -99,17 +96,20 @@ const AddScreenBase = ({ route, navigation }) => {
                     }
                 })
 
-                response = await setAsyncStorageValue(
-                    categoryInput,
-                    originListWithEditedItem
-                )
+                // const filteredArray = await getDataAfterAddingNoteOrCategory({
+                //     noteValue: textFieldInput,
+                //     categoryId: clickedCategory,
+                //     existingData: data,
+                // })
+                // updateData(filteredArray.final)
+
                 navigation.navigate('ListViewScreen', {
                     itemId: categoryInput,
                 })
             }
         } else {
             //Scenario: User enter AddScreen without EDIT option
-            const filteredArray = getDataAfterAddingNoteOrCategory({
+            const filteredArray = await getDataAfterAddingNoteOrCategory({
                 noteValue: textFieldInput,
                 categoryId: clickedCategory,
                 existingData: data,
@@ -117,11 +117,9 @@ const AddScreenBase = ({ route, navigation }) => {
             updateData(filteredArray)
         }
 
-        if (response) {
-            navigation.navigate('ListViewScreen', {
-                itemId: categoryInput || 'RANDOM',
-            })
-        }
+        return navigation.navigate('ListViewScreen', {
+            itemId: categoryInput || 'RANDOM',
+        })
     }
 
     const shouldDisplayCategoryInput =
