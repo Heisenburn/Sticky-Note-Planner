@@ -75,17 +75,8 @@ const AddScreenBase = ({ route, navigation }) => {
                     (item) => item.id !== editedItem.id
                 )
 
-                //1. remove element from origin list
-                await setAsyncStorageValue(
-                    clickedCategory,
-                    originListWithRemovedElement
-                )
-
-                //2. add element to target list
-                response = await getDataAfterAddingNoteOrCategory({
-                    noteValue: editedItem.text,
-                    categoryValue: categoryInput,
-                })
+                console.log({ originListWithRemovedElement })
+                return
             } else {
                 //only note value was edited
                 const originListWithEditedItem = listItems.map((item) => {
@@ -151,9 +142,8 @@ const AddScreenBase = ({ route, navigation }) => {
 
                 {shouldDisplayCategoryInput ? (
                     <AutocompleteCategory
-                        categoryInput={categoryInput}
                         setCategoryInput={setCategoryInput}
-                        clickedCategory={clickedCategory}
+                        categoryInput={categoryInput}
                     />
                 ) : null}
 

@@ -1,18 +1,12 @@
-import Autocomplete from 'react-native-autocomplete-input'
-import { Button, Pressable, Text, TouchableOpacity } from 'react-native'
-import { useEffect, useMemo, useState } from 'react'
+import { FlatList, Pressable, Text } from 'react-native'
+import { useEffect, useState } from 'react'
 import { getAllKeys } from '../../../AsyncStorage/getDataAfterAddingNoteOrCategory'
 import { CATEGORY_KEY_PREFIX } from '../../../Shared/constants'
 
-const AutocompleteCategory = ({
-    categoryInput,
-    setCategoryInput,
-    clickedCategory,
-}) => {
+const AutocompleteCategory = ({ setCategoryInput, categoryInput }) => {
     const [categories, setCategories] = useState([])
-    const [filteredCategories, setFilteredCategories] = useState([])
 
-    useMemo(async () => {
+    useEffect(async () => {
         const availableKeys = await getAllKeys()
         const keysWithCategoryKeyword = availableKeys.filter((item) =>
             item.includes(CATEGORY_KEY_PREFIX)
@@ -20,58 +14,39 @@ const AutocompleteCategory = ({
         setCategories(keysWithCategoryKeyword)
     }, [])
 
-    // const findCategory = (input) => {
-    //     setFilteredCategories(
-    //         input.length ? categories.filter((item) => item) : data
-    //     )
-    // }
-
-    // return (
-    //     <Autocomplete
-    //         autoCapitalize="none"
-    //         data={filteredCategories}
-    //         //TODO: Refactor ponizszego
-    //         defaultValue={
-    //             JSON.stringify(categoryInput) === '{}'
-    //                 ? ''
-    //                 : categoryInput || clickedCategory
-    //         }
-    //         autoCorrect={false}
-    //         onChangeText={(input) => findCategory(input)}
-    //         placeholder="Default category: RANDOM"
-    //         flatListProps={{
-    //             keyboardShouldPersistTaps: 'always',
-    //             keyExtractor: (_, idx) => idx,
-    //             renderItem: ({ item: { title } }) => (
-    //                 <TouchableOpacity
-    //                     onPress={() => {
-    //                         setCategoryInput(title)
-    //                         setFilteredCategories([])
-    //                     }}
-    //                 >
-    //                     <Text>{title}</Text>
-    //                 </TouchableOpacity>
-    //             ),
-    //         }}
-    //     />
-    // )
-
-    return categories.map((item) => {
+    const renderCategoryButton = (item) => {
         return (
             <Pressable
-                onPress={(item) => setCategoryInput(item)}
-                style={({ pressed }) => [
-                    { backgroundColor: pressed ? 'black' : 'white' },
-                ]}
+                key={item}
+                onPress={() => setCategoryInput(item)}
+                style={{
+                    backgroundColor: item === categoryInput ? 'black' : 'blue',
+                    borderRadius: 20,
+                    padding: 20,
+                    margin: 10,
+                }}
             >
-                {({ pressed }) => (
-                    <Text style={[{ color: pressed ? 'white' : 'black' }]}>
-                        {item}
-                    </Text>
-                )}
+                <Text
+                    style={{
+                        color: 'white',
+                    }}
+                >
+                    {item}
+                </Text>
             </Pressable>
         )
-    })
+    }
+
+    return (
+        <FlatList
+            style={{
+                maxHeight: 100,
+            }}
+            data={categories}
+            renderItem={({ item }) => renderCategoryButton(item)}
+            keyExtractor={(item) => item}
+        />
+    )
 }
 
 export default AutocompleteCategory
