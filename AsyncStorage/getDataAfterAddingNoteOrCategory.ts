@@ -39,8 +39,6 @@ export const getDataAfterAddingNoteOrCategory = async ({
     categoryId: null | string
     existingData: CategoryWithNotesType[]
 }): Promise<CategoryWithNotesType[]> => {
-    const category = categoryId || 'RANDOM'
-
     //1. saving note to category
     if (noteValue) {
         //append if there are existing notes for this category
@@ -59,7 +57,7 @@ export const getDataAfterAddingNoteOrCategory = async ({
 
         //2. saving category
     } else {
-        const categoryKeyId = await getNewCategoryKeyWithId(category)
+        const categoryKeyId = await getNewCategoryKeyWithId(categoryId)
 
         const newElement = {
             categoryId: categoryKeyId,

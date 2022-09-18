@@ -17,7 +17,7 @@ const getColor = (i) => {
 const ListViewScreenBase = ({ route, navigation }) => {
     const { passedPropsFromPreviousScreen } = route.params
     const { category } = passedPropsFromPreviousScreen
-    const { categoryTitle, categoryId } = category
+    const { categoryId } = category
 
     const [listItems, setListItems] = useState([])
     const { getData, updateData } = useContext(CategoriesWithNotesContext)
@@ -25,6 +25,7 @@ const ListViewScreenBase = ({ route, navigation }) => {
     const data = getData()
     const categoryItem = data.find((item) => item.categoryId === categoryId)
     const { items } = categoryItem?.details || []
+    const categoryTitle = categoryItem.details.categoryTitle
 
     const removeItem = async (idToBeRemoved) => {
         const filteredItems = items.filter(

@@ -23,7 +23,6 @@ const CategoryItem = ({ item, navigation }) => {
                 navigation.navigate('ListViewScreen', {
                     passedPropsFromPreviousScreen: {
                         category: {
-                            categoryTitle,
                             categoryId: item.categoryId,
                         },
                     },

@@ -12,6 +12,7 @@ export const updateDataAndGoToScreen = async ({
     data,
     listItems,
     editedItem,
+    shouldDisplayCategorySelect,
 }) => {
     switch (action) {
         case ACTIONS.ADD_CATEGORY: {
@@ -30,7 +31,9 @@ export const updateDataAndGoToScreen = async ({
         case ACTIONS.ADD_NOTE: {
             const filteredArray = await getDataAfterAddingNoteOrCategory({
                 noteValue: textFieldInput,
-                categoryId: categoryInput,
+                categoryId: shouldDisplayCategorySelect
+                    ? categoryInput
+                    : categoryId,
                 existingData: data,
             })
 
@@ -39,7 +42,6 @@ export const updateDataAndGoToScreen = async ({
             return navigation.navigate('ListViewScreen', {
                 passedPropsFromPreviousScreen: {
                     category: {
-                        categoryTitle,
                         categoryId: categoryInput,
                     },
                 },
@@ -77,8 +79,7 @@ export const updateDataAndGoToScreen = async ({
                 navigation.navigate('ListViewScreen', {
                     passedPropsFromPreviousScreen: {
                         category: {
-                            categoryTitle,
-                            categoryInput,
+                            categoryId: categoryInput,
                         },
                     },
                 })

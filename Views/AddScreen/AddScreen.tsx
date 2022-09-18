@@ -46,6 +46,10 @@ const AddScreenBase = ({ route, navigation }) => {
     const { getData, updateData } = useContext(CategoriesWithNotesContext)
     const data = getData()
 
+    const shouldDisplayCategorySelect =
+        action == ACTIONS.EDIT_NOTE ||
+        (triggeredFromHomeScreen && action === ACTIONS.ADD_NOTE)
+
     const handleSubmit = async () => {
         const isNoteEmpty = !textFieldInput.trim().length
         if (isNoteEmpty) {
@@ -63,12 +67,9 @@ const AddScreenBase = ({ route, navigation }) => {
             data,
             listItems,
             editedItem,
+            shouldDisplayCategorySelect,
         })
     }
-
-    const shouldDisplayCategorySelect =
-        action == ACTIONS.EDIT_NOTE ||
-        (triggeredFromHomeScreen && action === ACTIONS.ADD_NOTE)
 
     return (
         <SafeAreaView style={styles.container}>
