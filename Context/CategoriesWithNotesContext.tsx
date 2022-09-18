@@ -31,9 +31,9 @@ export const CategoriesWithNotesContextProvider = ({ children }) => {
         if (categoriesWithNotes) {
             ;(async () => {
                 //first remove old data
-                // const arrayOfCategories = await getKeysForExistingCategories()
-                //
-                // await removeMultipleAsyncStorageElements(arrayOfCategories)
+                const arrayOfCategories = await getKeysForExistingCategories()
+
+                await removeMultipleAsyncStorageElements(arrayOfCategories)
 
                 // then save new data
                 const mappedData = categoriesWithNotes.map((item) => {

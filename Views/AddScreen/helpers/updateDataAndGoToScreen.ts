@@ -51,7 +51,7 @@ export const updateDataAndGoToScreen = async ({
             return navigation.navigate('ListViewScreen', {
                 passedPropsFromPreviousScreen: {
                     category: {
-                        categoryId: categoryInput,
+                        categoryId,
                     },
                 },
             })
