@@ -26,12 +26,11 @@ const getHeading = (action, categoryTitle) => {
     }
 }
 
-const AddScreenBase = ({ route, navigation }) => {
+const AddScreen = ({ route, navigation }) => {
     const { passedPropsFromPreviousScreen } = route.params
     const {
         category,
         editedItem = null,
-        listItems = null,
         action = null,
         triggeredFromHomeScreen = false,
     } = passedPropsFromPreviousScreen
@@ -63,9 +62,7 @@ const AddScreenBase = ({ route, navigation }) => {
             textFieldInput,
             categoryInput,
             categoryId: category?.categoryId,
-            categoryTitle: category?.categoryTitle,
             data,
-            listItems,
             editedItem,
             shouldDisplayCategorySelect,
         })
@@ -97,10 +94,13 @@ const AddScreenBase = ({ route, navigation }) => {
 
                 {shouldDisplayCategorySelect ? (
                     <>
-                        <Text>
-                            Jeśli nie wybierzesz kategorii - notatka będzie
-                            przypisana do kategorii RANDOM
-                        </Text>
+                        {action === ACTIONS.ADD_NOTE ? (
+                            <Text>
+                                Jeśli nie wybierzesz kategorii - notatka będzie
+                                przypisana do kategorii RANDOM
+                            </Text>
+                        ) : null}
+
                         <CategorySelect
                             setCategoryInput={setCategoryInput}
                             categoryInput={categoryInput}
@@ -126,4 +126,4 @@ const AddScreenBase = ({ route, navigation }) => {
     )
 }
 
-export default AddScreenBase
+export default AddScreen

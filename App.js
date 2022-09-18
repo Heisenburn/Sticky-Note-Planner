@@ -1,26 +1,23 @@
 import { NavigationContainer } from '@react-navigation/native'
-import AddScreenBase from './Views/AddScreen/AddScreen'
-import HomeScreenBase from './Views/HomeScreen/HomeScreen'
+import AddScreen from './Views/AddScreen/AddScreen'
+import HomeScreen from './Views/HomeScreen/HomeScreen'
 import { createNativeStackNavigator } from '@react-navigation/native-stack'
-import ListViewScreenBase from './Views/ListViewScreen/ListViewScreen'
-import { SafeAreaProvider } from 'react-native-safe-area-context'
-import withSaveAreaView from './Shared/HoC/WithSaveAreaView'
-import { useEffect } from 'react'
-import {
-    CategoriesWithNotesContext,
-    CategoriesWithNotesContextProvider,
-} from './Context/CategoriesWithNotesContext'
+import ListViewScreen from './Views/ListViewScreen/ListViewScreen'
+import { CategoriesWithNotesContextProvider } from './Context/CategoriesWithNotesContext'
+import { SafeAreaView } from 'react-native-safe-area-context'
+import SettingsScreen from './Views/SettingsScreen/SettingsScreen'
 
 const Stack = createNativeStackNavigator()
 
 export default function App() {
-    const ListViewScreen = withSaveAreaView(ListViewScreenBase)
-    const HomeScreen = withSaveAreaView(HomeScreenBase)
-    const AddScreen = withSaveAreaView(AddScreenBase)
-
     return (
         <CategoriesWithNotesContextProvider>
-            <SafeAreaProvider>
+            <SafeAreaView
+                style={{
+                    flex: 1,
+                    justifyContent: 'space-between',
+                }}
+            >
                 <NavigationContainer>
                     <Stack.Navigator
                         screenOptions={{
@@ -36,9 +33,13 @@ export default function App() {
                             name="ListViewScreen"
                             component={ListViewScreen}
                         />
+                        <Stack.Screen
+                            name="SettingsScreen"
+                            component={SettingsScreen}
+                        />
                     </Stack.Navigator>
                 </NavigationContainer>
-            </SafeAreaProvider>
+            </SafeAreaView>
         </CategoriesWithNotesContextProvider>
     )
 }

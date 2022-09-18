@@ -5,6 +5,7 @@ import styles from './ListViewScreen.style'
 import RowItem from './RowItem/RowItem'
 import FloatingButton from '../../Shared/FloatingButton/FloatingButton'
 import { CategoriesWithNotesContext } from '../../Context/CategoriesWithNotesContext'
+import { MaterialIcons } from '@expo/vector-icons'
 
 const NUM_ITEMS = 20
 
@@ -14,7 +15,7 @@ const getColor = (i) => {
     return `rgb(${colorVal}, ${Math.abs(128 - colorVal)}, ${255 - colorVal})`
 }
 
-const ListViewScreenBase = ({ route, navigation }) => {
+const ListViewScreen = ({ route, navigation }) => {
     const { passedPropsFromPreviousScreen } = route.params
     const { category } = passedPropsFromPreviousScreen
     const { categoryId } = category
@@ -25,7 +26,7 @@ const ListViewScreenBase = ({ route, navigation }) => {
     const data = getData()
     const categoryItem = data.find((item) => item.categoryId === categoryId)
     const { items } = categoryItem?.details || []
-    const categoryTitle = categoryItem.details.categoryTitle
+    const categoryTitle = categoryItem?.details?.categoryTitle
 
     const removeItem = async (idToBeRemoved) => {
         const filteredItems = items.filter(
@@ -81,15 +82,43 @@ const ListViewScreenBase = ({ route, navigation }) => {
                 removeItem={removeItem}
                 navigation={navigation}
                 categoryId={categoryId}
-                categoryTitle={categoryTitle}
-                listItems={listItems}
             />
         )
     }
 
+    const handleSettingsClick = () => {
+        navigation.navigate('SettingsScreen', {
+            passedPropsFromPreviousScreen: {
+                category: {
+                    categoryTitle,
+                    categoryId,
+                },
+            },
+        })
+    }
+
     return (
         <>
-            <Text style={styles.heading}>{categoryTitle}</Text>
+            <View
+                style={{
+                    padding: 20,
+                    display: 'flex',
+                    flexDirection: 'row',
+                    alignItems: 'center',
+                    justifyContent: 'space-between',
+                }}
+            >
+                <Text style={styles.heading}>
+                    Kategoria:{' '}
+                    <Text style={{ color: 'blue' }}>{categoryTitle}</Text>
+                </Text>
+                <MaterialIcons
+                    name="settings"
+                    size={40}
+                    color="black"
+                    onPress={handleSettingsClick}
+                />
+            </View>
             <View style={styles.container}>
                 {listItems?.length ? (
                     <DraggableFlatList
@@ -116,4 +145,4 @@ const ListViewScreenBase = ({ route, navigation }) => {
     )
 }
 
-export default ListViewScreenBase
+export default ListViewScreen

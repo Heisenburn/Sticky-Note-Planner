@@ -16,7 +16,7 @@ const clearAll = async () => {
     console.log('Done.')
 }
 
-export default function HomeScreenBase({ navigation }) {
+export default function HomeScreen({ navigation }) {
     const { getData } = useContext(CategoriesWithNotesContext)
     const data = getData()
 

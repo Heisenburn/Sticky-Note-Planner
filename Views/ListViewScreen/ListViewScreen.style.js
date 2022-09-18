@@ -19,7 +19,8 @@ const styles = StyleSheet.create({
     heading: {
         fontWeight: 'bold',
         color: 'black',
-        fontSize: 30,
+        fontSize: 20,
+        width: '80%',
     },
     underlayRight: {
         flex: 1,

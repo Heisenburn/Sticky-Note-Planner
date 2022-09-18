@@ -1,5 +1,6 @@
 import { ACTIONS } from '../../../Shared/constants'
 import { getDataAfterAddingNoteOrCategory } from '../../../AsyncStorage/getDataAfterAddingNoteOrCategory'
+import { CategoryWithNotesType } from '../../../types/types'
 
 export const updateDataAndGoToScreen = async ({
     action,
@@ -8,11 +9,19 @@ export const updateDataAndGoToScreen = async ({
     textFieldInput,
     categoryInput,
     categoryId,
-    categoryTitle,
     data,
-    listItems,
     editedItem,
     shouldDisplayCategorySelect,
+}: {
+    action: keyof typeof ACTIONS
+    updateData
+    navigation
+    textFieldInput
+    categoryInput
+    categoryId
+    data: CategoryWithNotesType[]
+    editedItem: string
+    shouldDisplayCategorySelect
 }) => {
     switch (action) {
         case ACTIONS.ADD_CATEGORY: {
@@ -49,37 +58,58 @@ export const updateDataAndGoToScreen = async ({
         }
 
         case ACTIONS.EDIT_NOTE: {
-            const shouldUpdateCategory = categoryInput !== categoryId
+            const shouldUpdateCategory = categoryInput
 
-            return
-            if (shouldUpdateCategory) {
-                const originListWithRemovedElement = listItems.filter(
-                    (item) => item.id !== editedItem.id
-                )
+            if (!!shouldUpdateCategory) {
+                const originCategoryId = categoryId
+                const destinationCategoryId = categoryInput
 
-                console.log({ originListWithRemovedElement })
-                return
-            } else {
-                //only note value was edited
-                const originListWithEditedItem = listItems.map((item) => {
-                    if (item.id === editedItem.id) {
-                        return { ...item, text: textFieldInput }
-                    } else {
+                const filteredArray = data.filter((item) => {
+                    //move element to destination category
+                    if (item.categoryId == destinationCategoryId) {
+                        item.details.items.push(textFieldInput)
                         return item
                     }
+                    //remove element from origin category
+                    if (item.categoryId === originCategoryId) {
+                        const originCategoryWithoutMovedNoted =
+                            item.details.items.filter(
+                                (item) => item !== textFieldInput
+                            )
+                        item.details.items = originCategoryWithoutMovedNoted
+                        return item
+                    }
+                    return item
                 })
-
-                // const filteredArray = await getDataAfterAddingNoteOrCategory({
-                //     noteValue: textFieldInput,
-                //     categoryId: clickedCategory,
-                //     existingData: data,
-                // })
-                // updateData(filteredArray.final)
-
-                navigation.navigate('ListViewScreen', {
+                updateData(filteredArray)
+                return navigation.navigate('ListViewScreen', {
                     passedPropsFromPreviousScreen: {
                         category: {
-                            categoryId: categoryInput,
+                            categoryId: destinationCategoryId,
+                        },
+                    },
+                })
+            } else {
+                //only note value was edited
+
+                const filteredArray = data.filter((item) => {
+                    //clicked category
+                    if (item.categoryId === categoryId) {
+                        //get index of changed element and replace it with new value
+                        const indexOfChangedElement =
+                            item.details.items.indexOf(editedItem.text)
+                        item.details.items[indexOfChangedElement] =
+                            textFieldInput
+                        return item
+                    }
+                    return item
+                })
+
+                updateData(filteredArray)
+                return navigation.navigate('ListViewScreen', {
+                    passedPropsFromPreviousScreen: {
+                        category: {
+                            categoryId,
                         },
                     },
                 })
