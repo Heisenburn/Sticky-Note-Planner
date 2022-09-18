@@ -30,7 +30,7 @@ export const updateDataAndGoToScreen = async ({
         case ACTIONS.ADD_NOTE: {
             const filteredArray = await getDataAfterAddingNoteOrCategory({
                 noteValue: textFieldInput,
-                categoryId,
+                categoryId: categoryInput,
                 existingData: data,
             })
 
@@ -40,7 +40,7 @@ export const updateDataAndGoToScreen = async ({
                 passedPropsFromPreviousScreen: {
                     category: {
                         categoryTitle,
-                        categoryId,
+                        categoryId: categoryInput,
                     },
                 },
             })

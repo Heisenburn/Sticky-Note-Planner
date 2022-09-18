@@ -8,10 +8,10 @@ import {
 } from 'react-native'
 import React, { useContext, useState } from 'react'
 import styles from './AddScreen.styles'
-import CategorySelect from './CategorySelect/CategorySelect'
 import { CategoriesWithNotesContext } from '../../Context/CategoriesWithNotesContext'
 import { ACTION_PHRASES, ACTIONS } from '../../Shared/constants'
 import { updateDataAndGoToScreen } from './helpers/updateDataAndGoToScreen'
+import CategorySelect from './CategorySelect/CategorySelect'
 
 const getHeading = (action, categoryTitle) => {
     switch (action) {
