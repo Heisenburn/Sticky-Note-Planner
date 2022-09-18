@@ -3,17 +3,22 @@ import { useEffect, useState } from 'react'
 import { getAllKeys } from '../../../AsyncStorage/getDataAfterAddingNoteOrCategory'
 import { CATEGORY_KEY_PREFIX } from '../../../Shared/constants'
 
-const AutocompleteCategory = ({ setCategoryInput, categoryInput }) => {
+const CategorySelect = ({ setCategoryInput, categoryInput }) => {
     const [categories, setCategories] = useState([])
 
-    useEffect(async () => {
-        const availableKeys = await getAllKeys()
-        const keysWithCategoryKeyword = availableKeys.filter((item) => {
-            if (item !== categoryInput && item.includes(CATEGORY_KEY_PREFIX)) {
-                return item
-            }
-        })
-        setCategories(keysWithCategoryKeyword)
+    useEffect(() => {
+        ;(async () => {
+            const availableKeys = await getAllKeys()
+            const keysWithCategoryKeyword = availableKeys.filter((item) => {
+                if (
+                    item !== categoryInput &&
+                    item.includes(CATEGORY_KEY_PREFIX)
+                ) {
+                    return item
+                }
+            })
+            setCategories(keysWithCategoryKeyword)
+        })()
     }, [])
 
     const renderCategoryButton = (item) => {
@@ -51,4 +56,4 @@ const AutocompleteCategory = ({ setCategoryInput, categoryInput }) => {
     )
 }
 
-export default AutocompleteCategory
+export default CategorySelect

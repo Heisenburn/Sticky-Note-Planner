@@ -40,19 +40,7 @@ export const CategoriesWithNotesContextProvider = ({ children }) => {
                     return [item.categoryId, JSON.stringify(item)]
                 })
 
-                // const test = categoriesWithNotes.map((item) => {
-                //     return [item.categoryId, item]
-                // })
-                //
-                console.log({ categoriesWithNotes })
-
                 if (categoriesWithNotes.length > 0) {
-                    // for (const item of categoriesWithNotes) {
-                    //     const key = item.categoryId
-                    //     const value = item
-                    //     await setAsyncStorageValue(key, value)
-                    // }
-
                     try {
                         await AsyncStorage.multiSet(mappedData)
                     } catch (e) {

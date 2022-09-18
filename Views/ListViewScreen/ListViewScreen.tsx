@@ -16,14 +16,15 @@ const getColor = (i) => {
 
 const ListViewScreenBase = ({ route, navigation }) => {
     const { passedPropsFromPreviousScreen } = route.params
-    const { categoryTitle, categoryId } = passedPropsFromPreviousScreen
+    const { category } = passedPropsFromPreviousScreen
+    const { categoryTitle, categoryId } = category
 
     const [listItems, setListItems] = useState([])
     const { getData, updateData } = useContext(CategoriesWithNotesContext)
 
     const data = getData()
     const categoryItem = data.find((item) => item.categoryId === categoryId)
-    const { items } = categoryItem.details
+    const { items } = categoryItem?.details || []
 
     const removeItem = async (idToBeRemoved) => {
         const filteredItems = items.filter(
@@ -78,7 +79,8 @@ const ListViewScreenBase = ({ route, navigation }) => {
                 itemRefs={itemRefs}
                 removeItem={removeItem}
                 navigation={navigation}
-                category={categoryId}
+                categoryId={categoryId}
+                categoryTitle={categoryTitle}
                 listItems={listItems}
             />
         )
@@ -104,7 +106,11 @@ const ListViewScreenBase = ({ route, navigation }) => {
                 title="Powrót"
                 onPress={() => navigation.navigate('HomeScreen')}
             />
-            <FloatingButton navigation={navigation} categoryId={categoryId} />
+            <FloatingButton
+                navigation={navigation}
+                categoryId={categoryId}
+                categoryTitle={categoryTitle}
+            />
         </>
     )
 }

@@ -8,14 +8,12 @@ import {
 } from 'react-native'
 import React, { useContext, useState } from 'react'
 import styles from './AddScreen.styles'
-import AutocompleteCategory from './AutocompleteCategory/AutocompleteCategory'
-import setAsyncStorageValue from '../../AsyncStorage/setAsyncStorageValue'
+import CategorySelect from './CategorySelect/CategorySelect'
 import { CategoriesWithNotesContext } from '../../Context/CategoriesWithNotesContext'
 import { ACTION_PHRASES, ACTIONS } from '../../Shared/constants'
-import { getDataAfterAddingNoteOrCategory } from '../../AsyncStorage/getDataAfterAddingNoteOrCategory'
 import { updateDataAndGoToScreen } from './helpers/updateDataAndGoToScreen'
 
-const getHeading = (action, clickedCategory) => {
+const getHeading = (action, categoryTitle) => {
     switch (action) {
         case ACTIONS.EDIT_NOTE:
             return ACTION_PHRASES[ACTIONS.EDIT_NOTE]
@@ -23,7 +21,7 @@ const getHeading = (action, clickedCategory) => {
             return ACTION_PHRASES[ACTIONS.ADD_CATEGORY]
         case ACTIONS.ADD_NOTE:
             return `${ACTION_PHRASES[ACTIONS.ADD_NOTE]} ${
-                clickedCategory ? 'w kategorii: ' + clickedCategory : ''
+                categoryTitle ? 'w kategorii: ' + categoryTitle : ''
             }`
     }
 }
@@ -31,16 +29,19 @@ const getHeading = (action, clickedCategory) => {
 const AddScreenBase = ({ route, navigation }) => {
     const { passedPropsFromPreviousScreen } = route.params
     const {
-        clickedCategory = null,
+        category,
         editedItem = null,
         listItems = null,
         action = null,
+        triggeredFromHomeScreen = false,
     } = passedPropsFromPreviousScreen
 
     const [textFieldInput, setTextFieldInput] = useState<string>(
         editedItem?.text || ''
     )
-    const [categoryInput, setCategoryInput] = useState(clickedCategory || '')
+    const [categoryInput, setCategoryInput] = useState(
+        category?.categoryTitle || ''
+    )
 
     const { getData, updateData } = useContext(CategoriesWithNotesContext)
     const data = getData()
@@ -51,27 +52,29 @@ const AddScreenBase = ({ route, navigation }) => {
             Alert.alert('Notatka', 'Treść notatki nie może być pusta')
             return
         }
-        await updateDataAndGoToScreen(
+        await updateDataAndGoToScreen({
             action,
             updateData,
             navigation,
             textFieldInput,
             categoryInput,
-            clickedCategory,
+            categoryId: category?.categoryId,
+            categoryTitle: category?.categoryTitle,
             data,
             listItems,
-            editedItem
-        )
+            editedItem,
+        })
     }
 
-    const shouldDisplayCategoryInput =
-        (!clickedCategory || editedItem) && action !== ACTIONS.ADD_CATEGORY
+    const shouldDisplayCategorySelect =
+        action == ACTIONS.EDIT_NOTE ||
+        (triggeredFromHomeScreen && action === ACTIONS.ADD_NOTE)
 
     return (
         <SafeAreaView style={styles.container}>
             <View style={styles.innerContainer}>
                 <Text style={editedItem ? styles.editMode : styles.heading}>
-                    {getHeading(action, clickedCategory)}
+                    {getHeading(action, category?.categoryTitle)}
                 </Text>
                 <TextInput
                     multiline={true}
@@ -81,7 +84,7 @@ const AddScreenBase = ({ route, navigation }) => {
                     value={textFieldInput}
                 />
 
-                {shouldDisplayCategoryInput ? (
+                {shouldDisplayCategorySelect ? (
                     <Text style={styles.heading}>Kategoria</Text>
                 ) : null}
 
@@ -91,11 +94,17 @@ const AddScreenBase = ({ route, navigation }) => {
                     </Text>
                 ) : null}
 
-                {shouldDisplayCategoryInput ? (
-                    <AutocompleteCategory
-                        setCategoryInput={setCategoryInput}
-                        categoryInput={categoryInput}
-                    />
+                {shouldDisplayCategorySelect ? (
+                    <>
+                        <Text>
+                            Jeśli nie wybierzesz kategorii - notatka będzie
+                            przypisana do kategorii RANDOM
+                        </Text>
+                        <CategorySelect
+                            setCategoryInput={setCategoryInput}
+                            categoryInput={categoryInput}
+                        />
+                    </>
                 ) : null}
 
                 <View style={styles.buttonCommonStyles}>

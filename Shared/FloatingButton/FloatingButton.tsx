@@ -1,25 +1,27 @@
 import styles from './FloatingButton.styles'
-import { FloatingAction } from 'react-native-floating-action'
+import { FloatingAction, IActionProps } from 'react-native-floating-action'
 import { View } from 'react-native'
 import { useRef } from 'react'
 import { ACTION_PHRASES, ACTIONS } from '../constants'
 
-const FLOATING_BUTTON_ACTIONS = [
+const FLOATING_BUTTON_ACTIONS: IActionProps[] = [
     {
         text: ACTION_PHRASES[ACTIONS.ADD_NOTE],
         // icon: require('./images/ic_accessibility_white.png'),
         name: ACTIONS.ADD_NOTE,
-        position: 1,
     },
     {
         text: ACTION_PHRASES[ACTIONS.ADD_CATEGORY],
         // icon: require('./images/ic_language_white.png'),
         name: ACTIONS.ADD_CATEGORY,
-        position: 2,
     },
 ]
 
-const FloatingButton = ({ navigation, categoryId = null }) => {
+const FloatingButton = ({
+    navigation,
+    categoryId = null,
+    categoryTitle = null,
+}) => {
     const floatingButtonRef = useRef(null)
 
     return (
@@ -31,21 +33,29 @@ const FloatingButton = ({ navigation, categoryId = null }) => {
                 color={'#6638f0'}
                 distanceToEdge={10}
                 buttonSize={100}
-                iconSize={100}
+                //triggered from within ListViewScreen
                 onOpen={() => {
-                    if (clickedCategory) {
+                    if (categoryId) {
                         floatingButtonRef.current.reset()
                         navigation.navigate('AddScreen', {
                             passedPropsFromPreviousScreen: {
-                                categoryId: categoryId,
+                                category: {
+                                    categoryId,
+                                    categoryTitle,
+                                },
                                 action: ACTIONS.ADD_NOTE,
                             },
                         })
                     }
                 }}
-                onPressItem={(name) => {
+                //triggered from within HomeScreen
+                onPressItem={(pressedAction) => {
+                    console.log({ pressedAction })
                     navigation.navigate('AddScreen', {
-                        action: name,
+                        passedPropsFromPreviousScreen: {
+                            action: pressedAction,
+                            triggeredFromHomeScreen: true,
+                        },
                     })
                 }}
             />

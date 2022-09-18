@@ -22,8 +22,10 @@ const CategoryItem = ({ item, navigation }) => {
             onPress={() => {
                 navigation.navigate('ListViewScreen', {
                     passedPropsFromPreviousScreen: {
-                        categoryTitle,
-                        categoryId: item.categoryId,
+                        category: {
+                            categoryTitle,
+                            categoryId: item.categoryId,
+                        },
                     },
                 })
             }}

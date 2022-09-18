@@ -1,17 +1,18 @@
 import { ACTIONS } from '../../../Shared/constants'
 import { getDataAfterAddingNoteOrCategory } from '../../../AsyncStorage/getDataAfterAddingNoteOrCategory'
 
-export const updateDataAndGoToScreen = async (
+export const updateDataAndGoToScreen = async ({
     action,
     updateData,
     navigation,
     textFieldInput,
     categoryInput,
-    clickedCategory,
+    categoryId,
+    categoryTitle,
     data,
     listItems,
-    editedItem
-) => {
+    editedItem,
+}) => {
     switch (action) {
         case ACTIONS.ADD_CATEGORY: {
             const filteredArray = await getDataAfterAddingNoteOrCategory({
@@ -29,20 +30,25 @@ export const updateDataAndGoToScreen = async (
         case ACTIONS.ADD_NOTE: {
             const filteredArray = await getDataAfterAddingNoteOrCategory({
                 noteValue: textFieldInput,
-                categoryId: clickedCategory,
+                categoryId,
                 existingData: data,
             })
+
             updateData(filteredArray)
 
             return navigation.navigate('ListViewScreen', {
-                itemId: categoryInput || 'RANDOM',
+                passedPropsFromPreviousScreen: {
+                    category: {
+                        categoryTitle,
+                        categoryId,
+                    },
+                },
             })
         }
 
         case ACTIONS.EDIT_NOTE: {
-            const shouldUpdateCategory = categoryInput !== clickedCategory
-            console.log({ categoryInput })
-            console.log({ clickedCategory })
+            const shouldUpdateCategory = categoryInput !== categoryId
+
             return
             if (shouldUpdateCategory) {
                 const originListWithRemovedElement = listItems.filter(
@@ -69,7 +75,12 @@ export const updateDataAndGoToScreen = async (
                 // updateData(filteredArray.final)
 
                 navigation.navigate('ListViewScreen', {
-                    itemId: categoryInput,
+                    passedPropsFromPreviousScreen: {
+                        category: {
+                            categoryTitle,
+                            categoryInput,
+                        },
+                    },
                 })
             }
         }

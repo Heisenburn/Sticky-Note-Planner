@@ -14,9 +14,9 @@ export const PREDEFINED_CATEGORIES = [
 export const CATEGORY_KEY_PREFIX = '@CATEGORY-'
 
 export enum ACTIONS {
-    ADD_NOTE,
-    ADD_CATEGORY,
-    EDIT_NOTE,
+    ADD_NOTE = 'ADD_NOTE',
+    ADD_CATEGORY = 'ADD_CATEGORY',
+    EDIT_NOTE = 'EDIT_NOTE',
 }
 
 export const ACTION_PHRASES = {

@@ -17,12 +17,16 @@ const RowItem = ({
     drag,
     removeItem,
     navigation,
-    category,
+    categoryId,
+    categoryTitle,
 }) => {
     const handleEditClick = () => {
         navigation.navigate('AddScreen', {
             passedPropsFromPreviousScreen: {
-                clickedCategory: category,
+                category: {
+                    categoryId,
+                    categoryTitle,
+                },
                 editedItem: item,
                 action: ACTIONS.EDIT_NOTE,
             },
