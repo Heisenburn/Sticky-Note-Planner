@@ -3,17 +3,14 @@ import { useEffect, useState } from 'react'
 import { getAllKeys } from '../../../AsyncStorage/getDataAfterAddingNoteOrCategory'
 import { CATEGORY_KEY_PREFIX } from '../../../Shared/constants'
 
-const CategorySelect = ({ setCategoryInput, categoryInput }) => {
+const CategorySelect = ({ setCategoryInput, categoryInput, categoryId }) => {
     const [categories, setCategories] = useState([])
 
     useEffect(() => {
         ;(async () => {
             const availableKeys = await getAllKeys()
             const keysWithCategoryKeyword = availableKeys.filter((item) => {
-                if (
-                    item !== categoryInput &&
-                    item.includes(CATEGORY_KEY_PREFIX)
-                ) {
+                if (item !== categoryId && item.includes(CATEGORY_KEY_PREFIX)) {
                     return item
                 }
             })

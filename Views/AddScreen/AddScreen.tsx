@@ -9,22 +9,13 @@ import {
 import React, { useContext, useState } from 'react'
 import styles from './AddScreen.styles'
 import { CategoriesWithNotesContext } from '../../Context/CategoriesWithNotesContext'
-import { ACTION_PHRASES, ACTIONS } from '../../Shared/constants'
-import { updateDataAndGoToScreen } from './helpers/updateDataAndGoToScreen'
+import { ACTIONS } from '../../Shared/constants'
 import CategorySelect from './CategorySelect/CategorySelect'
-
-const getHeading = (action, categoryTitle) => {
-    switch (action) {
-        case ACTIONS.EDIT_NOTE:
-            return ACTION_PHRASES[ACTIONS.EDIT_NOTE]
-        case ACTIONS.ADD_CATEGORY:
-            return ACTION_PHRASES[ACTIONS.ADD_CATEGORY]
-        case ACTIONS.ADD_NOTE:
-            return `${ACTION_PHRASES[ACTIONS.ADD_NOTE]} ${
-                categoryTitle ? 'w kategorii: ' + categoryTitle : ''
-            }`
-    }
-}
+import {
+    getHeading,
+    navigateToCorrectView,
+    updateAsyncLocalStorageData,
+} from './helpers/helpers'
 
 const AddScreen = ({ route, navigation }) => {
     const { passedPropsFromPreviousScreen } = route.params
@@ -55,10 +46,9 @@ const AddScreen = ({ route, navigation }) => {
             Alert.alert('Notatka', 'Treść notatki nie może być pusta')
             return
         }
-        await updateDataAndGoToScreen({
+        await updateAsyncLocalStorageData({
             action,
             updateData,
-            navigation,
             textFieldInput,
             categoryInput,
             categoryId: category?.categoryId,
@@ -66,6 +56,8 @@ const AddScreen = ({ route, navigation }) => {
             editedItem,
             shouldDisplayCategorySelect,
         })
+
+        navigateToCorrectView(action, navigation, category, categoryInput)
     }
 
     return (
@@ -104,6 +96,7 @@ const AddScreen = ({ route, navigation }) => {
                         <CategorySelect
                             setCategoryInput={setCategoryInput}
                             categoryInput={categoryInput}
+                            categoryId={category?.categoryId}
                         />
                     </>
                 ) : null}

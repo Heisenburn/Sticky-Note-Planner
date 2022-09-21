@@ -9,6 +9,14 @@ import { MaterialIcons } from '@expo/vector-icons'
 
 const NUM_ITEMS = 20
 
+export type DraggableFlatListStructure = {
+    id: number
+    text: string
+    key: string
+    backgroundColor: string
+    height: number
+}
+
 const getColor = (i) => {
     const multiplier = 255 / (NUM_ITEMS - 1)
     const colorVal = i * multiplier
@@ -20,7 +28,7 @@ const ListViewScreen = ({ route, navigation }) => {
     const { category } = passedPropsFromPreviousScreen
     const { categoryId } = category
 
-    const [listItems, setListItems] = useState([])
+    const [listItems, setListItems] = useState<DraggableFlatListStructure[]>([])
     const { getData, updateData } = useContext(CategoriesWithNotesContext)
 
     const data = getData()

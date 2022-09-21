@@ -1,11 +1,11 @@
-import { ACTIONS } from '../../../Shared/constants'
 import { getDataAfterAddingNoteOrCategory } from '../../../AsyncStorage/getDataAfterAddingNoteOrCategory'
 import { CategoryWithNotesType } from '../../../types/types'
+import { DraggableFlatListStructure } from '../../ListViewScreen/ListViewScreen'
+import { ACTION_PHRASES, ACTIONS } from '../../../Shared/constants'
 
-export const updateDataAndGoToScreen = async ({
+export const updateAsyncLocalStorageData = async ({
     action,
     updateData,
-    navigation,
     textFieldInput,
     categoryInput,
     categoryId,
@@ -15,12 +15,11 @@ export const updateDataAndGoToScreen = async ({
 }: {
     action: keyof typeof ACTIONS
     updateData
-    navigation
     textFieldInput
     categoryInput
     categoryId
     data: CategoryWithNotesType[]
-    editedItem: string
+    editedItem: DraggableFlatListStructure
     shouldDisplayCategorySelect
 }) => {
     switch (action) {
@@ -31,11 +30,6 @@ export const updateDataAndGoToScreen = async ({
                 existingData: data,
             })
             updateData(filteredArray)
-            // return navigation.navigate('ListViewScreen', {
-            //     categoryTitle: textFieldInput,
-            //     categoryId: filteredArray.pop().categoryId,
-            // })
-            return navigation.navigate('HomeScreen')
         }
         case ACTIONS.ADD_NOTE: {
             const filteredArray = await getDataAfterAddingNoteOrCategory({
@@ -46,15 +40,9 @@ export const updateDataAndGoToScreen = async ({
                 existingData: data,
             })
 
-            updateData(filteredArray)
+            console.log({ filteredArray })
 
-            return navigation.navigate('ListViewScreen', {
-                passedPropsFromPreviousScreen: {
-                    category: {
-                        categoryId,
-                    },
-                },
-            })
+            updateData(filteredArray)
         }
 
         case ACTIONS.EDIT_NOTE: {
@@ -82,13 +70,6 @@ export const updateDataAndGoToScreen = async ({
                     return item
                 })
                 updateData(filteredArray)
-                return navigation.navigate('ListViewScreen', {
-                    passedPropsFromPreviousScreen: {
-                        category: {
-                            categoryId: destinationCategoryId,
-                        },
-                    },
-                })
             } else {
                 //only note value was edited
 
@@ -106,14 +87,55 @@ export const updateDataAndGoToScreen = async ({
                 })
 
                 updateData(filteredArray)
-                return navigation.navigate('ListViewScreen', {
-                    passedPropsFromPreviousScreen: {
-                        category: {
-                            categoryId,
-                        },
-                    },
-                })
             }
+        }
+    }
+}
+
+export const getHeading = (action, categoryTitle) => {
+    switch (action) {
+        case ACTIONS.EDIT_NOTE:
+            return ACTION_PHRASES[ACTIONS.EDIT_NOTE]
+        case ACTIONS.ADD_CATEGORY:
+            return ACTION_PHRASES[ACTIONS.ADD_CATEGORY]
+        case ACTIONS.ADD_NOTE:
+            return `${ACTION_PHRASES[ACTIONS.ADD_NOTE]} ${
+                categoryTitle ? 'w kategorii: ' + categoryTitle : ''
+            }`
+    }
+}
+
+export const navigateToCorrectView = (
+    action,
+    navigation,
+    category,
+    categoryInput
+) => {
+    switch (action) {
+        case ACTIONS.ADD_CATEGORY: {
+            // return navigation.navigate('ListViewScreen', {
+            //     categoryTitle: textFieldInput,
+            //     categoryId: filteredArray.pop().categoryId,
+            // })
+            return navigation.navigate('HomeScreen')
+        }
+        case ACTIONS.ADD_NOTE: {
+            return navigation.navigate('ListViewScreen', {
+                passedPropsFromPreviousScreen: {
+                    category: {
+                        categoryId: category?.categoryId,
+                    },
+                },
+            })
+        }
+        case ACTIONS.EDIT_NOTE: {
+            return navigation.navigate('ListViewScreen', {
+                passedPropsFromPreviousScreen: {
+                    category: {
+                        categoryId: categoryInput || category?.categoryId,
+                    },
+                },
+            })
         }
     }
 }
