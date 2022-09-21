@@ -1,5 +1,5 @@
 import AsyncStorage from '@react-native-async-storage/async-storage'
-import { CATEGORY_KEY_PREFIX } from '../../Shared/constants'
+import { CATEGORY_KEY_PREFIX } from '../Shared/constants'
 import { Alert } from 'react-native'
 
 export const getKeysForExistingCategories = async (): Promise<string[]> => {

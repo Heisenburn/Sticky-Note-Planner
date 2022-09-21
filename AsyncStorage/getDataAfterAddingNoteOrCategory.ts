@@ -2,7 +2,7 @@ import AsyncStorage from '@react-native-async-storage/async-storage'
 import { Alert } from 'react-native'
 import { CATEGORY_KEY_PREFIX } from '../Shared/constants'
 import { CategoryWithNotesType } from '../types/types'
-import { getKeysForExistingCategories } from '../Context/helpers/getKeysForExistingCategories'
+import { getKeysForExistingCategories } from './getKeysForExistingCategories'
 
 export const getAllKeys = async () => {
     let keys = []

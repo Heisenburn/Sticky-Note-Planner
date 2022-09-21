@@ -2,6 +2,7 @@ import { Alert, Button, Pressable, Text, TextInput, View } from 'react-native'
 import React, { useContext, useState } from 'react'
 import styles from '../AddScreen/AddScreen.styles'
 import { CategoriesWithNotesContext } from '../../Context/CategoriesWithNotesContext'
+import { PREDEFINED_CATEGORIES_KEY_SUFFIX } from '../../Shared/constants'
 
 const SettingsScreen = ({ route, navigation }) => {
     const { passedPropsFromPreviousScreen } = route.params
@@ -22,7 +23,17 @@ const SettingsScreen = ({ route, navigation }) => {
                 {
                     text: 'Tak',
                     onPress: () => {
-                        handleRemove()
+                        if (
+                            categoryId.includes(
+                                PREDEFINED_CATEGORIES_KEY_SUFFIX
+                            )
+                        ) {
+                            Alert.alert(
+                                'Predefined categories are not possible to be removed'
+                            )
+                        } else {
+                            handleRemove()
+                        }
                     },
                 },
                 // The "No" button

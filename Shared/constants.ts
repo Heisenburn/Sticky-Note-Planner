@@ -1,17 +1,14 @@
 export const PREDEFINED_CATEGORIES = [
     {
-        categoryId: 1,
-        categoryTitle: 'Tydzień',
-        items: [],
+        categoryTitle: 'WEEK',
     },
     {
-        categoryId: 2,
         categoryTitle: 'RANDOM',
-        items: [],
     },
 ]
 
 export const CATEGORY_KEY_PREFIX = '@CATEGORY-'
+export const PREDEFINED_CATEGORIES_KEY_SUFFIX = `${CATEGORY_KEY_PREFIX}PREDEFINED`
 
 export enum ACTIONS {
     ADD_NOTE = 'ADD_NOTE',
