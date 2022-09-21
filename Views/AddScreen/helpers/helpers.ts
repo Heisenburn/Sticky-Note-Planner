@@ -29,7 +29,7 @@ export const updateAsyncLocalStorageData = async ({
                 categoryId: textFieldInput,
                 existingData: data,
             })
-            updateData(filteredArray)
+            return updateData(filteredArray)
         }
         case ACTIONS.ADD_NOTE: {
             const filteredArray = await getDataAfterAddingNoteOrCategory({
@@ -42,7 +42,7 @@ export const updateAsyncLocalStorageData = async ({
 
             console.log({ filteredArray })
 
-            updateData(filteredArray)
+            return updateData(filteredArray)
         }
 
         case ACTIONS.EDIT_NOTE: {
@@ -69,7 +69,7 @@ export const updateAsyncLocalStorageData = async ({
                     }
                     return item
                 })
-                updateData(filteredArray)
+                return updateData(filteredArray)
             } else {
                 //only note value was edited
 
@@ -85,8 +85,7 @@ export const updateAsyncLocalStorageData = async ({
                     }
                     return item
                 })
-
-                updateData(filteredArray)
+                return updateData(filteredArray)
             }
         }
     }

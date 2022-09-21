@@ -68,14 +68,15 @@ const RowItem = ({
                         styles.row,
                         {
                             backgroundColor: item.backgroundColor,
-                            height: item.height,
                             display: 'flex',
                             justifyContent: 'space-between',
                         },
                     ]}
                 >
                     <TouchableOpacity>
-                        <Text style={styles.text}>{item.text}</Text>
+                        <Text style={styles.text} numberOfLines={2}>
+                            {item.text}
+                        </Text>
                     </TouchableOpacity>
                     <TouchableOpacity onLongPress={drag}>
                         <View

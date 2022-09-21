@@ -3,6 +3,7 @@ import AsyncStorage from '@react-native-async-storage/async-storage'
 import { CategoryWithNotesType } from '../types/types'
 import { getKeysForExistingCategories } from './helpers/getKeysForExistingCategories'
 import { removeMultipleAsyncStorageElements } from '../AsyncStorage/removeMultipleAsyncStorageElements'
+import { Alert } from 'react-native'
 
 interface Props {
     updateData: (newState: CategoryWithNotesType[]) => void
@@ -30,7 +31,6 @@ export const CategoriesWithNotesContextProvider = ({ children }) => {
             ;(async () => {
                 //first remove old data
                 const arrayOfCategories = await getKeysForExistingCategories()
-
                 await removeMultipleAsyncStorageElements(arrayOfCategories)
 
                 // then save new data
@@ -40,8 +40,9 @@ export const CategoriesWithNotesContextProvider = ({ children }) => {
                             return [item.categoryId, JSON.stringify(item)]
                         })
                         await AsyncStorage.multiSet(mappedData)
-                    } catch (e) {
-                        //save error
+                    } catch (error) {
+                        Alert.alert(`error: ${error}`)
+                        throw error
                     }
                 }
             })()

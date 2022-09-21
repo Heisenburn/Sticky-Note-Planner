@@ -14,7 +14,6 @@ export type DraggableFlatListStructure = {
     text: string
     key: string
     backgroundColor: string
-    height: number
 }
 
 const getColor = (i) => {
@@ -74,7 +73,6 @@ const ListViewScreen = ({ route, navigation }) => {
                 text: note,
                 key: `key-${backgroundColor}`,
                 backgroundColor,
-                height: 100,
             }
         })
 
