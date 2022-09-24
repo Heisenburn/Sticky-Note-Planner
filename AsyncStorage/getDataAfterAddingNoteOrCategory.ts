@@ -1,6 +1,10 @@
 import AsyncStorage from '@react-native-async-storage/async-storage'
 import { Alert } from 'react-native'
-import { CATEGORY_KEY_PREFIX } from '../Shared/constants'
+import {
+    CATEGORY_KEY_PREFIX,
+    PREDEFINED_CATEGORIES,
+    PREDEFINED_CATEGORIES_KEY_SUFFIX,
+} from '../Shared/constants'
 import { CategoryWithNotesType } from '../types/types'
 import { getKeysForExistingCategories } from './getKeysForExistingCategories'
 
@@ -43,9 +47,12 @@ export const getDataAfterAddingNoteOrCategory = async ({
     if (noteValue) {
         //append if there are existing notes for this category
 
+        const randomCategoryKey = '@CATEGORY-PREDEFINED-RANDOM'
+        const category = categoryId || randomCategoryKey
+
         const existingDataWithNewNoteInCategory = existingData.filter(
             (item) => {
-                if (item.categoryId === categoryId) {
+                if (item.categoryId === category) {
                     item.details.items.push(noteValue)
                     return item
                 }

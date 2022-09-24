@@ -33,7 +33,7 @@ const styles = StyleSheet.create({
     noteInput: {
         marginTop: 10,
         marginBottom: 10,
-        height: 300,
+        height: 100,
         borderRadius: 10,
         padding: 20,
         borderWidth: 1,

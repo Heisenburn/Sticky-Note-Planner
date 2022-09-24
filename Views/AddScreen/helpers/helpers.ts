@@ -40,6 +40,7 @@ export const updateAsyncLocalStorageData = async ({
                 existingData: data,
             })
 
+            console.log({ filteredArray })
             return updateData(filteredArray)
         }
 

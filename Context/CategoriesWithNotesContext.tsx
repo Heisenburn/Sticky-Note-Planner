@@ -1,4 +1,4 @@
-import { createContext, useEffect, useState } from 'react'
+import { createContext, useEffect, useRef, useState } from 'react'
 import AsyncStorage from '@react-native-async-storage/async-storage'
 import { CategoryWithNotesType } from '../types/types'
 import { getKeysForExistingCategories } from '../AsyncStorage/getKeysForExistingCategories'
@@ -25,6 +25,8 @@ const setPredefinedCategories = async () => {
                 return [categoryId, JSON.stringify(defaultCategoriesWithNotes)]
             }
         )
+
+        console.log({ predefinedCategoriesArray })
 
         await AsyncStorage.multiSet(predefinedCategoriesArray)
     } catch (error) {
@@ -54,9 +56,12 @@ export const CategoriesWithNotesContextProvider = ({ children }) => {
 
     const getData = (): CategoryWithNotesType[] => categoriesWithNotes
 
+    const shouldRunUpdateUseEffect = useRef(false)
+
     useEffect(() => {
-        if (categoriesWithNotes) {
+        if (categoriesWithNotes && shouldRunUpdateUseEffect.current) {
             ;(async () => {
+                console.log('odpala sie useEffect przy updatcie data')
                 //first remove old data
                 const arrayOfCategories = await getKeysForExistingCategories()
                 await removeMultipleAsyncStorageElements(arrayOfCategories)
@@ -84,22 +89,22 @@ export const CategoriesWithNotesContextProvider = ({ children }) => {
         //IIFE format to avoid adding async to useEffect
         ;(async () => {
             //add predefined categories
-            const keysWithCategoryKeyword = await getKeysForExistingCategories()
+            const keysWithCategoryKeyword = await AsyncStorage.getAllKeys()
 
-            // const arePredefinedCategoriesAdded = keysWithCategoryKeyword.some(
-            //     (item) => item.includes(PREDEFINED_CATEGORIES_KEY_SUFFIX)
-            // )
-            //
-            // //todo: wynieść do osobnej funkcji
-            // if (arePredefinedCategoriesAdded === false) {
-            //     await setPredefinedCategories()
-            // }
+            const arePredefinedCategoriesAdded = keysWithCategoryKeyword.some(
+                (item) => item.includes(PREDEFINED_CATEGORIES_KEY_SUFFIX)
+            )
+
+            //todo: wynieść do osobnej funkcji
+            if (!arePredefinedCategoriesAdded) {
+                await setPredefinedCategories()
+            }
             const data = await AsyncStorage.multiGet(keysWithCategoryKeyword)
             const mappedData = data.map((item) => JSON.parse(item[1]))
 
-            console.log({ mappedData })
             //update state
             setCategoriesWithNotes(mappedData)
+            shouldRunUpdateUseEffect.current = true
         })()
     }, [])
 
