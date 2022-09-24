@@ -11,11 +11,7 @@ import styles from './AddScreen.styles'
 import { CategoriesWithNotesContext } from '../../Context/CategoriesWithNotesContext'
 import { ACTIONS } from '../../Shared/constants'
 import CategorySelect from './CategorySelect/CategorySelect'
-import {
-    getHeading,
-    navigateToCorrectView,
-    updateAsyncLocalStorageData,
-} from './helpers/helpers'
+import { getHeading, updateAsyncLocalStorageData } from './helpers/helpers'
 
 const AddScreen = ({ route, navigation }) => {
     const { passedPropsFromPreviousScreen } = route.params
