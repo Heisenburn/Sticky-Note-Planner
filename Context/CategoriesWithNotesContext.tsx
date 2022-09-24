@@ -86,15 +86,14 @@ export const CategoriesWithNotesContextProvider = ({ children }) => {
             //add predefined categories
             const keysWithCategoryKeyword = await getKeysForExistingCategories()
 
-            console.log({ keysWithCategoryKeyword })
-            const arePredefinedCategoriesAdded = keysWithCategoryKeyword.some(
-                (item) => item.includes(PREDEFINED_CATEGORIES_KEY_SUFFIX)
-            )
-
-            //todo: wynieść do osobnej funkcji
-            if (arePredefinedCategoriesAdded === false) {
-                await setPredefinedCategories()
-            }
+            // const arePredefinedCategoriesAdded = keysWithCategoryKeyword.some(
+            //     (item) => item.includes(PREDEFINED_CATEGORIES_KEY_SUFFIX)
+            // )
+            //
+            // //todo: wynieść do osobnej funkcji
+            // if (arePredefinedCategoriesAdded === false) {
+            //     await setPredefinedCategories()
+            // }
             const data = await AsyncStorage.multiGet(keysWithCategoryKeyword)
             const mappedData = data.map((item) => JSON.parse(item[1]))
 

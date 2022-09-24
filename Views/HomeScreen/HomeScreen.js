@@ -2,9 +2,10 @@ import { SafeAreaView } from 'react-native'
 import CategoriesList from './Categories/CategoriesList'
 import FloatingButton from '../../Shared/FloatingButton/FloatingButton'
 import styles from './HomeScreen.styles'
-import { useContext } from 'react'
+import { useContext, useEffect } from 'react'
 import AsyncStorage from '@react-native-async-storage/async-storage'
 import { CategoriesWithNotesContext } from '../../Context/CategoriesWithNotesContext'
+import { useIsFocused } from '@react-navigation/native'
 
 const clearAll = async () => {
     try {

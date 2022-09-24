@@ -57,7 +57,7 @@ const AddScreen = ({ route, navigation }) => {
             shouldDisplayCategorySelect,
         })
 
-        navigateToCorrectView(action, navigation, category, categoryInput)
+        navigation.navigate('HomeScreen')
     }
 
     return (

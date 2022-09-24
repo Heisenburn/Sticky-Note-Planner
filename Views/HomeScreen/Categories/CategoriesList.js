@@ -39,7 +39,7 @@ const CategoriesList = ({ navigation, categories }) => {
             data={categories}
             renderItem={({ item }) => renderItem(item, navigation)}
             ItemSeparatorComponent={(e) => separator(e)}
-            keyExtractor={(item) => item.categoryId}
+            keyExtractor={(item, index) => item?.categoryId || index}
         />
     )
 }

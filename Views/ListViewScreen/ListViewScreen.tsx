@@ -6,6 +6,7 @@ import RowItem from './RowItem/RowItem'
 import FloatingButton from '../../Shared/FloatingButton/FloatingButton'
 import { CategoriesWithNotesContext } from '../../Context/CategoriesWithNotesContext'
 import { MaterialIcons } from '@expo/vector-icons'
+import { useIsFocused } from '@react-navigation/native'
 
 const NUM_ITEMS = 20
 
@@ -24,43 +25,40 @@ const getColor = (i) => {
 
 const ListViewScreen = ({ route, navigation }) => {
     const { passedPropsFromPreviousScreen } = route.params
-    const { category } = passedPropsFromPreviousScreen
-    const { categoryId } = category
+    const { categoryItem } = passedPropsFromPreviousScreen
 
     const [listItems, setListItems] = useState<DraggableFlatListStructure[]>([])
-    const { getData, updateData } = useContext(CategoriesWithNotesContext)
 
-    const data = getData()
-    const categoryItem = data.find((item) => item.categoryId === categoryId)
+    const { categoryId } = categoryItem
     const { items } = categoryItem?.details || []
     const categoryTitle = categoryItem?.details?.categoryTitle
 
     const removeItem = async (idToBeRemoved) => {
-        const filteredItems = items.filter(
-            (item, index) => index !== idToBeRemoved
-        )
-
-        const dataWithRemovedElement = data.filter((item) => {
-            if (item.categoryId === categoryId) {
-                item.details.items = filteredItems
-            }
-            return item
-        })
-
-        updateData(dataWithRemovedElement)
-        setListItems(filteredItems)
+        // const filteredItems = items.filter(
+        //     (item, index) => index !== idToBeRemoved
+        // )
+        //
+        // const dataWithRemovedElement = data.filter((item) => {
+        //     if (item.categoryId === categoryId) {
+        //         item.details.items = filteredItems
+        //     }
+        //     return item
+        // })
+        //
+        // updateData(dataWithRemovedElement)
+        // setListItems(filteredItems)
     }
 
     const handleDragUpAndDown = async (listItemsAfterDrag) => {
-        //save data with new order
-        const dataWithNewOrder = data.filter((item) => {
-            if (item.categoryId === categoryId) {
-                item.details.items = listItemsAfterDrag.map((item) => item.text)
-            }
-            return item
-        })
-
-        updateData(dataWithNewOrder)
+        // //save data with new order
+        // const dataWithNewOrder = data.filter((item) => {
+        //     if (item.categoryId === categoryId) {
+        //         item.details.items = listItemsAfterDrag.map((item) => item.text)
+        //     }
+        //     return item
+        // })
+        //
+        // updateData(dataWithNewOrder)
     }
 
     useEffect(() => {
@@ -77,7 +75,7 @@ const ListViewScreen = ({ route, navigation }) => {
         })
 
         setListItems(mappedData)
-    }, [data])
+    }, [])
 
     const itemRefs = useRef(new Map())
     const renderItem = (params) => {
@@ -126,17 +124,9 @@ const ListViewScreen = ({ route, navigation }) => {
                 />
             </View>
             <View style={styles.container}>
-                {listItems?.length ? (
-                    <DraggableFlatList
-                        keyExtractor={(item) => item.key}
-                        data={listItems}
-                        renderItem={renderItem}
-                        onDragEnd={({ data }) => handleDragUpAndDown(data)}
-                        activationDistance={20}
-                    />
-                ) : (
-                    <Text>Brak notatek</Text>
-                )}
+                {items.map((item, index) => {
+                    return <Text key={index}>{item}</Text>
+                })}
             </View>
             <Button
                 title="Powrót"

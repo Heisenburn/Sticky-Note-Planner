@@ -40,8 +40,6 @@ export const updateAsyncLocalStorageData = async ({
                 existingData: data,
             })
 
-            console.log({ filteredArray })
-
             return updateData(filteredArray)
         }
 
@@ -88,6 +86,8 @@ export const updateAsyncLocalStorageData = async ({
                 return updateData(filteredArray)
             }
         }
+        default:
+            break
     }
 }
 
@@ -101,40 +101,5 @@ export const getHeading = (action, categoryTitle) => {
             return `${ACTION_PHRASES[ACTIONS.ADD_NOTE]} ${
                 categoryTitle ? 'w kategorii: ' + categoryTitle : ''
             }`
-    }
-}
-
-export const navigateToCorrectView = (
-    action,
-    navigation,
-    category,
-    categoryInput
-) => {
-    switch (action) {
-        case ACTIONS.ADD_CATEGORY: {
-            // return navigation.navigate('ListViewScreen', {
-            //     categoryTitle: textFieldInput,
-            //     categoryId: filteredArray.pop().categoryId,
-            // })
-            return navigation.navigate('HomeScreen')
-        }
-        case ACTIONS.ADD_NOTE: {
-            return navigation.navigate('ListViewScreen', {
-                passedPropsFromPreviousScreen: {
-                    category: {
-                        categoryId: category?.categoryId,
-                    },
-                },
-            })
-        }
-        case ACTIONS.EDIT_NOTE: {
-            return navigation.navigate('ListViewScreen', {
-                passedPropsFromPreviousScreen: {
-                    category: {
-                        categoryId: categoryInput || category?.categoryId,
-                    },
-                },
-            })
-        }
     }
 }
