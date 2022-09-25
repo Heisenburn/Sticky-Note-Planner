@@ -10,9 +10,6 @@ import styles from './ListViewScreen.style'
 import * as Haptics from 'expo-haptics'
 import FloatingButton from '../../Shared/FloatingButton/FloatingButton'
 import { Dimensions } from 'react-native'
-
-const MIN_HEIGHT = Dimensions.get('window').height
-
 import React, { useCallback, useState, useEffect } from 'react'
 import {
     SortableList,
@@ -30,6 +27,8 @@ interface Item {
     id: string
 }
 
+const MIN_HEIGHT = Dimensions.get('window').height
+
 const ListViewScreen = ({ route, navigation }) => {
     const { passedPropsFromPreviousScreen } = route.params
 
@@ -43,15 +42,14 @@ const ListViewScreen = ({ route, navigation }) => {
         const mappedData = data.map((item, index) => {
             return {
                 item,
-                id: `${index}`,
+                id: `${item}-${index}`,
             }
         })
-        console.log({ mappedData })
         setItems(mappedData)
     }, [])
 
     const keyExtractor = useCallback((item: Item) => {
-        return `${categoryId}-${item}`
+        return `${categoryId}-${item.item}`
     }, [])
 
     const onOrderChange = useCallback(async (newData) => {
@@ -77,8 +75,6 @@ const ListViewScreen = ({ route, navigation }) => {
             return (
                 <TouchableOpacity
                     style={[styles.itemContainer]}
-                    // overriding the BG color to anything other than white will cause Android's elevation to fail
-                    // backgroundColor={Colors.red30}
                     centerV
                     paddingH-page
                 >
