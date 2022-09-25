@@ -10,7 +10,13 @@ import styles from './ListViewScreen.style'
 import * as Haptics from 'expo-haptics'
 import FloatingButton from '../../Shared/FloatingButton/FloatingButton'
 import { Dimensions } from 'react-native'
-import React, { useCallback, useState, useEffect } from 'react'
+import React, {
+    useCallback,
+    useState,
+    useEffect,
+    useContext,
+    useRef,
+} from 'react'
 import {
     SortableList,
     View,
@@ -20,28 +26,31 @@ import {
     Assets,
     Colors,
 } from 'react-native-ui-lib'
-import { CategoryWithNotesType } from '../../types/types'
+import { CategoriesWithNotesContext } from '../../Context/CategoriesWithNotesContext'
 
 interface Item {
-    item: CategoryWithNotesType['details']['items']
+    text: string
     id: string
 }
 
-const MIN_HEIGHT = Dimensions.get('window').height
+const MIN_HEIGHT = Dimensions.get('window').height - 100
 
 const ListViewScreen = ({ route, navigation }) => {
     const { passedPropsFromPreviousScreen } = route.params
-
     const { categoryItem } = passedPropsFromPreviousScreen
     const { categoryId, details } = categoryItem
     const { items: data, categoryTitle } = details || []
 
     const [items, setItems] = useState<Item[] | []>([])
+    const { getData, updateData } = useContext(CategoriesWithNotesContext)
+    const rootData = getData()
+
+    const shouldUpdate = useRef(false)
 
     useEffect(() => {
         const mappedData = data.map((item, index) => {
             return {
-                item,
+                text: item,
                 id: `${item}-${index}`,
             }
         })
@@ -49,11 +58,24 @@ const ListViewScreen = ({ route, navigation }) => {
     }, [])
 
     const keyExtractor = useCallback((item: Item) => {
-        return `${categoryId}-${item.item}`
+        return `${categoryId}-${item.text}`
     }, [])
 
     const onOrderChange = useCallback(async (newData) => {
-        console.log('New order:', newData)
+        shouldUpdate.current = true
+
+        const newOrderOfItemsMappedToCorrectStructure = newData.map(
+            (item) => item.text
+        )
+        const mappedData = rootData.map((item) => {
+            if (item.categoryId === categoryId) {
+                item.details.items = newOrderOfItemsMappedToCorrectStructure
+            }
+            return item
+        })
+
+        updateData(mappedData)
+
         await Haptics.notificationAsync(
             Haptics.NotificationFeedbackType.Success
         )
@@ -84,7 +106,7 @@ const ListViewScreen = ({ route, navigation }) => {
                             tintColor={Colors.$iconDisabled}
                         />
                         <Text center $textDefault>
-                            {item.item}
+                            {item.text}
                         </Text>
                         <Icon
                             source={Assets.icons.demo.chevronRight}
@@ -119,7 +141,6 @@ const ListViewScreen = ({ route, navigation }) => {
                 onOrderChange={onOrderChange}
                 scale={1.12}
             />
-
             <FloatingButton
                 navigation={navigation}
                 categoryId={categoryId}

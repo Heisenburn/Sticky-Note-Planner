@@ -71,32 +71,3 @@ const FloatingButton = ({
 }
 
 export default FloatingButton
-
-// const renderItem = useCallback(
-//     ({ item, index: _index }: { item: Item; index: number }) => {
-//         return (
-//             <TouchableOpacity
-//                 style={[styles.itemContainer]}
-//                 // overriding the BG color to anything other than white will cause Android's elevation to fail
-//                 // backgroundColor={Colors.red30}
-//                 centerV
-//                 paddingH-page
-//             >
-//                 <View flex row spread centerV>
-//                     <Icon
-//                         source={Assets.icons.demo.drag}
-//                         tintColor={Colors.$iconDisabled}
-//                     />
-//                     <Text center $textDefault>
-//                         {item.item}
-//                     </Text>
-//                     <Icon
-//                         source={Assets.icons.demo.chevronRight}
-//                         tintColor={Colors.$iconDefault}
-//                     />
-//                 </View>
-//             </TouchableOpacity>
-//         )
-//     },
-//     []
-// )
