@@ -7,12 +7,41 @@ import { CategoriesWithNotesContextProvider } from './Context/CategoriesWithNote
 import { SafeAreaView } from 'react-native-safe-area-context'
 import SettingsScreen from './Views/SettingsScreen/SettingsScreen'
 import { loadDemoConfigurations } from './configuration'
+import * as Font from 'expo-font'
+import * as SplashScreen from 'expo-splash-screen'
+import FontAwesome from '@expo/vector-icons/FontAwesome'
+import { useEffect, useState } from 'react'
+
+function cacheFonts(fonts) {
+    return fonts.map((font) => Font.loadAsync(font))
+}
 
 loadDemoConfigurations()
 const Stack = createNativeStackNavigator()
 
 export default function App() {
-    return (
+    const [appIsReady, setAppIsReady] = useState(false)
+
+    // Load any resources or data that you need prior to rendering the app
+    useEffect(() => {
+        async function loadResourcesAndDataAsync() {
+            try {
+                SplashScreen.preventAutoHideAsync()
+
+                await cacheFonts([FontAwesome.font])
+            } catch (e) {
+                // You might want to provide this error information to an error reporting service
+                console.warn(e)
+            } finally {
+                setAppIsReady(true)
+                SplashScreen.hideAsync()
+            }
+        }
+
+        loadResourcesAndDataAsync()
+    }, [])
+
+    return appIsReady ? (
         <CategoriesWithNotesContextProvider>
             <SafeAreaView
                 style={{
@@ -46,5 +75,5 @@ export default function App() {
                 </NavigationContainer>
             </SafeAreaView>
         </CategoriesWithNotesContextProvider>
-    )
+    ) : null
 }

@@ -26,8 +26,9 @@ import {
     Assets,
     Colors,
 } from 'react-native-ui-lib'
-import { CategoriesWithNotesContext } from '../../Context/CategoriesWithNotesContext'
 
+import { CategoriesWithNotesContext } from '../../Context/CategoriesWithNotesContext'
+import { Entypo } from '@expo/vector-icons'
 interface Item {
     text: string
     id: string
@@ -101,16 +102,13 @@ const ListViewScreen = ({ route, navigation }) => {
                     paddingH-page
                 >
                     <View flex row spread centerV>
-                        <Icon
-                            source={Assets.icons.demo.drag}
-                            tintColor={Colors.$iconDisabled}
-                        />
                         <Text center $textDefault>
                             {item.text}
                         </Text>
-                        <Icon
-                            source={Assets.icons.demo.chevronRight}
-                            tintColor={Colors.$iconDefault}
+                        <Entypo
+                            name="dots-three-horizontal"
+                            size={24}
+                            color="black"
                         />
                     </View>
                 </TouchableOpacity>
