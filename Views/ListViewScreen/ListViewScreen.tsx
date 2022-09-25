@@ -180,6 +180,7 @@ import {
     Colors,
 } from 'react-native-ui-lib'
 import styles from './ListViewScreen.style'
+import * as Haptics from 'expo-haptics'
 
 interface Item {
     originalIndex: number
@@ -193,44 +194,30 @@ const data = _.times(30, (index) => {
     }
 })
 
-const ListViewScreen = () => {
-    const [items, setItems] = useState<Item[]>(data)
-    const [selectedItems, setSelectedItems] = useState<Item[]>([])
-    const orderedItems = useRef<Item[]>(data)
+const ListViewScreen = ({ route }) => {
+    const { passedPropsFromPreviousScreen } = route.params
 
-    const toggleItemSelection = useCallback(
-        (item: Item) => {
-            if (selectedItems.includes(item)) {
-                setSelectedItems(
-                    selectedItems.filter(
-                        (selectedItem) => ![item.id].includes(selectedItem.id)
-                    )
-                )
-            } else {
-                setSelectedItems(selectedItems.concat(item))
-            }
-        },
-        [selectedItems, setSelectedItems]
-    )
+    console.log({ passedPropsFromPreviousScreen })
+    const [items, setItems] = useState<Item[]>(data)
+    const orderedItems = useRef<Item[]>(data)
 
     const keyExtractor = useCallback((item: Item) => {
         return `${item.id}`
     }, [])
 
-    const onOrderChange = useCallback((newData: Item[]) => {
+    const onOrderChange = useCallback(async (newData: Item[]) => {
         console.log('New order:', newData)
         orderedItems.current = newData
+        await Haptics.notificationAsync(
+            Haptics.NotificationFeedbackType.Success
+        )
     }, [])
 
     const renderItem = useCallback(
         ({ item, index: _index }: { item: Item; index: number }) => {
-            const isSelected = selectedItems.includes(item)
             return (
                 <TouchableOpacity
-                    style={[
-                        styles.itemContainer,
-                        isSelected && styles.selectedItemContainer,
-                    ]}
+                    style={[styles.itemContainer]}
                     // onPress={() => toggleItemSelection(item)}
                     centerV
                     paddingH-page
@@ -251,7 +238,7 @@ const ListViewScreen = () => {
                 </TouchableOpacity>
             )
         },
-        [selectedItems, toggleItemSelection]
+        []
     )
 
     return (
@@ -263,6 +250,7 @@ const ListViewScreen = () => {
                 keyExtractor={keyExtractor}
                 onOrderChange={onOrderChange}
                 scale={1.12}
+                enableHaptic={true}
             />
         </View>
     )
