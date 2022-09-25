@@ -1,12 +1,14 @@
-import React, { useState, useRef, useEffect, useContext } from 'react'
+import React, { useState, useEffect } from 'react'
 import { View, Button, Text } from 'react-native'
-import DraggableFlatList from 'react-native-draggable-flatlist'
 import styles from './ListViewScreen.style'
-import RowItem from './RowItem/RowItem'
 import FloatingButton from '../../Shared/FloatingButton/FloatingButton'
-import { CategoriesWithNotesContext } from '../../Context/CategoriesWithNotesContext'
 import { MaterialIcons } from '@expo/vector-icons'
-import { useIsFocused } from '@react-navigation/native'
+import {
+    Colors,
+    Drawer,
+    View as RNUIView,
+    Text as RNUIText,
+} from 'react-native-ui-lib'
 
 const NUM_ITEMS = 20
 
@@ -17,6 +19,7 @@ export type DraggableFlatListStructure = {
     backgroundColor: string
 }
 
+//TODO: może użyć tego?
 const getColor = (i) => {
     const multiplier = 255 / (NUM_ITEMS - 1)
     const colorVal = i * multiplier
@@ -63,32 +66,19 @@ const ListViewScreen = ({ route, navigation }) => {
 
     useEffect(() => {
         //structure of data expected by DraggableFlatList library
-        if (!items) return setListItems([])
-        const mappedData = items.map((note, index) => {
-            const backgroundColor = getColor(index)
-            return {
-                id: index,
-                text: note,
-                key: `key-${backgroundColor}`,
-                backgroundColor,
-            }
-        })
-
-        setListItems(mappedData)
+        // if (!items) return setListItems([])
+        // const mappedData = items.map((note, index) => {
+        //     const backgroundColor = getColor(index)
+        //     return {
+        //         id: index,
+        //         text: note,
+        //         key: `key-${backgroundColor}`,
+        //         backgroundColor,
+        //     }
+        // })
+        //
+        // setListItems(mappedData)
     }, [])
-
-    const itemRefs = useRef(new Map())
-    const renderItem = (params) => {
-        return (
-            <RowItem
-                {...params}
-                itemRefs={itemRefs}
-                removeItem={removeItem}
-                navigation={navigation}
-                categoryId={categoryId}
-            />
-        )
-    }
 
     const handleSettingsClick = () => {
         navigation.navigate('SettingsScreen', {
@@ -125,7 +115,36 @@ const ListViewScreen = ({ route, navigation }) => {
             </View>
             <View style={styles.container}>
                 {items.map((item, index) => {
-                    return <Text key={index}>{item}</Text>
+                    return (
+                        <Drawer
+                            key={index}
+                            rightItems={[
+                                {
+                                    text: 'Delete',
+                                    background: Colors.red30,
+                                    onPress: (item) => console.log({ item }),
+                                },
+                            ]}
+                            leftItem={{
+                                text: 'Read',
+                                background: Colors.green30,
+                                onPress: () => console.log('read pressed'),
+                            }}
+                            style={{
+                                marginBottom: 10,
+                            }}
+                            bounciness={15}
+                        >
+                            <RNUIView
+                                centerV
+                                padding-s4
+                                bg-white
+                                style={{ height: 60 }}
+                            >
+                                <RNUIText text70>{item}</RNUIText>
+                            </RNUIView>
+                        </Drawer>
+                    )
                 })}
             </View>
             <Button
