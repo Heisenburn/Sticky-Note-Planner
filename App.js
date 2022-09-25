@@ -21,19 +21,22 @@ export default function App() {
                 }}
             >
                 <NavigationContainer>
-                    <Stack.Navigator
-                        screenOptions={{
-                            headerShown: true,
-                        }}
-                    >
+                    <Stack.Navigator>
                         <Stack.Screen
                             name="HomeScreen"
                             component={HomeScreen}
+                            options={{ headerShown: false }}
                         />
                         <Stack.Screen name="AddScreen" component={AddScreen} />
                         <Stack.Screen
                             name="ListViewScreen"
                             component={ListViewScreen}
+                            options={({ route }) => ({
+                                title:
+                                    route.params.passedPropsFromPreviousScreen
+                                        .categoryItem.details.categoryTitle ||
+                                    '',
+                            })}
                         />
                         <Stack.Screen
                             name="SettingsScreen"

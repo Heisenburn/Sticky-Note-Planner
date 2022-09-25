@@ -120,20 +120,20 @@ const ListViewScreen = ({ route, navigation }) => {
     )
 
     return (
-        <View useSafeArea style={{ minHeight: MIN_HEIGHT }}>
-            <View spread row padding-15 centerV>
-                <View bottom row padding>
-                    <Text h1 blue20>
-                        {categoryTitle}
-                    </Text>
-                </View>
-                <MaterialIcons
-                    name="settings"
-                    size={40}
-                    color="black"
-                    onPress={handleSettingsClick}
-                />
-            </View>
+        <View useSafeArea style={{ minHeight: MIN_HEIGHT, marginTop: 10 }}>
+            {/*<View spread row padding-15 centerV>*/}
+            {/*    <View bottom row padding>*/}
+            {/*        <Text h1 blue20>*/}
+            {/*            {categoryTitle}*/}
+            {/*        </Text>*/}
+            {/*    </View>*/}
+            {/*    <MaterialIcons*/}
+            {/*        name="settings"*/}
+            {/*        size={40}*/}
+            {/*        color="black"*/}
+            {/*        onPress={handleSettingsClick}*/}
+            {/*    />*/}
+            {/*</View>*/}
             <SortableList
                 data={items}
                 renderItem={renderItem}
