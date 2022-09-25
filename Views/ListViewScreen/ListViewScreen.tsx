@@ -1,6 +1,5 @@
 // import React, { useState, useEffect } from 'react'
 // import { View, Button, Text } from 'react-native'
-// import styles from './ListViewScreen.style'
 // import FloatingButton from '../../Shared/FloatingButton/FloatingButton'
 // import { MaterialIcons } from '@expo/vector-icons'
 // import {
@@ -171,7 +170,6 @@
 
 import _ from 'lodash'
 import React, { useCallback, useState, useRef } from 'react'
-import { StyleSheet } from 'react-native'
 import {
     SortableList,
     View,
@@ -180,17 +178,8 @@ import {
     Icon,
     Assets,
     Colors,
-    Button,
-    TextProps,
 } from 'react-native-ui-lib'
-
-function renderHeader(title: string, others?: TextProps) {
-    return (
-        <Text text30 $textDefault {...others}>
-            {title}
-        </Text>
-    )
-}
+import styles from './ListViewScreen.style'
 
 interface Item {
     originalIndex: number
@@ -204,10 +193,9 @@ const data = _.times(30, (index) => {
     }
 })
 
-const SortableListScreen = () => {
+const ListViewScreen = () => {
     const [items, setItems] = useState<Item[]>(data)
     const [selectedItems, setSelectedItems] = useState<Item[]>([])
-    const [removedItems, setRemovedItems] = useState<Item[]>([])
     const orderedItems = useRef<Item[]>(data)
 
     const toggleItemSelection = useCallback(
@@ -224,29 +212,6 @@ const SortableListScreen = () => {
         },
         [selectedItems, setSelectedItems]
     )
-
-    const addItem = useCallback(() => {
-        if (removedItems.length > 0) {
-            orderedItems.current = orderedItems.current.concat(removedItems[0])
-            setItems(orderedItems.current)
-            setRemovedItems(removedItems.slice(1))
-        }
-    }, [removedItems, setItems, setRemovedItems])
-
-    const removeSelectedItems = useCallback(() => {
-        setRemovedItems(removedItems.concat(selectedItems))
-        setSelectedItems([])
-        orderedItems.current = orderedItems.current.filter(
-            (item) => !selectedItems.includes(item)
-        )
-        setItems(orderedItems.current)
-    }, [
-        setRemovedItems,
-        removedItems,
-        selectedItems,
-        setItems,
-        setSelectedItems,
-    ])
 
     const keyExtractor = useCallback((item: Item) => {
         return `${item.id}`
@@ -266,7 +231,7 @@ const SortableListScreen = () => {
                         styles.itemContainer,
                         isSelected && styles.selectedItemContainer,
                     ]}
-                    onPress={() => toggleItemSelection(item)}
+                    // onPress={() => toggleItemSelection(item)}
                     centerV
                     paddingH-page
                 >
@@ -290,45 +255,17 @@ const SortableListScreen = () => {
     )
 
     return (
-        <View flex bg-$backgroundDefault>
-            {renderHeader('Sortable List', { 'margin-10': true })}
-            <View row center marginB-s2>
-                <Button
-                    label="Add Item"
-                    size={Button.sizes.xSmall}
-                    disabled={removedItems.length === 0}
-                    onPress={addItem}
-                />
-                <Button
-                    label="Remove Items"
-                    size={Button.sizes.xSmall}
-                    disabled={selectedItems.length === 0}
-                    marginL-s3
-                    onPress={removeSelectedItems}
-                />
-            </View>
-            <View flex useSafeArea>
-                <SortableList
-                    data={items}
-                    renderItem={renderItem}
-                    keyExtractor={keyExtractor}
-                    onOrderChange={onOrderChange}
-                    scale={1.02}
-                />
-            </View>
+        <View useSafeArea>
+            <Text h1>Kategoria</Text>
+            <SortableList
+                data={items}
+                renderItem={renderItem}
+                keyExtractor={keyExtractor}
+                onOrderChange={onOrderChange}
+                scale={1.12}
+            />
         </View>
     )
 }
 
-export default SortableListScreen
-const styles = StyleSheet.create({
-    itemContainer: {
-        height: 52,
-        borderColor: Colors.$outlineDefault,
-        borderBottomWidth: 1,
-    },
-    selectedItemContainer: {
-        borderLeftColor: Colors.$outlinePrimary,
-        borderLeftWidth: 5,
-    },
-})
+export default ListViewScreen
