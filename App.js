@@ -6,7 +6,9 @@ import ListViewScreen from './Views/ListViewScreen/ListViewScreen'
 import { CategoriesWithNotesContextProvider } from './Context/CategoriesWithNotesContext'
 import { SafeAreaView } from 'react-native-safe-area-context'
 import SettingsScreen from './Views/SettingsScreen/SettingsScreen'
+import { loadDemoConfigurations } from './configuration'
 
+loadDemoConfigurations()
 const Stack = createNativeStackNavigator()
 
 export default function App() {
