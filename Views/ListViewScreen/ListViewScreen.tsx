@@ -1,14 +1,19 @@
-//TODO: może użyć tego?
-// const getColor = (i) => {
-//     const multiplier = 255 / (NUM_ITEMS - 1)
-//     const colorVal = i * multiplier
-//     return `rgb(${colorVal}, ${Math.abs(128 - colorVal)}, ${255 - colorVal})`
-// }
+// //TODO: może użyć tego?
+// // const getColor = (i) => {
+// //     const multiplier = 255 / (NUM_ITEMS - 1)
+// //     const colorVal = i * multiplier
+// //     return `rgb(${colorVal}, ${Math.abs(128 - colorVal)}, ${255 - colorVal})`
+// // }
+
+import { MaterialIcons } from '@expo/vector-icons'
+import styles from './ListViewScreen.style'
+import * as Haptics from 'expo-haptics'
+import FloatingButton from '../../Shared/FloatingButton/FloatingButton'
+import { Dimensions } from 'react-native'
 
 const MIN_HEIGHT = Dimensions.get('window').height
 
-import { MaterialIcons } from '@expo/vector-icons'
-import React, { useCallback } from 'react'
+import React, { useCallback, useState, useEffect } from 'react'
 import {
     SortableList,
     View,
@@ -17,32 +22,35 @@ import {
     Icon,
     Assets,
     Colors,
-    Button,
 } from 'react-native-ui-lib'
-import styles from './ListViewScreen.style'
-import * as Haptics from 'expo-haptics'
-import FloatingButton from '../../Shared/FloatingButton/FloatingButton'
-import { Dimensions } from 'react-native'
+import { CategoryWithNotesType } from '../../types/types'
+
+interface Item {
+    item: CategoryWithNotesType['details']['items']
+    id: string
+}
 
 const ListViewScreen = ({ route, navigation }) => {
     const { passedPropsFromPreviousScreen } = route.params
 
     const { categoryItem } = passedPropsFromPreviousScreen
     const { categoryId, details } = categoryItem
-    const { items, categoryTitle } = details || []
+    const { items: data, categoryTitle } = details || []
 
-    const handleSettingsClick = () => {
-        navigation.navigate('SettingsScreen', {
-            passedPropsFromPreviousScreen: {
-                category: {
-                    categoryTitle,
-                    categoryId,
-                },
-            },
+    const [items, setItems] = useState<Item[] | []>([])
+
+    useEffect(() => {
+        const mappedData = data.map((item, index) => {
+            return {
+                item,
+                id: `${index}`,
+            }
         })
-    }
+        console.log({ mappedData })
+        setItems(mappedData)
+    }, [])
 
-    const keyExtractor = useCallback((item) => {
+    const keyExtractor = useCallback((item: Item) => {
         return `${categoryId}-${item}`
     }, [])
 
@@ -53,11 +61,24 @@ const ListViewScreen = ({ route, navigation }) => {
         )
     }, [])
 
+    const handleSettingsClick = useCallback(() => {
+        navigation.navigate('SettingsScreen', {
+            passedPropsFromPreviousScreen: {
+                category: {
+                    categoryTitle,
+                    categoryId,
+                },
+            },
+        })
+    }, [])
+
     const renderItem = useCallback(
-        ({ item, index: _index }: { item; index: number }) => {
+        ({ item, index: _index }: { item: Item; index: number }) => {
             return (
                 <TouchableOpacity
                     style={[styles.itemContainer]}
+                    // overriding the BG color to anything other than white will cause Android's elevation to fail
+                    // backgroundColor={Colors.red30}
                     centerV
                     paddingH-page
                 >
@@ -67,7 +88,7 @@ const ListViewScreen = ({ route, navigation }) => {
                             tintColor={Colors.$iconDisabled}
                         />
                         <Text center $textDefault>
-                            {item}
+                            {item.item}
                         </Text>
                         <Icon
                             source={Assets.icons.demo.chevronRight}
@@ -82,7 +103,7 @@ const ListViewScreen = ({ route, navigation }) => {
 
     return (
         <View useSafeArea style={{ minHeight: MIN_HEIGHT }}>
-            <View spread row padding-10 centerV>
+            <View spread row padding-15 centerV>
                 <View bottom row padding>
                     <Text h1 blue20>
                         {categoryTitle}
