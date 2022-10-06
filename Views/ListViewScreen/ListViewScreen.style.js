@@ -3,7 +3,7 @@ import { Colors } from 'react-native-ui-lib'
 
 const styles = StyleSheet.create({
     itemContainer: {
-        height: 52,
+        height: 62,
         borderColor: Colors.$outlineDefault,
         borderBottomWidth: 1,
     },

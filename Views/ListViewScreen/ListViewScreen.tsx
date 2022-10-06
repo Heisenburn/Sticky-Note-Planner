@@ -26,10 +26,12 @@ import {
     Assets,
     Colors,
     ActionSheet,
+    Checkbox,
 } from 'react-native-ui-lib'
 
 import { CategoriesWithNotesContext } from '../../Context/CategoriesWithNotesContext'
 import { Entypo } from '@expo/vector-icons'
+import { CustomCheckbox } from './Checkbox'
 interface Item {
     text: string
     id: string
@@ -100,32 +102,38 @@ const ListViewScreen = ({ route, navigation }) => {
         })
     }, [])
 
-    const renderItem = useCallback(
-        ({ item, index: _index }: { item: Item; index: number }) => {
-            return (
-                <TouchableOpacity
-                    style={[styles.itemContainer]}
-                    centerV
-                    paddingH-page
-                >
-                    <View flex row spread centerV>
-                        <Text center $textDefault>
+    const renderItem = ({
+        item,
+        index: _index,
+    }: {
+        item: Item
+        index: number
+    }) => {
+        return (
+            <TouchableOpacity
+                style={[styles.itemContainer]}
+                centerV
+                paddingH-page
+            >
+                <View flex row spread centerV>
+                    <View flex row centerV>
+                        <CustomCheckbox />
+                        <Text center $textDefault style={{ maxWidth: 200 }}>
                             {item.text}
                         </Text>
-                        <Entypo
-                            name="dots-three-horizontal"
-                            size={24}
-                            color="black"
-                            onPress={() =>
-                                setIsListingItemOptionsModalVisible(true)
-                            }
-                        />
                     </View>
-                </TouchableOpacity>
-            )
-        },
-        []
-    )
+                    <Entypo
+                        name="dots-three-horizontal"
+                        size={34}
+                        color="black"
+                        onPress={() =>
+                            setIsListingItemOptionsModalVisible(true)
+                        }
+                    />
+                </View>
+            </TouchableOpacity>
+        )
+    }
 
     return (
         <View useSafeArea style={{ minHeight: MIN_HEIGHT, marginTop: 10 }}>
@@ -150,10 +158,10 @@ const ListViewScreen = ({ route, navigation }) => {
                 scale={1.12}
             />
             <ActionSheet
-                title={'Title'}
-                message={'Message goes here'}
+                title={'Opcje'}
+                message={'Tutaj możesz modyfikować notatkę'}
                 cancelButtonIndex={3}
-                destructiveButtonIndex={0}
+                destructiveButtonIndex={2}
                 options={[
                     { label: 'Edytuj', onPress: () => console.log('Edytuj') },
                     { label: 'Usuń', onPress: () => console.log('Usuń') },
