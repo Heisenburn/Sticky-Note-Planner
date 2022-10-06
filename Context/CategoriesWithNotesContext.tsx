@@ -5,7 +5,6 @@ import { getKeysForExistingCategories } from '../AsyncStorage/getKeysForExisting
 import { removeMultipleAsyncStorageElements } from '../AsyncStorage/removeMultipleAsyncStorageElements'
 import { Alert } from 'react-native'
 import {
-    CATEGORY_KEY_PREFIX,
     PREDEFINED_CATEGORIES,
     PREDEFINED_CATEGORIES_KEY_SUFFIX,
 } from '../Shared/constants'
@@ -56,6 +55,8 @@ export const CategoriesWithNotesContextProvider = ({ children }) => {
 
     const getData = (): CategoryWithNotesType[] => categoriesWithNotes
 
+    //TODO: nie potrzebujemy refa, wystarczy zwykła flaga
+    // :https://beta.reactjs.org/learn/you-might-not-need-an-effect#initializing-the-application-initializing-the-application
     const shouldRunUpdateUseEffect = useRef(false)
 
     useEffect(() => {
@@ -83,6 +84,8 @@ export const CategoriesWithNotesContextProvider = ({ children }) => {
         }
     }, [categoriesWithNotes])
 
+    //TODO: to można przepisać do funkcji, która odpala się na początku renderu i
+    // zwraca wartość do zmiennej którą byśmy użyli jako defaultValue dla stanu
     //this hook runs only at the startup of app
     //get initial data
     useEffect(() => {

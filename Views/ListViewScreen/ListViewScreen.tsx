@@ -25,6 +25,7 @@ import {
     Icon,
     Assets,
     Colors,
+    ActionSheet,
 } from 'react-native-ui-lib'
 
 import { CategoriesWithNotesContext } from '../../Context/CategoriesWithNotesContext'
@@ -46,8 +47,14 @@ const ListViewScreen = ({ route, navigation }) => {
     const { getData, updateData } = useContext(CategoriesWithNotesContext)
     const rootData = getData()
 
+    const [
+        isListingItemOptionsModalVisible,
+        setIsListingItemOptionsModalVisible,
+    ] = useState(false)
+
     const shouldUpdate = useRef(false)
 
+    //TODO: not needed probably - react beta docs
     useEffect(() => {
         const mappedData = data.map((item, index) => {
             return {
@@ -109,6 +116,9 @@ const ListViewScreen = ({ route, navigation }) => {
                             name="dots-three-horizontal"
                             size={24}
                             color="black"
+                            onPress={() =>
+                                setIsListingItemOptionsModalVisible(true)
+                            }
                         />
                     </View>
                 </TouchableOpacity>
@@ -138,6 +148,20 @@ const ListViewScreen = ({ route, navigation }) => {
                 keyExtractor={keyExtractor}
                 onOrderChange={onOrderChange}
                 scale={1.12}
+            />
+            <ActionSheet
+                title={'Title'}
+                message={'Message goes here'}
+                cancelButtonIndex={3}
+                destructiveButtonIndex={0}
+                options={[
+                    { label: 'Edytuj', onPress: () => console.log('Edytuj') },
+                    { label: 'Usuń', onPress: () => console.log('Usuń') },
+                    { label: 'Wyjdź', onPress: () => console.log('cancel') },
+                ]}
+                visible={isListingItemOptionsModalVisible}
+                useNativeIOS={true}
+                onDismiss={() => setIsListingItemOptionsModalVisible(false)}
             />
             <FloatingButton
                 navigation={navigation}

@@ -26,7 +26,7 @@ export default function App() {
     useEffect(() => {
         async function loadResourcesAndDataAsync() {
             try {
-                SplashScreen.preventAutoHideAsync()
+                await SplashScreen.preventAutoHideAsync()
 
                 await cacheFonts([FontAwesome.font])
             } catch (e) {
@@ -34,11 +34,13 @@ export default function App() {
                 console.warn(e)
             } finally {
                 setAppIsReady(true)
-                SplashScreen.hideAsync()
+                await SplashScreen.hideAsync()
             }
         }
 
-        loadResourcesAndDataAsync()
+        ;(async () => {
+            await loadResourcesAndDataAsync()
+        })()
     }, [])
 
     return appIsReady ? (
@@ -56,7 +58,11 @@ export default function App() {
                             component={HomeScreen}
                             options={{ headerShown: false }}
                         />
-                        <Stack.Screen name="AddScreen" component={AddScreen} />
+                        <Stack.Screen
+                            name="AddScreen"
+                            component={AddScreen}
+                            options={{ headerShown: false }}
+                        />
                         <Stack.Screen
                             name="ListViewScreen"
                             component={ListViewScreen}
