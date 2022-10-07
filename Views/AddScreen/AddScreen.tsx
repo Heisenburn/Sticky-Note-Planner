@@ -17,13 +17,13 @@ const AddScreen = ({ route, navigation }) => {
     const { passedPropsFromPreviousScreen } = route.params
     const {
         category,
-        editedItem = null,
+        noteValueToBeEdited,
         action = null,
         triggeredFromHomeScreen = false,
     } = passedPropsFromPreviousScreen
 
     const [textFieldInput, setTextFieldInput] = useState<string>(
-        editedItem?.text || ''
+        noteValueToBeEdited || ''
     )
     const [categoryInput, setCategoryInput] = useState(
         category?.categoryTitle || ''
@@ -49,7 +49,7 @@ const AddScreen = ({ route, navigation }) => {
             categoryInput,
             categoryId: category?.categoryId,
             data,
-            editedItem,
+            noteValueToBeEdited,
             shouldDisplayCategorySelect,
         })
 
@@ -59,7 +59,13 @@ const AddScreen = ({ route, navigation }) => {
     return (
         <SafeAreaView style={styles.container}>
             <View style={styles.innerContainer}>
-                <Text style={editedItem ? styles.editMode : styles.heading}>
+                <Text
+                    style={
+                        noteValueToBeEdited?.length > 0
+                            ? styles.editMode
+                            : styles.heading
+                    }
+                >
                     {getHeading(action, category?.categoryTitle)}
                 </Text>
                 <TextInput

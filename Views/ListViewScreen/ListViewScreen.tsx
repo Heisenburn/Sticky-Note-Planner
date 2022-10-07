@@ -5,33 +5,25 @@
 // //     return `rgb(${colorVal}, ${Math.abs(128 - colorVal)}, ${255 - colorVal})`
 // // }
 
-import { MaterialIcons } from '@expo/vector-icons'
+// import { MaterialIcons } from '@expo/vector-icons'
 import styles from './ListViewScreen.style'
 import * as Haptics from 'expo-haptics'
 import FloatingButton from '../../Shared/FloatingButton/FloatingButton'
 import { Dimensions } from 'react-native'
-import React, {
-    useCallback,
-    useState,
-    useEffect,
-    useContext,
-    useRef,
-} from 'react'
+import React, { useCallback, useState, useContext, useRef } from 'react'
 import {
     SortableList,
     View,
     TouchableOpacity,
     Text,
-    Icon,
-    Assets,
-    Colors,
     ActionSheet,
-    Checkbox,
 } from 'react-native-ui-lib'
 
 import { CategoriesWithNotesContext } from '../../Context/CategoriesWithNotesContext'
 import { Entypo } from '@expo/vector-icons'
 import { CustomCheckbox } from './Checkbox'
+import { ACTIONS } from '../../Shared/constants'
+
 interface Item {
     text: string
     id: string
@@ -45,35 +37,44 @@ const ListViewScreen = ({ route, navigation }) => {
     const { categoryId, details } = categoryItem
     const { items: data, categoryTitle } = details || []
 
-    const [items, setItems] = useState<Item[] | []>([])
     const { getData, updateData } = useContext(CategoriesWithNotesContext)
     const rootData = getData()
+
+    const editedElement = useRef(null)
+
+    const actionSheetOptions = [
+        {
+            label: 'Edytuj',
+            onPress: (element) => {
+                navigation.navigate('AddScreen', {
+                    passedPropsFromPreviousScreen: {
+                        category: {
+                            categoryId,
+                            categoryTitle,
+                        },
+                        noteValueToBeEdited: editedElement.current,
+                        action: ACTIONS.EDIT_NOTE,
+                    },
+                })
+
+                console.log(element)
+            },
+        },
+        { label: 'Usuń', onPress: () => console.log('Usuń') },
+        { label: 'Wyjdź', onPress: () => console.log('cancel') },
+    ]
+    const closeActionSheetOptionsIndex = actionSheetOptions.length
 
     const [
         isListingItemOptionsModalVisible,
         setIsListingItemOptionsModalVisible,
     ] = useState(false)
 
-    const shouldUpdate = useRef(false)
-
-    //TODO: not needed probably - react beta docs
-    useEffect(() => {
-        const mappedData = data.map((item, index) => {
-            return {
-                text: item,
-                id: `${item}-${index}`,
-            }
-        })
-        setItems(mappedData)
-    }, [])
-
     const keyExtractor = useCallback((item: Item) => {
         return `${categoryId}-${item.text}`
     }, [])
 
     const onOrderChange = useCallback(async (newData) => {
-        shouldUpdate.current = true
-
         const newOrderOfItemsMappedToCorrectStructure = newData.map(
             (item) => item.text
         )
@@ -91,16 +92,16 @@ const ListViewScreen = ({ route, navigation }) => {
         )
     }, [])
 
-    const handleSettingsClick = useCallback(() => {
-        navigation.navigate('SettingsScreen', {
-            passedPropsFromPreviousScreen: {
-                category: {
-                    categoryTitle,
-                    categoryId,
-                },
-            },
-        })
-    }, [])
+    // const handleSettingsClick = useCallback(() => {
+    //     navigation.navigate('SettingsScreen', {
+    //         passedPropsFromPreviousScreen: {
+    //             category: {
+    //                 categoryTitle,
+    //                 categoryId,
+    //             },
+    //         },
+    //     })
+    // }, [])
 
     const renderItem = ({
         item,
@@ -126,14 +127,22 @@ const ListViewScreen = ({ route, navigation }) => {
                         name="dots-three-horizontal"
                         size={34}
                         color="black"
-                        onPress={() =>
+                        onPress={() => {
                             setIsListingItemOptionsModalVisible(true)
-                        }
+                            editedElement.current = item.text
+                        }}
                     />
                 </View>
             </TouchableOpacity>
         )
     }
+
+    const mappedData = data.map((item, index) => {
+        return {
+            text: item,
+            id: `${item}-${index}`,
+        }
+    })
 
     return (
         <View useSafeArea style={{ minHeight: MIN_HEIGHT, marginTop: 10 }}>
@@ -151,7 +160,7 @@ const ListViewScreen = ({ route, navigation }) => {
             {/*    />*/}
             {/*</View>*/}
             <SortableList
-                data={items}
+                data={mappedData}
                 renderItem={renderItem}
                 keyExtractor={keyExtractor}
                 onOrderChange={onOrderChange}
@@ -159,14 +168,10 @@ const ListViewScreen = ({ route, navigation }) => {
             />
             <ActionSheet
                 title={'Opcje'}
-                message={'Tutaj możesz modyfikować notatkę'}
-                cancelButtonIndex={3}
-                destructiveButtonIndex={2}
-                options={[
-                    { label: 'Edytuj', onPress: () => console.log('Edytuj') },
-                    { label: 'Usuń', onPress: () => console.log('Usuń') },
-                    { label: 'Wyjdź', onPress: () => console.log('cancel') },
-                ]}
+                message={'Wybierz właściwą akcje'}
+                cancelButtonIndex={closeActionSheetOptionsIndex}
+                destructiveButtonIndex={closeActionSheetOptionsIndex - 1}
+                options={actionSheetOptions}
                 visible={isListingItemOptionsModalVisible}
                 useNativeIOS={true}
                 onDismiss={() => setIsListingItemOptionsModalVisible(false)}

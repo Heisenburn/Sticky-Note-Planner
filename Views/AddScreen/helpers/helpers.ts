@@ -1,6 +1,5 @@
 import { getDataAfterAddingNoteOrCategory } from '../../../AsyncStorage/getDataAfterAddingNoteOrCategory'
 import { CategoryWithNotesType } from '../../../types/types'
-import { DraggableFlatListStructure } from '../../ListViewScreen/ListViewScreen'
 import { ACTION_PHRASES, ACTIONS } from '../../../Shared/constants'
 
 export const updateAsyncLocalStorageData = async ({
@@ -10,7 +9,7 @@ export const updateAsyncLocalStorageData = async ({
     categoryInput,
     categoryId,
     data,
-    editedItem,
+    noteValueToBeEdited,
     shouldDisplayCategorySelect,
 }: {
     action: keyof typeof ACTIONS
@@ -19,7 +18,7 @@ export const updateAsyncLocalStorageData = async ({
     categoryInput
     categoryId
     data: CategoryWithNotesType[]
-    editedItem: DraggableFlatListStructure
+    noteValueToBeEdited
     shouldDisplayCategorySelect
 }) => {
     switch (action) {
@@ -77,7 +76,7 @@ export const updateAsyncLocalStorageData = async ({
                     if (item.categoryId === categoryId) {
                         //get index of changed element and replace it with new value
                         const indexOfChangedElement =
-                            item.details.items.indexOf(editedItem.text)
+                            item.details.items.indexOf(noteValueToBeEdited)
                         item.details.items[indexOfChangedElement] =
                             textFieldInput
                         return item
