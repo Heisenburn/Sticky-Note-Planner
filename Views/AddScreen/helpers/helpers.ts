@@ -39,7 +39,6 @@ export const updateAsyncLocalStorageData = async ({
                 existingData: data,
             })
 
-            console.log({ filteredArray })
             return updateData(filteredArray)
         }
 
@@ -54,7 +53,10 @@ export const updateAsyncLocalStorageData = async ({
                 const filteredArray = data.filter((item) => {
                     //move element to destination category
                     if (item.categoryId == destinationCategoryId) {
-                        item.details.items.push(textFieldInput)
+                        item.details.items.push({
+                            note: textFieldInput,
+                            id: item.details.items.length + 1,
+                        })
                         return item
                     }
                     //remove element from origin category

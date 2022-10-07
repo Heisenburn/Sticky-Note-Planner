@@ -53,7 +53,10 @@ export const getDataAfterAddingNoteOrCategory = async ({
         const existingDataWithNewNoteInCategory = existingData.filter(
             (item) => {
                 if (item.categoryId === category) {
-                    item.details.items.push(noteValue)
+                    item.details.items.push({
+                        note: noteValue,
+                        id: `${item.details.items.length + 1}`,
+                    })
                     return item
                 }
                 return item
@@ -66,7 +69,7 @@ export const getDataAfterAddingNoteOrCategory = async ({
     } else {
         const categoryKeyId = await getNewCategoryKeyWithId(categoryId)
 
-        const newElement = {
+        const newElement: CategoryWithNotesType = {
             categoryId: categoryKeyId,
             details: {
                 categoryTitle: categoryId,

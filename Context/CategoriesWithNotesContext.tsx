@@ -50,6 +50,7 @@ export const CategoriesWithNotesContextProvider = ({ children }) => {
     >(null)
 
     const updateData = (newData: CategoryWithNotesType[]): void => {
+        console.log(newData)
         setCategoriesWithNotes(newData)
     }
 

@@ -10,7 +10,7 @@ import styles from './ListViewScreen.style'
 import * as Haptics from 'expo-haptics'
 import FloatingButton from '../../Shared/FloatingButton/FloatingButton'
 import { Dimensions } from 'react-native'
-import React, { useCallback, useState, useContext, useRef } from 'react'
+import React, {useCallback, useState, useContext, useRef, useEffect, useMemo} from 'react'
 import {
     SortableList,
     View,
@@ -25,7 +25,7 @@ import { CustomCheckbox } from './Checkbox'
 import { ACTIONS } from '../../Shared/constants'
 
 interface Item {
-    text: string
+    note: string
     id: string
 }
 
@@ -37,30 +37,33 @@ const ListViewScreen = ({ route, navigation }) => {
     const { categoryId, details } = categoryItem
     const { items: data, categoryTitle } = details || []
 
-    const { getData, updateData } = useContext(CategoriesWithNotesContext)
-    const rootData = getData()
+    const [listItems] = useState( data)
 
-    const editedElement = useRef(null)
+
+
+    const { getData, updateData } = useContext(CategoriesWithNotesContext)
+    const rootData = getData();
+
+
+    const editedElement = useRef<Item | null>(null)
 
     const actionSheetOptions = [
         {
             label: 'Edytuj',
-            onPress: (element) => {
+            onPress: () => {
                 navigation.navigate('AddScreen', {
                     passedPropsFromPreviousScreen: {
                         category: {
                             categoryId,
                             categoryTitle,
                         },
-                        noteValueToBeEdited: editedElement.current,
+                        noteValueToBeEdited: editedElement.current.note,
                         action: ACTIONS.EDIT_NOTE,
                     },
                 })
-
-                console.log(element)
             },
         },
-        { label: 'Usuń', onPress: () => console.log('Usuń') },
+        { label: 'Usuń', onPress: () => {} },
         { label: 'Wyjdź', onPress: () => console.log('cancel') },
     ]
     const closeActionSheetOptionsIndex = actionSheetOptions.length
@@ -71,16 +74,14 @@ const ListViewScreen = ({ route, navigation }) => {
     ] = useState(false)
 
     const keyExtractor = useCallback((item: Item) => {
-        return `${categoryId}-${item.text}`
+        return `${categoryId}-${item.note}`
     }, [])
 
     const onOrderChange = useCallback(async (newData) => {
-        const newOrderOfItemsMappedToCorrectStructure = newData.map(
-            (item) => item.text
-        )
+
         const mappedData = rootData.map((item) => {
             if (item.categoryId === categoryId) {
-                item.details.items = newOrderOfItemsMappedToCorrectStructure
+                item.details.items = newData
             }
             return item
         })
@@ -120,7 +121,7 @@ const ListViewScreen = ({ route, navigation }) => {
                     <View flex row centerV>
                         <CustomCheckbox />
                         <Text center $textDefault style={{ maxWidth: 200 }}>
-                            {item.text}
+                            {item.note}
                         </Text>
                     </View>
                     <Entypo
@@ -129,7 +130,8 @@ const ListViewScreen = ({ route, navigation }) => {
                         color="black"
                         onPress={() => {
                             setIsListingItemOptionsModalVisible(true)
-                            editedElement.current = item.text
+                            //TODO: tutaj przekazywac ID?
+                            editedElement.current = item
                         }}
                     />
                 </View>
@@ -137,12 +139,8 @@ const ListViewScreen = ({ route, navigation }) => {
         )
     }
 
-    const mappedData = data.map((item, index) => {
-        return {
-            text: item,
-            id: `${item}-${index}`,
-        }
-    })
+
+    console.log({data})
 
     return (
         <View useSafeArea style={{ minHeight: MIN_HEIGHT, marginTop: 10 }}>
@@ -160,7 +158,7 @@ const ListViewScreen = ({ route, navigation }) => {
             {/*    />*/}
             {/*</View>*/}
             <SortableList
-                data={mappedData}
+                data={listItems}
                 renderItem={renderItem}
                 keyExtractor={keyExtractor}
                 onOrderChange={onOrderChange}
