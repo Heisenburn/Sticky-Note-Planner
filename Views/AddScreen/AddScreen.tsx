@@ -25,9 +25,7 @@ const AddScreen = ({ route, navigation }) => {
     const [textFieldInput, setTextFieldInput] = useState<string>(
         noteValueToBeEdited || ''
     )
-    const [categoryInput, setCategoryInput] = useState(
-        category?.categoryTitle || ''
-    )
+    const [selectedCategory, setSelectedCategory] = useState(null)
 
     const { getData, updateData } = useContext(CategoriesWithNotesContext)
     const data = getData()
@@ -46,7 +44,7 @@ const AddScreen = ({ route, navigation }) => {
             action,
             updateData,
             textFieldInput,
-            categoryInput,
+            categoryInput: selectedCategory,
             categoryId: category?.categoryId,
             data,
             noteValueToBeEdited,
@@ -96,8 +94,8 @@ const AddScreen = ({ route, navigation }) => {
                         ) : null}
 
                         <CategorySelect
-                            setCategoryInput={setCategoryInput}
-                            categoryInput={categoryInput}
+                            setCategoryInput={setSelectedCategory}
+                            categoryInput={selectedCategory}
                             categoryId={category?.categoryId}
                         />
                     </>

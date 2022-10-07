@@ -46,6 +46,7 @@ export const updateAsyncLocalStorageData = async ({
         case ACTIONS.EDIT_NOTE: {
             const shouldUpdateCategory = categoryInput
 
+            console.log({ shouldUpdateCategory })
             if (!!shouldUpdateCategory) {
                 const originCategoryId = categoryId
                 const destinationCategoryId = categoryInput
