@@ -1,15 +1,8 @@
 import styles from './FloatingButton.styles'
 import { FloatingAction, IActionProps } from 'react-native-floating-action'
 import { View } from 'react-native'
-import React, { useCallback, useRef } from 'react'
+import React, { useRef } from 'react'
 import { ACTION_PHRASES, ACTIONS } from '../constants'
-import {
-    Assets,
-    Colors,
-    Icon,
-    Text,
-    TouchableOpacity,
-} from 'react-native-ui-lib'
 
 const FLOATING_BUTTON_ACTIONS: IActionProps[] = [
     {

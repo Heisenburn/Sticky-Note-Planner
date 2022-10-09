@@ -1,13 +1,12 @@
 import CategoryItem from '../CategoryItem/CategoryItem'
 import { FlatList } from 'react-native'
 
-
 const CategoriesList = ({ navigation, categories }) => {
     return (
         <FlatList
             data={categories}
             renderItem={({ item }) => {
-                return(
+                return (
                     <CategoryItem
                         item={item}
                         keyExtractor={(item) => item.id}

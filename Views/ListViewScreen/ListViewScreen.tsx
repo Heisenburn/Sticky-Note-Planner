@@ -1,6 +1,6 @@
 import FloatingButton from '../../Shared/FloatingButton/FloatingButton'
 import { Dimensions } from 'react-native'
-import React, { useState, useRef, useMemo } from 'react'
+import React, { useState, useRef, useMemo, useCallback } from 'react'
 import { View, ActionSheet } from 'react-native-ui-lib'
 import { ACTIONS } from '../../Shared/constants'
 import type { Item } from './types'
@@ -12,33 +12,36 @@ const ListViewScreen = ({ route, navigation }) => {
     const { categoryId, details } = categoryItem
     const { items: data, categoryTitle } = details || []
 
-    const editedElement = useRef<Item | null>(null)
-
-    const actionSheetOptions = [
-        {
-            label: 'Edytuj',
-            onPress: () => {
-                navigation.navigate('AddScreen', {
-                    passedPropsFromPreviousScreen: {
-                        category: {
-                            categoryId,
-                            categoryTitle,
-                        },
-                        noteValueToBeEdited: editedElement.current.note,
-                        action: ACTIONS.EDIT_NOTE,
-                    },
-                })
-            },
-        },
-        { label: 'Usuń', onPress: () => {} },
-        { label: 'Wyjdź', onPress: () => console.log('cancel') },
-    ]
-    const closeActionSheetOptionsIndex = actionSheetOptions.length
-
     const [
         isListingItemOptionsModalVisible,
         setIsListingItemOptionsModalVisible,
     ] = useState(false)
+    const editedElement = useRef<Item | null>(null)
+
+    const getActionSheetOption = useCallback(() => {
+        return [
+            {
+                label: 'Edytuj',
+                onPress: () => {
+                    navigation.navigate('AddScreen', {
+                        passedPropsFromPreviousScreen: {
+                            category: {
+                                categoryId,
+                                categoryTitle,
+                            },
+                            noteValueToBeEdited: editedElement.current.note,
+                            action: ACTIONS.EDIT_NOTE,
+                        },
+                    })
+                },
+            },
+            { label: 'Usuń', onPress: () => {} },
+            { label: 'Wyjdź', onPress: () => console.log('cancel') },
+        ]
+    }, [editedElement])
+
+    const actionSheetOptions = getActionSheetOption()
+    const closeActionSheetOptionsIndex = actionSheetOptions.length
 
     // const handleSettingsClick = useCallback(() => {
     //     navigation.navigate('SettingsScreen', {

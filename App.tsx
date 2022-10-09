@@ -12,8 +12,12 @@ import * as SplashScreen from 'expo-splash-screen'
 import FontAwesome from '@expo/vector-icons/FontAwesome'
 import { useEffect, useState } from 'react'
 
-function cacheFonts(fonts) {
-    return fonts.map((font) => Font.loadAsync(font))
+const cacheFonts = (
+    fonts: { [x: string]: any }[] | (string | Record<string, Font.FontSource>)[]
+) => {
+    return fonts.map((font: string | Record<string, Font.FontSource>) =>
+        Font.loadAsync(font)
+    )
 }
 
 loadDemoConfigurations()
@@ -27,7 +31,7 @@ export default function App() {
         async function loadResourcesAndDataAsync() {
             try {
                 await SplashScreen.preventAutoHideAsync()
-                await cacheFonts([FontAwesome.font])
+                cacheFonts([FontAwesome.font])
             } catch (e) {
                 // You might want to provide this error information to an error reporting service
                 console.warn(e)
@@ -69,7 +73,7 @@ export default function App() {
                                 title:
                                     route.params.passedPropsFromPreviousScreen
                                         .categoryItem.details.categoryTitle ||
-                                    ''
+                                    '',
                             })}
                         />
                         <Stack.Screen

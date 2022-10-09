@@ -1,8 +1,6 @@
 import { Pressable, Text } from 'react-native'
 import styles from '../../HomeScreen.styles'
 
-
-
 const CategoryItem = ({ item, navigation }) => {
     const { categoryTitle, items } = item.details
 
