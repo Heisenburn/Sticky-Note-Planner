@@ -2,10 +2,9 @@ import { SafeAreaView } from 'react-native'
 import CategoriesList from './Categories/CategoriesList'
 import FloatingButton from '../../Shared/FloatingButton/FloatingButton'
 import styles from './HomeScreen.styles'
-import { useContext, useEffect } from 'react'
+import { useContext } from 'react'
 import AsyncStorage from '@react-native-async-storage/async-storage'
 import { CategoriesWithNotesContext } from '../../Context/CategoriesWithNotesContext'
-import { useIsFocused } from '@react-navigation/native'
 
 const clearAll = async () => {
     try {
@@ -20,7 +19,6 @@ const clearAll = async () => {
 export default function HomeScreen({ navigation }) {
     const { getData } = useContext(CategoriesWithNotesContext)
     const data = getData()
-
 
     return (
         <SafeAreaView style={styles.container}>

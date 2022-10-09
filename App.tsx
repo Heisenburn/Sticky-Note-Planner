@@ -27,7 +27,6 @@ export default function App() {
         async function loadResourcesAndDataAsync() {
             try {
                 await SplashScreen.preventAutoHideAsync()
-
                 await cacheFonts([FontAwesome.font])
             } catch (e) {
                 // You might want to provide this error information to an error reporting service

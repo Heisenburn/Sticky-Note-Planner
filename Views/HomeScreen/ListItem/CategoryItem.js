@@ -1,12 +1,7 @@
 import { Pressable, Text } from 'react-native'
 import styles from '../HomeScreen.styles'
 
-const generateColor = () => {
-    const randomColor = Math.floor(Math.random() * 16777215)
-        .toString(16)
-        .padStart(6, '0')
-    return `#${randomColor}`
-}
+
 
 const CategoryItem = ({ item, navigation }) => {
     const { categoryTitle, items } = item.details
@@ -16,7 +11,7 @@ const CategoryItem = ({ item, navigation }) => {
             style={[
                 styles.categoryButton,
                 styles.boxShadow,
-                { backgroundColor: generateColor() },
+                { backgroundColor: 'orange' },
             ]}
             onPress={() => {
                 navigation.navigate('ListViewScreen', {
