@@ -53,7 +53,7 @@ export const CategoriesWithNotesContextProvider = ({ children }) => {
 
     const getData = (): CategoryWithNotesType[] => categoriesWithNotes
 
-   //prevent unnecessary rerenders
+    //prevent unnecessary rerenders
     let shouldRunUpdateUseEffect = false
 
     useEffect(() => {
@@ -81,7 +81,6 @@ export const CategoriesWithNotesContextProvider = ({ children }) => {
         }
     }, [categoriesWithNotes])
 
-
     //get initial data
     useEffect(() => {
         //IIFE format to avoid adding async to useEffect
@@ -102,7 +101,7 @@ export const CategoriesWithNotesContextProvider = ({ children }) => {
 
             //update state
             setCategoriesWithNotes(mappedData)
-            shouldRunUpdateUseEffect =  true
+            shouldRunUpdateUseEffect = true
         })()
     }, [])
 

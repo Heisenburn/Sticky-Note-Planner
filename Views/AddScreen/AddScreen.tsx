@@ -10,7 +10,7 @@ import React, { useContext, useState } from 'react'
 import styles from './AddScreen.styles'
 import { CategoriesWithNotesContext } from '../../Context/CategoriesWithNotesContext'
 import { ACTIONS } from '../../Shared/constants'
-import CategorySelect from './CategorySelect/CategorySelect'
+import CategorySelect from './Components/CategorySelect'
 import { getHeading, updateAsyncLocalStorageData } from './helpers/helpers'
 
 const AddScreen = ({ route, navigation }) => {
@@ -22,7 +22,7 @@ const AddScreen = ({ route, navigation }) => {
         triggeredFromHomeScreen = false,
     } = passedPropsFromPreviousScreen
 
-    const [textFieldInput, setTextFieldInput] = useState<string>(
+    const [textFieldInput, setTextFieldInput] = useState(
         noteValueToBeEdited || ''
     )
     const [selectedCategory, setSelectedCategory] = useState(null)
@@ -36,6 +36,7 @@ const AddScreen = ({ route, navigation }) => {
 
     const handleSubmit = async () => {
         const isNoteEmpty = !textFieldInput.trim().length
+
         if (isNoteEmpty) {
             Alert.alert('Notatka', 'Treść notatki nie może być pusta')
             return

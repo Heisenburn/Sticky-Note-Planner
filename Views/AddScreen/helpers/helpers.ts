@@ -1,5 +1,5 @@
 import { getDataAfterAddingNoteOrCategory } from '../../../AsyncStorage/getDataAfterAddingNoteOrCategory'
-import { CategoryWithNotesType } from '../../../types/types'
+import type { CategoryWithNotesType } from '../../../types/types'
 import { ACTION_PHRASES, ACTIONS } from '../../../Shared/constants'
 
 export const updateAsyncLocalStorageData = async ({
@@ -13,13 +13,13 @@ export const updateAsyncLocalStorageData = async ({
     shouldDisplayCategorySelect,
 }: {
     action: keyof typeof ACTIONS
-    updateData
-    textFieldInput
-    categoryInput
-    categoryId
+    updateData: (newState: CategoryWithNotesType[]) => void
+    textFieldInput: string
+    categoryInput: string
+    categoryId: string
     data: CategoryWithNotesType[]
-    noteValueToBeEdited
-    shouldDisplayCategorySelect
+    noteValueToBeEdited: string
+    shouldDisplayCategorySelect: boolean
 }) => {
     switch (action) {
         case ACTIONS.ADD_CATEGORY: {
@@ -41,12 +41,12 @@ export const updateAsyncLocalStorageData = async ({
 
             return updateData(filteredArray)
         }
+        
 
         case ACTIONS.EDIT_NOTE: {
-            const shouldUpdateCategory = categoryInput
+            const shouldUpdateCategory = !!categoryInput
 
-            console.log({ shouldUpdateCategory })
-            if (!!shouldUpdateCategory) {
+            if (shouldUpdateCategory) {
                 const originCategoryId = categoryId
                 const destinationCategoryId = categoryInput
 
@@ -55,7 +55,7 @@ export const updateAsyncLocalStorageData = async ({
                     if (item.categoryId == destinationCategoryId) {
                         item.details.items.push({
                             note: textFieldInput,
-                            id: item.details.items.length + 1,
+                            id: `${item.details.items.length + 1}`
                         })
                         return item
                     }
@@ -94,7 +94,7 @@ export const updateAsyncLocalStorageData = async ({
     }
 }
 
-export const getHeading = (action, categoryTitle) => {
+export const getHeading = (action: any, categoryTitle: string) => {
     switch (action) {
         case ACTIONS.EDIT_NOTE:
             return ACTION_PHRASES[ACTIONS.EDIT_NOTE]
