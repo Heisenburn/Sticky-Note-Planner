@@ -1,4 +1,4 @@
-type CategoryNotesItemsType = {
+export type CategoryNotesItemsType = {
     note: string
     id: string
 }

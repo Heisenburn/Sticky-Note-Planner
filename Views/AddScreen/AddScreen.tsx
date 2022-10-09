@@ -17,13 +17,13 @@ const AddScreen = ({ route, navigation }) => {
     const { passedPropsFromPreviousScreen } = route.params
     const {
         category,
-        noteValueToBeEdited,
+        noteToBeEdited,
         action = null,
         triggeredFromHomeScreen = false,
     } = passedPropsFromPreviousScreen
 
     const [textFieldInput, setTextFieldInput] = useState(
-        noteValueToBeEdited || ''
+        noteToBeEdited?.note || ''
     )
     const [selectedCategory, setSelectedCategory] = useState(null)
 
@@ -48,7 +48,7 @@ const AddScreen = ({ route, navigation }) => {
             categoryInput: selectedCategory,
             categoryId: category?.categoryId,
             data,
-            noteValueToBeEdited,
+            noteToBeEdited,
             shouldDisplayCategorySelect,
         })
 
@@ -60,7 +60,7 @@ const AddScreen = ({ route, navigation }) => {
             <View style={styles.innerContainer}>
                 <Text
                     style={
-                        noteValueToBeEdited?.length > 0
+                        noteToBeEdited?.note?.length > 0
                             ? styles.editMode
                             : styles.heading
                     }

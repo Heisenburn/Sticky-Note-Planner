@@ -18,6 +18,8 @@ const ListViewScreen = ({ route, navigation }) => {
     ] = useState(false)
     const editedElement = useRef<Item | null>(null)
 
+    console.log({ data })
+
     const getActionSheetOption = useCallback(() => {
         return [
             {
@@ -29,7 +31,7 @@ const ListViewScreen = ({ route, navigation }) => {
                                 categoryId,
                                 categoryTitle,
                             },
-                            noteValueToBeEdited: editedElement.current.note,
+                            noteToBeEdited: editedElement.current,
                             action: ACTIONS.EDIT_NOTE,
                         },
                     })

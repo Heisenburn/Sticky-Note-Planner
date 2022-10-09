@@ -61,7 +61,6 @@ export const CategoriesWithNotesContextProvider = ({ children }) => {
         ;(async () => {
             //add predefined categories
             const keysWithCategoryKeyword = await AsyncStorage.getAllKeys()
-
             const arePredefinedCategoriesAdded = keysWithCategoryKeyword.some(
                 (item) => item.includes(PREDEFINED_CATEGORIES_KEY_SUFFIX)
             )

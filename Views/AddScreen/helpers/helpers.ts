@@ -1,5 +1,8 @@
 import { getDataAfterAddingNoteOrCategory } from '../../../AsyncStorage/getDataAfterAddingNoteOrCategory'
-import type { CategoryWithNotesType } from '../../../types/types'
+import type {
+    CategoryNotesItemsType,
+    CategoryWithNotesType,
+} from '../../../types/types'
 import { ACTION_PHRASES, ACTIONS } from '../../../Shared/constants'
 
 export const updateAsyncLocalStorageData = async ({
@@ -9,7 +12,7 @@ export const updateAsyncLocalStorageData = async ({
     categoryInput,
     categoryId,
     data,
-    noteValueToBeEdited,
+    noteToBeEdited,
     shouldDisplayCategorySelect,
 }: {
     action: keyof typeof ACTIONS
@@ -18,7 +21,7 @@ export const updateAsyncLocalStorageData = async ({
     categoryInput: string
     categoryId: string
     data: CategoryWithNotesType[]
-    noteValueToBeEdited: string
+    noteToBeEdited: CategoryNotesItemsType
     shouldDisplayCategorySelect: boolean
 }) => {
     switch (action) {
@@ -41,7 +44,6 @@ export const updateAsyncLocalStorageData = async ({
 
             return updateData(filteredArray)
         }
-        
 
         case ACTIONS.EDIT_NOTE: {
             const shouldUpdateCategory = !!categoryInput
@@ -55,7 +57,7 @@ export const updateAsyncLocalStorageData = async ({
                     if (item.categoryId == destinationCategoryId) {
                         item.details.items.push({
                             note: textFieldInput,
-                            id: `${item.details.items.length + 1}`
+                            id: `${item.details.items.length + 1}`,
                         })
                         return item
                     }
@@ -63,7 +65,7 @@ export const updateAsyncLocalStorageData = async ({
                     if (item.categoryId === originCategoryId) {
                         const originCategoryWithoutMovedNoted =
                             item.details.items.filter(
-                                (item) => item !== textFieldInput
+                                (item) => item.note !== textFieldInput
                             )
                         item.details.items = originCategoryWithoutMovedNoted
                         return item
@@ -74,17 +76,16 @@ export const updateAsyncLocalStorageData = async ({
             } else {
                 //only note value was edited
 
-                const filteredArray = data.filter((item) => {
-                    //clicked category
-                    if (item.categoryId === categoryId) {
-                        //get index of changed element and replace it with new value
-                        const indexOfChangedElement =
-                            item.details.items.indexOf(noteValueToBeEdited)
-                        item.details.items[indexOfChangedElement] =
-                            textFieldInput
-                        return item
+                const filteredArray = data.filter((categoryItem) => {
+                    if (categoryItem.categoryId === categoryId) {
+                        const elementToBeUpdated =
+                            categoryItem.details.items.find(
+                                (item) => item.id === noteToBeEdited.id
+                            )
+
+                        elementToBeUpdated.note = textFieldInput
                     }
-                    return item
+                    return categoryItem
                 })
                 return updateData(filteredArray)
             }
