@@ -69,7 +69,7 @@ export default function App() {
                                 title:
                                     route.params.passedPropsFromPreviousScreen
                                         .categoryItem.details.categoryTitle ||
-                                    '',
+                                    ''
                             })}
                         />
                         <Stack.Screen

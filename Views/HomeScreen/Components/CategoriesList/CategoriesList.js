@@ -1,4 +1,4 @@
-import CategoryItem from '../ListItem/CategoryItem'
+import CategoryItem from '../CategoryItem/CategoryItem'
 import { FlatList } from 'react-native'
 
 

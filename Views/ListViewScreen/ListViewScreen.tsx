@@ -10,7 +10,7 @@ import styles from './ListViewScreen.style'
 import * as Haptics from 'expo-haptics'
 import FloatingButton from '../../Shared/FloatingButton/FloatingButton'
 import { Dimensions } from 'react-native'
-import React, {useCallback, useState, useContext, useRef, useEffect, useMemo} from 'react'
+import React, {useCallback, useState, useContext, useRef, useMemo} from 'react'
 import {
     SortableList,
     View,
@@ -21,15 +21,11 @@ import {
 
 import { CategoriesWithNotesContext } from '../../Context/CategoriesWithNotesContext'
 import { Entypo } from '@expo/vector-icons'
-import { CustomCheckbox } from './Checkbox'
+import { CustomCheckbox } from './Components/Checkbox'
 import { ACTIONS } from '../../Shared/constants'
+import {Item} from "./types";
+import {CustomSortableList} from "./Components/CustomSortableList";
 
-interface Item {
-    note: string
-    id: string
-}
-
-const MIN_HEIGHT = Dimensions.get('window').height - 100
 
 const ListViewScreen = ({ route, navigation }) => {
     const { passedPropsFromPreviousScreen } = route.params
@@ -37,7 +33,6 @@ const ListViewScreen = ({ route, navigation }) => {
     const { categoryId, details } = categoryItem
     const { items: data, categoryTitle } = details || []
 
-    const [listItems] = useState( data)
 
 
 
@@ -104,43 +99,12 @@ const ListViewScreen = ({ route, navigation }) => {
     //     })
     // }, [])
 
-    const renderItem = ({
-        item,
-        index: _index,
-    }: {
-        item: Item
-        index: number
-    }) => {
-        return (
-            <TouchableOpacity
-                style={[styles.itemContainer]}
-                centerV
-                paddingH-page
-            >
-                <View flex row spread centerV>
-                    <View flex row centerV>
-                        <CustomCheckbox />
-                        <Text center $textDefault style={{ maxWidth: 200 }}>
-                            {item.note}
-                        </Text>
-                    </View>
-                    <Entypo
-                        name="dots-three-horizontal"
-                        size={34}
-                        color="black"
-                        onPress={() => {
-                            setIsListingItemOptionsModalVisible(true)
-                            //TODO: tutaj przekazywac ID?
-                            editedElement.current = item
-                        }}
-                    />
-                </View>
-            </TouchableOpacity>
-        )
-    }
 
 
-    console.log({data})
+
+
+    const MIN_HEIGHT = useMemo((()=>Dimensions.get('window').height - 100), []);
+
 
     return (
         <View useSafeArea style={{ minHeight: MIN_HEIGHT, marginTop: 10 }}>
@@ -157,13 +121,7 @@ const ListViewScreen = ({ route, navigation }) => {
             {/*        onPress={handleSettingsClick}*/}
             {/*    />*/}
             {/*</View>*/}
-            <SortableList
-                data={listItems}
-                renderItem={renderItem}
-                keyExtractor={keyExtractor}
-                onOrderChange={onOrderChange}
-                scale={1.12}
-            />
+            <CustomSortableList data={data}/>
             <ActionSheet
                 title={'Opcje'}
                 message={'Wybierz właściwą akcje'}

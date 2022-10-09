@@ -1,5 +1,5 @@
 import { Pressable, Text } from 'react-native'
-import styles from '../HomeScreen.styles'
+import styles from '../../HomeScreen.styles'
 
 
 

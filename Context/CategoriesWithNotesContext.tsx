@@ -25,8 +25,6 @@ const setPredefinedCategories = async () => {
             }
         )
 
-        console.log({ predefinedCategoriesArray })
-
         await AsyncStorage.multiSet(predefinedCategoriesArray)
     } catch (error) {
         Alert.alert(`error: ${error}`)
@@ -50,18 +48,16 @@ export const CategoriesWithNotesContextProvider = ({ children }) => {
     >(null)
 
     const updateData = (newData: CategoryWithNotesType[]): void => {
-        console.log(newData)
         setCategoriesWithNotes(newData)
     }
 
     const getData = (): CategoryWithNotesType[] => categoriesWithNotes
 
-    //TODO: nie potrzebujemy refa, wystarczy zwykła flaga
-    // :https://beta.reactjs.org/learn/you-might-not-need-an-effect#initializing-the-application-initializing-the-application
-    const shouldRunUpdateUseEffect = useRef(false)
+   //prevent unnecessary rerenders
+    let shouldRunUpdateUseEffect = false
 
     useEffect(() => {
-        if (categoriesWithNotes && shouldRunUpdateUseEffect.current) {
+        if (categoriesWithNotes && shouldRunUpdateUseEffect) {
             ;(async () => {
                 console.log('odpala sie useEffect przy updatcie data')
                 //first remove old data
@@ -85,9 +81,7 @@ export const CategoriesWithNotesContextProvider = ({ children }) => {
         }
     }, [categoriesWithNotes])
 
-    //TODO: to można przepisać do funkcji, która odpala się na początku renderu i
-    // zwraca wartość do zmiennej którą byśmy użyli jako defaultValue dla stanu
-    //this hook runs only at the startup of app
+
     //get initial data
     useEffect(() => {
         //IIFE format to avoid adding async to useEffect
@@ -108,7 +102,7 @@ export const CategoriesWithNotesContextProvider = ({ children }) => {
 
             //update state
             setCategoriesWithNotes(mappedData)
-            shouldRunUpdateUseEffect.current = true
+            shouldRunUpdateUseEffect =  true
         })()
     }, [])
 

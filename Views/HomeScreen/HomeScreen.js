@@ -1,5 +1,5 @@
 import { SafeAreaView } from 'react-native'
-import CategoriesList from './Categories/CategoriesList'
+import CategoriesList from './Components/CategoriesList/CategoriesList'
 import FloatingButton from '../../Shared/FloatingButton/FloatingButton'
 import styles from './HomeScreen.styles'
 import { useContext } from 'react'
