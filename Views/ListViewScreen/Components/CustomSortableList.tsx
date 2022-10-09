@@ -1,5 +1,5 @@
 import { SortableList, Text, TouchableOpacity, View } from 'react-native-ui-lib'
-import React, { useCallback, useState } from 'react'
+import React, { useCallback, useEffect, useState } from 'react'
 import { Item } from '../types'
 import styles from '../ListViewScreen.style'
 import { CustomCheckbox } from './Checkbox'
@@ -12,7 +12,11 @@ export const CustomSortableList = ({
     editedElement,
     categoryId,
 }) => {
-    const [listItems] = useState(data)
+    const [listItems, setListItems] = useState(data)
+
+    useEffect(() => {
+        setListItems(data)
+    }, [data])
 
     const renderItem = ({
         item,

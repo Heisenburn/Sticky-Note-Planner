@@ -1,11 +1,17 @@
 import CategoryItem from '../CategoryItem/CategoryItem'
 import { FlatList } from 'react-native'
+import type { CategoryWithNotesType } from '../../../../types/types'
 
-const CategoriesList = ({ navigation, categories }) => {
+interface Props {
+    navigation: any
+    categories: CategoryWithNotesType[]
+}
+
+const CategoriesList = ({ navigation, categories }: Props) => {
     return (
         <FlatList
             data={categories}
-            renderItem={({ item }) => {
+            renderItem={({ item }: { item: CategoryWithNotesType }) => {
                 return (
                     <CategoryItem
                         item={item}
@@ -14,7 +20,7 @@ const CategoriesList = ({ navigation, categories }) => {
                     />
                 )
             }}
-            keyExtractor={(item, index) => item?.categoryId || index}
+            keyExtractor={(item, index) => item?.categoryId}
         />
     )
 }

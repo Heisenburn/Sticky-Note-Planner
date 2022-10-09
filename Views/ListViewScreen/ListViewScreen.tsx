@@ -1,24 +1,41 @@
 import FloatingButton from '../../Shared/FloatingButton/FloatingButton'
 import { Dimensions } from 'react-native'
-import React, { useState, useRef, useMemo, useCallback } from 'react'
+import React, {
+    useState,
+    useRef,
+    useMemo,
+    useCallback,
+    useContext,
+    useEffect,
+} from 'react'
 import { View, ActionSheet } from 'react-native-ui-lib'
 import { ACTIONS } from '../../Shared/constants'
 import type { Item } from './types'
 import { CustomSortableList } from './Components/CustomSortableList'
+import { CategoriesWithNotesContext } from '../../Context/CategoriesWithNotesContext'
 
-const ListViewScreen = ({ route, navigation }) => {
+const ListViewScreen = ({ navigation, route }) => {
+    const { getData, updateData } = useContext(CategoriesWithNotesContext)
+    const data = getData()
+
     const { passedPropsFromPreviousScreen } = route.params
-    const { categoryItem } = passedPropsFromPreviousScreen
-    const { categoryId, details } = categoryItem
-    const { items: data, categoryTitle } = details || []
+    const { categoryId } = passedPropsFromPreviousScreen
+
+    const categoryItem = data.find((item) => item.categoryId === categoryId)
+
+    const categoryTitle =
+        passedPropsFromPreviousScreen?.categoryTitle ||
+        categoryItem.details.categoryTitle
+
+    const details = categoryItem?.details
+
+    const items = details?.items || []
 
     const [
         isListingItemOptionsModalVisible,
         setIsListingItemOptionsModalVisible,
     ] = useState(false)
     const editedElement = useRef<Item | null>(null)
-
-    console.log({ data })
 
     const getActionSheetOption = useCallback(() => {
         return [
@@ -37,7 +54,25 @@ const ListViewScreen = ({ route, navigation }) => {
                     })
                 },
             },
-            { label: 'Usuń', onPress: () => {} },
+            {
+                label: 'Usuń',
+                onPress: () => {
+                    const dataWithoutRemovedElement = data.filter(
+                        (categoryItem) => {
+                            if (categoryItem.categoryId === categoryId) {
+                                categoryItem.details.items =
+                                    categoryItem.details.items.filter(
+                                        (item) =>
+                                            item.id !== editedElement.current.id
+                                    )
+                            }
+                            return categoryItem
+                        }
+                    )
+
+                    updateData(dataWithoutRemovedElement)
+                },
+            },
             { label: 'Wyjdź', onPress: () => console.log('cancel') },
         ]
     }, [editedElement])
@@ -59,7 +94,13 @@ const ListViewScreen = ({ route, navigation }) => {
     const MIN_HEIGHT = useMemo(() => Dimensions.get('window').height - 100, [])
 
     return (
-        <View useSafeArea style={{ minHeight: MIN_HEIGHT, marginTop: 10 }}>
+        <View
+            useSafeArea
+            style={{
+                minHeight: MIN_HEIGHT,
+                marginTop: 10,
+            }}
+        >
             {/*<View spread row padding-15 centerV>*/}
             {/*    <View bottom row padding>*/}
             {/*        <Text h1 blue20>*/}
@@ -74,7 +115,7 @@ const ListViewScreen = ({ route, navigation }) => {
             {/*    />*/}
             {/*</View>*/}
             <CustomSortableList
-                data={data}
+                data={items}
                 setIsListingItemOptionsModalVisible={
                     setIsListingItemOptionsModalVisible
                 }

@@ -1,7 +1,14 @@
 import { Pressable, Text } from 'react-native'
+import { CategoryWithNotesType } from '../../../../types/types'
 import styles from '../../HomeScreen.styles'
 
-const CategoryItem = ({ item, navigation }) => {
+const CategoryItem = ({
+    item,
+    navigation,
+}: {
+    item: CategoryWithNotesType
+    navigation: any
+}) => {
     const { categoryTitle, items } = item.details
 
     return (
@@ -14,7 +21,8 @@ const CategoryItem = ({ item, navigation }) => {
             onPress={() => {
                 navigation.navigate('ListViewScreen', {
                     passedPropsFromPreviousScreen: {
-                        categoryItem: item,
+                        categoryId: item.categoryId,
+                        categoryTitle,
                     },
                 })
             }}

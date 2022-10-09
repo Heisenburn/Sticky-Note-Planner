@@ -52,7 +52,7 @@ const AddScreen = ({ route, navigation }) => {
             shouldDisplayCategorySelect,
         })
 
-        navigation.navigate('HomeScreen')
+        navigation.goBack()
     }
 
     return (
