@@ -1,10 +1,11 @@
 import { SortableList, Text, TouchableOpacity, View } from 'react-native-ui-lib'
-import React, { useCallback, useEffect, useState } from 'react'
+import React, { useCallback, useContext, useEffect, useState } from 'react'
 import { Item } from '../types'
 import styles from '../ListViewScreen.style'
 import { CustomCheckbox } from './Checkbox'
 import { Entypo } from '@expo/vector-icons'
 import * as Haptics from 'expo-haptics'
+import { CategoriesWithNotesContext } from '../../../Context/CategoriesWithNotesContext'
 
 export const CustomSortableList = ({
     data,
@@ -13,6 +14,9 @@ export const CustomSortableList = ({
     categoryId,
 }) => {
     const [listItems, setListItems] = useState(data)
+
+    const { getData, updateData } = useContext(CategoriesWithNotesContext)
+    const rootData = getData()
 
     useEffect(() => {
         setListItems(data)
@@ -58,14 +62,14 @@ export const CustomSortableList = ({
     }, [])
 
     const onOrderChange = useCallback(async (newData) => {
-        // const mappedData = rootData.map((item) => {
-        //     if (item.categoryId === categoryId) {
-        //         item.details.items = newData
-        //     }
-        //     return item
-        // })
+        const mappedData = rootData.map((item) => {
+            if (item.categoryId === categoryId) {
+                item.details.items = newData
+            }
+            return item
+        })
 
-        // updateData(mappedData)
+        updateData(mappedData)
 
         await Haptics.notificationAsync(
             Haptics.NotificationFeedbackType.Success

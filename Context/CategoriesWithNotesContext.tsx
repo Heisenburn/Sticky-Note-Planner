@@ -29,9 +29,10 @@ export const CategoriesWithNotesContextProvider = ({ children }) => {
     const shouldRunUpdateUseEffect = useRef(false)
 
     useEffect(() => {
-        console.log({ categoriesWithNotes })
-
-        if (categoriesWithNotes && shouldRunUpdateUseEffect.current) {
+        if (
+            categoriesWithNotes?.length > 0 &&
+            shouldRunUpdateUseEffect.current
+        ) {
             ;(async () => {
                 console.log('odpala sie useEffect przy updatcie data')
                 //first remove old data
