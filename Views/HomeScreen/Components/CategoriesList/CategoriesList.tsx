@@ -10,6 +10,7 @@ interface Props {
 const CategoriesList = ({ navigation, categories }: Props) => {
     return (
         <FlatList
+            style={{ display: 'flex' }}
             data={categories}
             renderItem={({ item }: { item: CategoryWithNotesType }) => {
                 return (

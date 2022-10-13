@@ -46,7 +46,7 @@ const SettingsScreen = ({ route, navigation }) => {
     }
 
     const handleSubmit = () => {
-        const dataWithChangedCategoryName = data.filter((item) => {
+        const dataWithChangedCategoryName = data.map((item) => {
             if (item.categoryId === categoryId) {
                 item.details.categoryTitle = categoryNameInput
                 return item

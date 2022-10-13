@@ -52,7 +52,7 @@ export const updateAsyncLocalStorageData = async ({
                 const originCategoryId = categoryId
                 const destinationCategoryId = categoryInput
 
-                const filteredArray = data.filter((item) => {
+                const updatedDataArray = data.map((item) => {
                     //move element to destination category
                     if (item.categoryId == destinationCategoryId) {
                         item.details.items.push({
@@ -63,20 +63,18 @@ export const updateAsyncLocalStorageData = async ({
                     }
                     //remove element from origin category
                     if (item.categoryId === originCategoryId) {
-                        const originCategoryWithoutMovedNoted =
-                            item.details.items.filter(
-                                (item) => item.note !== textFieldInput
-                            )
-                        item.details.items = originCategoryWithoutMovedNoted
+                        item.details.items = item.details.items.filter(
+                            (item) => item.note !== textFieldInput
+                        )
                         return item
                     }
                     return item
                 })
-                return updateData(filteredArray)
+                return updateData(updatedDataArray)
             } else {
                 //only note value was edited
 
-                const filteredArray = data.filter((categoryItem) => {
+                const updatedDataArray = data.map((categoryItem) => {
                     if (categoryItem.categoryId === categoryId) {
                         const elementToBeUpdated =
                             categoryItem.details.items.find(
@@ -87,7 +85,7 @@ export const updateAsyncLocalStorageData = async ({
                     }
                     return categoryItem
                 })
-                return updateData(filteredArray)
+                return updateData(updatedDataArray)
             }
         }
         default:

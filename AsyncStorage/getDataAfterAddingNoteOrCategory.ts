@@ -1,7 +1,5 @@
 import AsyncStorage from '@react-native-async-storage/async-storage'
-import {
-    CATEGORY_KEY_PREFIX,
-} from '../Shared/constants'
+import { CATEGORY_KEY_PREFIX } from '../Shared/constants'
 import type { CategoryWithNotesType } from '../types/types'
 import { getKeysForExistingCategories } from './getKeysForExistingCategories'
 
@@ -47,20 +45,16 @@ export const getDataAfterAddingNoteOrCategory = async ({
         const randomCategoryKey = '@CATEGORY-PREDEFINED-RANDOM'
         const category = categoryId || randomCategoryKey
 
-        const existingDataWithNewNoteInCategory = existingData.filter(
-            (item) => {
-                if (item.categoryId === category) {
-                    item.details.items.push({
-                        note: noteValue,
-                        id: `${item.details.items.length + 1}`,
-                    })
-                    return item
-                }
+        return existingData.map((item) => {
+            if (item.categoryId === category) {
+                item.details.items.push({
+                    note: noteValue,
+                    id: `${item.details.items.length + 1}`,
+                })
                 return item
             }
-        )
-
-        return existingDataWithNewNoteInCategory
+            return item
+        })
 
         //2. saving category
     } else {
