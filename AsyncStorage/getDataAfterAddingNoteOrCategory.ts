@@ -2,6 +2,8 @@ import AsyncStorage from '@react-native-async-storage/async-storage'
 import { CATEGORY_KEY_PREFIX } from '../Shared/constants'
 import type { CategoryWithNotesType } from '../types/types'
 import { getKeysForExistingCategories } from './getKeysForExistingCategories'
+import 'react-native-get-random-values'
+import { v4 as uuidv4 } from 'uuid'
 
 export const getAllKeys = async () => {
     let keys = []
@@ -17,10 +19,7 @@ export const getAllKeys = async () => {
 }
 
 const getNewCategoryKeyWithId = async (category) => {
-    //first get all keys with category in key
-    //then get last ID to be used when creating new category
-    const keysWithCategoryKeyword = await getKeysForExistingCategories()
-    const categoryId = keysWithCategoryKeyword.length + 1
+    const categoryId = uuidv4()
 
     //remove whitespaces and add prefix + suffix
     return `${CATEGORY_KEY_PREFIX}${category.replace(
@@ -49,7 +48,7 @@ export const getDataAfterAddingNoteOrCategory = async ({
             if (item.categoryId === category) {
                 item.details.items.push({
                     note: noteValue,
-                    id: `${item.details.items.length + 1}`,
+                    id: uuidv4(),
                 })
                 return item
             }

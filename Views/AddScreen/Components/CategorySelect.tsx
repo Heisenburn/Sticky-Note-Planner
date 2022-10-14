@@ -44,7 +44,7 @@ const CategorySelect = ({ setCategoryInput, categoryInput, categoryId }) => {
     return (
         <FlatList
             style={{
-                maxHeight: 100,
+                maxHeight: 200,
             }}
             data={categories}
             renderItem={({ item }) => renderCategoryButton(item)}

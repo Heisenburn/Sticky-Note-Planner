@@ -1,5 +1,5 @@
 import FloatingButton from '../../Shared/FloatingButton/FloatingButton'
-import { Dimensions } from 'react-native'
+import { Alert, Dimensions } from 'react-native'
 import React, {
     useState,
     useRef,
@@ -9,7 +9,10 @@ import React, {
     useEffect,
 } from 'react'
 import { View, ActionSheet } from 'react-native-ui-lib'
-import { ACTIONS } from '../../Shared/constants'
+import {
+    ACTIONS,
+    PREDEFINED_CATEGORIES_KEY_SUFFIX,
+} from '../../Shared/constants'
 import type { Item } from './types'
 import { CustomSortableList } from './Components/CustomSortableList'
 import { CategoriesWithNotesContext } from '../../Context/CategoriesWithNotesContext'
@@ -37,6 +40,19 @@ const ListViewScreen = ({ navigation, route }) => {
     ] = useState(false)
     const editedElement = useRef<Item | null>(null)
 
+    const handleRemove = () => {
+        const dataWithoutRemovedElement = data.filter((categoryItem) => {
+            if (categoryItem.categoryId === categoryId) {
+                categoryItem.details.items = categoryItem.details.items.filter(
+                    (item) => item.id !== editedElement.current.id
+                )
+            }
+            return categoryItem
+        })
+
+        updateData(dataWithoutRemovedElement)
+    }
+
     const getActionSheetOption = useCallback(() => {
         return [
             {
@@ -57,20 +73,21 @@ const ListViewScreen = ({ navigation, route }) => {
             {
                 label: 'Usuń',
                 onPress: () => {
-                    const dataWithoutRemovedElement = data.filter(
-                        (categoryItem) => {
-                            if (categoryItem.categoryId === categoryId) {
-                                categoryItem.details.items =
-                                    categoryItem.details.items.filter(
-                                        (item) =>
-                                            item.id !== editedElement.current.id
-                                    )
-                            }
-                            return categoryItem
-                        }
+                    Alert.alert(
+                        'Usunięcie notatki',
+                        `Czy na pewno chcesz usunąć tę notatkę?`,
+                        [
+                            {
+                                text: 'Tak',
+                                onPress: () => {
+                                    handleRemove()
+                                },
+                            },
+                            {
+                                text: 'Nie',
+                            },
+                        ]
                     )
-
-                    updateData(dataWithoutRemovedElement)
                 },
             },
             { label: 'Wyjdź', onPress: () => console.log('cancel') },

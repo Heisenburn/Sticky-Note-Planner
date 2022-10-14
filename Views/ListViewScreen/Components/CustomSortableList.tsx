@@ -22,6 +22,8 @@ export const CustomSortableList = ({
         setListItems(data)
     }, [data])
 
+    console.log({ listItems })
+
     const renderItem = ({
         item,
         index: _index,
@@ -58,7 +60,7 @@ export const CustomSortableList = ({
     }
 
     const keyExtractor = useCallback((item: Item) => {
-        return `${categoryId}-${item.note}`
+        return item.id
     }, [])
 
     const onOrderChange = useCallback(async (newData) => {
