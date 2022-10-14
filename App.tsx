@@ -4,13 +4,14 @@ import HomeScreen from './Views/HomeScreen/HomeScreen'
 import { createNativeStackNavigator } from '@react-navigation/native-stack'
 import ListViewScreen from './Views/ListViewScreen/ListViewScreen'
 import { CategoriesWithNotesContextProvider } from './Context/CategoriesWithNotesContext'
-import { SafeAreaView } from 'react-native-safe-area-context'
+import { SafeAreaView } from 'react-native'
 import SettingsScreen from './Views/SettingsScreen/SettingsScreen'
 import { loadDemoConfigurations } from './configuration'
 import * as Font from 'expo-font'
 import * as SplashScreen from 'expo-splash-screen'
 import FontAwesome from '@expo/vector-icons/FontAwesome'
 import { useEffect, useState } from 'react'
+import { MaterialIcons } from '@expo/vector-icons'
 
 const cacheFonts = (
     fonts: { [x: string]: any }[] | (string | Record<string, Font.FontSource>)[]
@@ -59,7 +60,13 @@ export default function App() {
                         <Stack.Screen
                             name="HomeScreen"
                             component={HomeScreen}
-                            options={{ title: 'Kategorie' }}
+                            options={{
+                                title: 'Kategorie',
+                                headerSearchBarOptions: {
+                                    placeholder:
+                                        'Wpisz nazwe kategorii lub treść notatki',
+                                },
+                            }}
                         />
                         <Stack.Screen
                             name="AddScreen"
@@ -69,15 +76,44 @@ export default function App() {
                         <Stack.Screen
                             name="ListViewScreen"
                             component={ListViewScreen}
-                            options={({ route }) => ({
-                                title:
-                                    route.params.passedPropsFromPreviousScreen
-                                        .categoryTitle || '',
-                            })}
+                            options={({ route, navigation }) => {
+                                const { passedPropsFromPreviousScreen } =
+                                    route.params
+                                const { categoryTitle, categoryId } =
+                                    passedPropsFromPreviousScreen
+
+                                return {
+                                    title: categoryTitle,
+                                    headerRight: () => {
+                                        return (
+                                            <MaterialIcons
+                                                name="settings"
+                                                size={30}
+                                                color="black"
+                                                onPress={() => {
+                                                    navigation.navigate(
+                                                        'SettingsScreen',
+                                                        {
+                                                            passedPropsFromPreviousScreen:
+                                                                {
+                                                                    category: {
+                                                                        categoryTitle,
+                                                                        categoryId,
+                                                                    },
+                                                                },
+                                                        }
+                                                    )
+                                                }}
+                                            />
+                                        )
+                                    },
+                                }
+                            }}
                         />
                         <Stack.Screen
                             name="SettingsScreen"
                             component={SettingsScreen}
+                            options={{ headerShown: false }}
                         />
                     </Stack.Navigator>
                 </NavigationContainer>

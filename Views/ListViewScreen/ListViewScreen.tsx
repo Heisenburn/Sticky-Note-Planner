@@ -6,13 +6,9 @@ import React, {
     useMemo,
     useCallback,
     useContext,
-    useEffect,
 } from 'react'
 import { View, ActionSheet } from 'react-native-ui-lib'
-import {
-    ACTIONS,
-    PREDEFINED_CATEGORIES_KEY_SUFFIX,
-} from '../../Shared/constants'
+import { ACTIONS } from '../../Shared/constants'
 import type { Item } from './types'
 import { CustomSortableList } from './Components/CustomSortableList'
 import { CategoriesWithNotesContext } from '../../Context/CategoriesWithNotesContext'
@@ -90,23 +86,11 @@ const ListViewScreen = ({ navigation, route }) => {
                     )
                 },
             },
-            { label: 'Wyjdź', onPress: () => console.log('cancel') },
         ]
     }, [editedElement])
 
     const actionSheetOptions = getActionSheetOption()
     const closeActionSheetOptionsIndex = actionSheetOptions.length
-
-    // const handleSettingsClick = useCallback(() => {
-    //     navigation.navigate('SettingsScreen', {
-    //         passedPropsFromPreviousScreen: {
-    //             category: {
-    //                 categoryTitle,
-    //                 categoryId,
-    //             },
-    //         },
-    //     })
-    // }, [])
 
     const MIN_HEIGHT = useMemo(() => Dimensions.get('window').height - 100, [])
 
@@ -118,19 +102,6 @@ const ListViewScreen = ({ navigation, route }) => {
                 marginTop: 10,
             }}
         >
-            {/*<View spread row padding-15 centerV>*/}
-            {/*    <View bottom row padding>*/}
-            {/*        <Text h1 blue20>*/}
-            {/*            {categoryTitle}*/}
-            {/*        </Text>*/}
-            {/*    </View>*/}
-            {/*    <MaterialIcons*/}
-            {/*        name="settings"*/}
-            {/*        size={40}*/}
-            {/*        color="black"*/}
-            {/*        onPress={handleSettingsClick}*/}
-            {/*    />*/}
-            {/*</View>*/}
             <CustomSortableList
                 data={items}
                 setIsListingItemOptionsModalVisible={
