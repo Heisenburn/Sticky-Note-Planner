@@ -50,7 +50,6 @@ const FloatingButton = ({
                 }}
                 //triggered from within HomeScreen
                 onPressItem={(pressedAction) => {
-                    console.log({ pressedAction })
                     navigation.navigate('AddScreen', {
                         passedPropsFromPreviousScreen: {
                             action: pressedAction,

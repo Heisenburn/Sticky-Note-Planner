@@ -49,13 +49,12 @@ export default function App() {
 
     return appIsReady ? (
         <CategoriesWithNotesContextProvider>
-            <SafeAreaView
-                style={{
-                    flex: 1,
-                    justifyContent: 'space-between',
-                }}
-            >
-                <NavigationContainer>
+            <NavigationContainer>
+                <SafeAreaView
+                    style={{
+                        flex: 1,
+                    }}
+                >
                     <Stack.Navigator>
                         <Stack.Screen
                             name="HomeScreen"
@@ -71,7 +70,7 @@ export default function App() {
                         <Stack.Screen
                             name="AddScreen"
                             component={AddScreen}
-                            options={{ headerShown: false }}
+                            options={{ title: '' }}
                         />
                         <Stack.Screen
                             name="ListViewScreen"
@@ -113,11 +112,13 @@ export default function App() {
                         <Stack.Screen
                             name="SettingsScreen"
                             component={SettingsScreen}
-                            options={{ headerShown: false }}
+                            options={{
+                                title: 'Ustawienia',
+                            }}
                         />
                     </Stack.Navigator>
-                </NavigationContainer>
-            </SafeAreaView>
+                </SafeAreaView>
+            </NavigationContainer>
         </CategoriesWithNotesContextProvider>
     ) : null
 }

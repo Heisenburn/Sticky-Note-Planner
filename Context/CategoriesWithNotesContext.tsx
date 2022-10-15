@@ -1,4 +1,4 @@
-import { createContext, useCallback, useEffect, useRef, useState } from 'react'
+import { createContext, useCallback, useEffect, useState } from 'react'
 import AsyncStorage from '@react-native-async-storage/async-storage'
 import type { CategoryWithNotesType } from '../types/types'
 import { getKeysForExistingCategories } from '../AsyncStorage/getKeysForExistingCategories'
@@ -25,23 +25,15 @@ export const CategoriesWithNotesContextProvider = ({ children }) => {
 
     const getData = (): CategoryWithNotesType[] => categoriesWithNotes
 
-    //prevent unnecessary rerenders
-    const shouldRunUpdateUseEffect = useRef(false)
-
     useEffect(() => {
-        if (
-            categoriesWithNotes?.length > 0 &&
-            shouldRunUpdateUseEffect.current
-        ) {
+        if (categoriesWithNotes?.length > 0) {
             ;(async () => {
-                console.log('odpala sie useEffect przy updatcie data')
                 //first remove old data
                 const arrayOfCategories = await getKeysForExistingCategories()
                 await removeMultipleAsyncStorageElements(arrayOfCategories)
 
                 // then save new data
                 if (categoriesWithNotes.length > 0) {
-                    //TODO: to wynieść do osobnej funkcji
                     try {
                         const mappedData = categoriesWithNotes.map((item) => {
                             return [item.categoryId, JSON.stringify(item)]
@@ -66,7 +58,6 @@ export const CategoriesWithNotesContextProvider = ({ children }) => {
                 (item) => item.includes(PREDEFINED_CATEGORIES_KEY_SUFFIX)
             )
 
-            //todo: wynieść do osobnej funkcji
             if (!arePredefinedCategoriesAdded) {
                 await setPredefinedCategories()
             }
@@ -75,7 +66,6 @@ export const CategoriesWithNotesContextProvider = ({ children }) => {
 
             //update state
             setCategoriesWithNotes(mappedData)
-            shouldRunUpdateUseEffect.current = true
         })()
     }, [])
 

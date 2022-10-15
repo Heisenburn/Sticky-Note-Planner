@@ -50,7 +50,7 @@ const AddScreen = ({ route, navigation }) => {
             shouldDisplayCategorySelect,
         })
 
-        navigation.goBack()
+        navigation.navigate('HomeScreen')
     }
 
     return (
@@ -74,43 +74,49 @@ const AddScreen = ({ route, navigation }) => {
                 />
 
                 {shouldDisplayCategorySelect ? (
-                    <ExpandableSection
-                        top={true}
-                        expanded={isCategorySelectionVisible}
-                        sectionHeader={
-                            <View
-                                style={{
-                                    display: 'flex',
-                                    flexDirection: 'row',
-                                }}
-                            >
-                                <Text blue10 text60 marginB-5>
-                                    Kategoria
-                                </Text>
-                                <Entypo
-                                    name="chevron-down"
-                                    size={24}
-                                    color="black"
-                                />
-                            </View>
-                        }
-                        onPress={() =>
-                            setIsCategorySelectionVisible(
-                                (prevState) => !prevState
-                            )
-                        }
-                    />
-                ) : null}
-
-                {isCategorySelectionVisible ? (
                     <>
-                        <Text style={styles.categoryInfo}>
-                            Wybierz inną kategorię aby przenieść notatke
-                        </Text>
                         {action === ACTIONS.ADD_NOTE ? (
                             <Text>
                                 Jeśli nie wybierzesz kategorii - notatka będzie
                                 przypisana do kategorii RANDOM
+                            </Text>
+                        ) : null}
+                        <ExpandableSection
+                            top={true}
+                            expanded={isCategorySelectionVisible}
+                            sectionHeader={
+                                <View
+                                    style={{
+                                        display: 'flex',
+                                        flexDirection: 'row',
+                                        marginTop: 10,
+                                        marginBottom: 10,
+                                    }}
+                                >
+                                    <Text blue10 text60>
+                                        Kategoria
+                                    </Text>
+                                    <Entypo
+                                        name="chevron-down"
+                                        size={24}
+                                        color="black"
+                                    />
+                                </View>
+                            }
+                            onPress={() =>
+                                setIsCategorySelectionVisible(
+                                    (prevState) => !prevState
+                                )
+                            }
+                        />
+                    </>
+                ) : null}
+
+                {isCategorySelectionVisible ? (
+                    <>
+                        {action === ACTIONS.EDIT_NOTE ? (
+                            <Text style={styles.categoryInfo}>
+                                Wybierz inną kategorię aby przenieść notatke
                             </Text>
                         ) : null}
 
@@ -127,12 +133,6 @@ const AddScreen = ({ route, navigation }) => {
                         title="Zapisz"
                         onPress={() => handleSubmit()}
                         color={'orange'}
-                    />
-                </View>
-                <View style={styles.buttonCommonStyles}>
-                    <Button
-                        title="Powrót"
-                        onPress={() => navigation.goBack()}
                     />
                 </View>
             </View>

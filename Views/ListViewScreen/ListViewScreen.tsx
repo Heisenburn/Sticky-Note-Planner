@@ -99,10 +99,8 @@ const ListViewScreen = ({ navigation, route }) => {
 
     return (
         <View
-            useSafeArea
             style={{
-                minHeight: MIN_HEIGHT,
-                marginTop: 10,
+                minHeight: MIN_HEIGHT - 20,
             }}
         >
             <CustomSortableList

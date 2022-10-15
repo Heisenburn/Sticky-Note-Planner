@@ -109,12 +109,6 @@ const SettingsScreen = ({ route, navigation }) => {
                             color={'orange'}
                         />
                     </View>
-                    <View style={styles.buttonCommonStyles}>
-                        <Button
-                            title="Powrót"
-                            onPress={() => navigation.goBack()}
-                        />
-                    </View>
                 </View>
                 <View
                     testID={'dangerZone'}
