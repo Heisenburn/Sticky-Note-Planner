@@ -86,6 +86,9 @@ const ListViewScreen = ({ navigation, route }) => {
                     )
                 },
             },
+            {
+                label: 'Zamknij',
+            },
         ]
     }, [editedElement])
 

@@ -1,17 +1,12 @@
-import {
-    Text,
-    SafeAreaView,
-    TextInput,
-    View,
-    Alert,
-    Button,
-} from 'react-native'
+import { SafeAreaView, TextInput, View, Alert, Button } from 'react-native'
 import React, { useContext, useState } from 'react'
 import styles from './AddScreen.styles'
 import { CategoriesWithNotesContext } from '../../Context/CategoriesWithNotesContext'
 import { ACTIONS } from '../../Shared/constants'
 import CategorySelect from './Components/CategorySelect'
 import { getHeading, updateAsyncLocalStorageData } from './helpers/helpers'
+import { ExpandableSection, Text } from 'react-native-ui-lib'
+import { Entypo } from '@expo/vector-icons'
 
 const AddScreen = ({ route, navigation }) => {
     const { passedPropsFromPreviousScreen } = route.params
@@ -33,6 +28,9 @@ const AddScreen = ({ route, navigation }) => {
     const shouldDisplayCategorySelect =
         action == ACTIONS.EDIT_NOTE ||
         (triggeredFromHomeScreen && action === ACTIONS.ADD_NOTE)
+
+    const [isCategorySelectionVisible, setIsCategorySelectionVisible] =
+        useState(false)
 
     const handleSubmit = async () => {
         const isNoteEmpty = !textFieldInput.trim().length
@@ -76,17 +74,39 @@ const AddScreen = ({ route, navigation }) => {
                 />
 
                 {shouldDisplayCategorySelect ? (
-                    <Text style={styles.heading}>Kategoria</Text>
+                    <ExpandableSection
+                        top={true}
+                        expanded={isCategorySelectionVisible}
+                        sectionHeader={
+                            <View
+                                style={{
+                                    display: 'flex',
+                                    flexDirection: 'row',
+                                }}
+                            >
+                                <Text blue10 text60 marginB-5>
+                                    Kategoria
+                                </Text>
+                                <Entypo
+                                    name="chevron-down"
+                                    size={24}
+                                    color="black"
+                                />
+                            </View>
+                        }
+                        onPress={() =>
+                            setIsCategorySelectionVisible(
+                                (prevState) => !prevState
+                            )
+                        }
+                    />
                 ) : null}
 
-                {action == ACTIONS.EDIT_NOTE ? (
-                    <Text style={styles.categoryInfo}>
-                        Wybierz inną kategorię aby przenieść notatke
-                    </Text>
-                ) : null}
-
-                {shouldDisplayCategorySelect ? (
+                {isCategorySelectionVisible ? (
                     <>
+                        <Text style={styles.categoryInfo}>
+                            Wybierz inną kategorię aby przenieść notatke
+                        </Text>
                         {action === ACTIONS.ADD_NOTE ? (
                             <Text>
                                 Jeśli nie wybierzesz kategorii - notatka będzie

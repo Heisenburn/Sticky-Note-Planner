@@ -22,8 +22,6 @@ export const CustomSortableList = ({
         setListItems(data)
     }, [data])
 
-    console.log({ listItems })
-
     const renderItem = ({
         item,
         index: _index,
@@ -50,7 +48,6 @@ export const CustomSortableList = ({
                         color="black"
                         onPress={() => {
                             setIsListingItemOptionsModalVisible(true)
-                            //TODO: tutaj przekazywac ID?
                             editedElement.current = item
                         }}
                     />

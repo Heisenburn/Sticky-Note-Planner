@@ -62,10 +62,10 @@ export default function App() {
                             component={HomeScreen}
                             options={{
                                 title: 'Kategorie',
-                                headerSearchBarOptions: {
-                                    placeholder:
-                                        'Wpisz nazwe kategorii lub treść notatki',
-                                },
+                                // headerSearchBarOptions: {
+                                //     placeholder:
+                                //         'Wpisz nazwe kategorii lub treść notatki',
+                                // },
                             }}
                         />
                         <Stack.Screen
