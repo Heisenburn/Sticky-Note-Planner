@@ -7,10 +7,6 @@ const styles = StyleSheet.create({
         borderColor: Colors.$outlineDefault,
         borderBottomWidth: 1,
     },
-    selectedItemContainer: {
-        borderLeftColor: Colors.$outlinePrimary,
-        borderLeftWidth: 5,
-    },
 })
 
 export default styles
