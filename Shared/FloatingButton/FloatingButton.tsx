@@ -1,21 +1,9 @@
 import styles from './FloatingButton.styles'
-import { FloatingAction, IActionProps } from 'react-native-floating-action'
+import { FloatingAction } from 'react-native-floating-action'
 import { View } from 'react-native'
 import React, { useRef } from 'react'
 import { ACTION_PHRASES, ACTIONS } from '../constants'
-
-const FLOATING_BUTTON_ACTIONS: IActionProps[] = [
-    {
-        text: ACTION_PHRASES[ACTIONS.ADD_NOTE],
-        // icon: require('./images/ic_accessibility_white.png'),
-        name: ACTIONS.ADD_NOTE,
-    },
-    {
-        text: ACTION_PHRASES[ACTIONS.ADD_CATEGORY],
-        // icon: require('./images/ic_language_white.png'),
-        name: ACTIONS.ADD_CATEGORY,
-    },
-]
+import { AntDesign } from '@expo/vector-icons'
 
 const FloatingButton = ({
     navigation,
@@ -27,7 +15,26 @@ const FloatingButton = ({
     return (
         <View style={styles.container}>
             <FloatingAction
-                actions={FLOATING_BUTTON_ACTIONS}
+                actions={[
+                    {
+                        text: ACTION_PHRASES[ACTIONS.ADD_NOTE],
+                        icon: (
+                            <AntDesign name="addfile" size={24} color="white" />
+                        ),
+                        name: ACTIONS.ADD_NOTE,
+                    },
+                    {
+                        text: ACTION_PHRASES[ACTIONS.ADD_CATEGORY],
+                        icon: (
+                            <AntDesign
+                                name="addfolder"
+                                size={24}
+                                color="white"
+                            />
+                        ),
+                        name: ACTIONS.ADD_CATEGORY,
+                    },
+                ]}
                 ref={floatingButtonRef}
                 showBackground={true}
                 color={'#6638f0'}
