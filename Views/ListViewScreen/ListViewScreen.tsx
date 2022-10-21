@@ -7,7 +7,7 @@ import React, {
     useCallback,
     useContext,
 } from 'react'
-import { View, ActionSheet } from 'react-native-ui-lib'
+import { View, ActionSheet, Toast, Text } from 'react-native-ui-lib'
 import { ACTIONS } from '../../Shared/constants'
 import type { Item } from './types'
 import { CustomSortableList } from './Components/CustomSortableList'
@@ -90,7 +90,7 @@ const ListViewScreen = ({ navigation, route }) => {
                 label: 'Zamknij',
             },
         ]
-    }, [editedElement])
+    }, [categoryId, categoryTitle, handleRemove, navigation])
 
     const actionSheetOptions = getActionSheetOption()
     const closeActionSheetOptionsIndex = actionSheetOptions.length
@@ -121,6 +121,7 @@ const ListViewScreen = ({ navigation, route }) => {
                 useNativeIOS={true}
                 onDismiss={() => setIsListingItemOptionsModalVisible(false)}
             />
+
             <FloatingButton
                 navigation={navigation}
                 categoryId={categoryId}

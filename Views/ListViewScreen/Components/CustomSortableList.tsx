@@ -6,7 +6,6 @@ import { CustomCheckbox } from './Checkbox'
 import { Entypo } from '@expo/vector-icons'
 import * as Haptics from 'expo-haptics'
 import { CategoriesWithNotesContext } from '../../../Context/CategoriesWithNotesContext'
-import { MaterialCommunityIcons } from '@expo/vector-icons'
 
 export const CustomSortableList = ({
     data,
@@ -38,14 +37,6 @@ export const CustomSortableList = ({
             >
                 <View flex row spread centerV>
                     <View flex row centerV>
-                        <MaterialCommunityIcons
-                            name="drag"
-                            size={24}
-                            color="gray"
-                            style={{
-                                marginRight: 10,
-                            }}
-                        />
                         <CustomCheckbox />
                         <Text center $textDefault style={{ maxWidth: 200 }}>
                             {item.note}
