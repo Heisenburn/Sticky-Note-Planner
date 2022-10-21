@@ -14,7 +14,7 @@ const CategoryItem = ({
 
     return (
         <Pressable
-            style={[styles.categoryButton, styles.boxShadow]}
+            style={[styles.categoryButton]}
             onPress={() => {
                 navigation.navigate('ListViewScreen', {
                     passedPropsFromPreviousScreen: {
@@ -28,9 +28,9 @@ const CategoryItem = ({
             <View
                 style={{
                     borderRadius: 20,
-                    backgroundColor: '#2F80ED',
-                    height: 60,
-                    width: 60,
+                    backgroundColor: '#eba814',
+                    height: 30,
+                    width: 30,
                     display: 'flex',
                     alignItems: 'center',
                     justifyContent: 'center',

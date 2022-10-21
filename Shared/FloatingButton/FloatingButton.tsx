@@ -37,7 +37,7 @@ const FloatingButton = ({
                 ]}
                 ref={floatingButtonRef}
                 showBackground={true}
-                color={'#6638f0'}
+                color={'#1457EB'}
                 distanceToEdge={10}
                 buttonSize={100}
                 //triggered from within ListViewScreen

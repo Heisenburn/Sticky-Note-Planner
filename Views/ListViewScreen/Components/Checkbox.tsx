@@ -9,6 +9,7 @@ export const CustomCheckbox = () => {
             style={{
                 marginRight: 20,
             }}
+            color={'#1457EB'}
             value={isChecked}
             onValueChange={(value) => setIsChecked(value)}
         />

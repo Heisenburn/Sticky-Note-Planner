@@ -8,39 +8,39 @@ const styles = StyleSheet.create({
     },
     heading: {
         color: 'black',
-        fontSize: 20,
+        fontSize: 16,
         fontWeight: '500',
         maxWidth: 200,
     },
 
-    boxShadow: {
+    numberOfElements: {
+        color: 'white',
+        fontSize: 16,
+        fontWeight: 'bold',
+    },
+    categoryButton: {
+        display: 'flex',
+        justifyContent: 'space-between',
+        backgroundColor: '#F4F5F7',
+        alignItems: 'center',
+        flexDirection: 'row',
+        alignSelf: 'center',
+        borderRadius: 15,
+        borderColor: 'black',
+        marginVertical: 10,
+        height: 70,
+        width: '90%',
+        paddingHorizontal: 20,
+
         shadowColor: '#000',
         shadowOffset: {
             width: 0,
             height: 1,
         },
         shadowOpacity: 0.22,
-        shadowRadius: 2.22,
+        shadowRadius: 1.22,
 
         elevation: 3,
-    },
-    numberOfElements: {
-        color: 'white',
-        fontSize: 30,
-        fontWeight: 'bold',
-    },
-    categoryButton: {
-        display: 'flex',
-        justifyContent: 'space-between',
-        alignItems: 'center',
-        flexDirection: 'row',
-        alignSelf: 'center',
-        backgroundColor: 'orange',
-        borderRadius: 25,
-        marginVertical: 10,
-        height: 110,
-        width: '90%',
-        paddingHorizontal: 20,
     },
 })
 

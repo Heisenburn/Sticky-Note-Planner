@@ -60,11 +60,12 @@ export default function App() {
                             name="HomeScreen"
                             component={HomeScreen}
                             options={{
-                                title: 'Kategorie',
+                                // title: 'Kategorie',
                                 // headerSearchBarOptions: {
                                 //     placeholder:
                                 //         'Wpisz nazwe kategorii lub treść notatki',
                                 // },
+                                headerShown: false,
                             }}
                         />
                         <Stack.Screen
@@ -83,11 +84,14 @@ export default function App() {
 
                                 return {
                                     title: categoryTitle,
+                                    // headerSearchBarOptions: {
+                                    //     placeholder: 'Wpisz treść notatki',
+                                    // },
                                     headerRight: () => {
                                         return (
                                             <MaterialIcons
                                                 name="settings"
-                                                size={30}
+                                                size={24}
                                                 color="black"
                                                 onPress={() => {
                                                     navigation.navigate(
