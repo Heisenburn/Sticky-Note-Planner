@@ -49,6 +49,7 @@ export const getDataAfterAddingNoteOrCategory = async ({
                 item.details.items.push({
                     note: noteValue,
                     id: uuidv4(),
+                    checked: false,
                 })
                 return item
             }

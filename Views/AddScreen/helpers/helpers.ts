@@ -1,6 +1,6 @@
 import { getDataAfterAddingNoteOrCategory } from '../../../AsyncStorage/getDataAfterAddingNoteOrCategory'
 import type {
-    CategoryNotesItemsType,
+    ItemInCategoryType,
     CategoryWithNotesType,
 } from '../../../types/types'
 import { ACTION_PHRASES, ACTIONS } from '../../../Shared/constants'
@@ -21,7 +21,7 @@ export const updateAsyncLocalStorageData = async ({
     categoryInput: string
     categoryId: string
     data: CategoryWithNotesType[]
-    noteToBeEdited: CategoryNotesItemsType
+    noteToBeEdited: ItemInCategoryType
     shouldDisplayCategorySelect: boolean
 }) => {
     switch (action) {

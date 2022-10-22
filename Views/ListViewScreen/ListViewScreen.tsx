@@ -15,19 +15,17 @@ const ListViewScreen = ({ navigation, route }) => {
     const { categoryId } = passedPropsFromPreviousScreen
 
     const categoryItem = data.find((item) => item.categoryId === categoryId)
-
     const categoryTitle =
         passedPropsFromPreviousScreen?.categoryTitle ||
         categoryItem.details.categoryTitle
-
     const details = categoryItem?.details
-
     const items = details?.items || []
 
     const [
         isListingItemOptionsModalVisible,
         setIsListingItemOptionsModalVisible,
     ] = useState(false)
+
     const editedElement = useRef<Item | null>(null)
 
     const handleRemove = useCallback(() => {
