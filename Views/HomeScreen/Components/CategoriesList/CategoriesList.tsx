@@ -1,9 +1,6 @@
 import CategoryItem from '../CategoryItem/CategoryItem'
 import { FlatList } from 'react-native'
-import type {
-    CategoryNotesItemsType,
-    CategoryWithNotesType,
-} from '../../../../types/types'
+import type { CategoryWithNotesType } from '../../../../types/types'
 
 interface Props {
     navigation: any

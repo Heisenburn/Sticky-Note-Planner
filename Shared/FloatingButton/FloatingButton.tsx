@@ -2,7 +2,7 @@ import styles from './FloatingButton.styles'
 import { FloatingAction } from 'react-native-floating-action'
 import { View } from 'react-native'
 import React, { useRef } from 'react'
-import { ACTION_PHRASES, ACTIONS } from '../constants'
+import { ACTION_PHRASES, ACTIONS, FLOATING_BUTTON_HEIGHT } from '../constants'
 import { AntDesign } from '@expo/vector-icons'
 
 const FloatingButton = ({
@@ -39,7 +39,7 @@ const FloatingButton = ({
                 showBackground={true}
                 color={'#1457EB'}
                 distanceToEdge={10}
-                buttonSize={100}
+                buttonSize={FLOATING_BUTTON_HEIGHT}
                 //triggered from within ListViewScreen
                 onOpen={() => {
                     if (categoryId) {

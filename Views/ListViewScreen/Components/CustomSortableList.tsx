@@ -1,11 +1,18 @@
 import { SortableList, Text, TouchableOpacity, View } from 'react-native-ui-lib'
-import React, { useCallback, useContext, useEffect, useState } from 'react'
+import React, {
+    useCallback,
+    useContext,
+    useEffect,
+    useMemo,
+    useState,
+} from 'react'
 import { Item } from '../types'
 import styles from '../ListViewScreen.style'
 import { CustomCheckbox } from './Checkbox'
 import { Entypo } from '@expo/vector-icons'
 import * as Haptics from 'expo-haptics'
 import { CategoriesWithNotesContext } from '../../../Context/CategoriesWithNotesContext'
+import { Dimensions } from 'react-native'
 
 export const CustomSortableList = ({
     data,
@@ -31,14 +38,23 @@ export const CustomSortableList = ({
     }) => {
         return (
             <TouchableOpacity
-                style={[styles.itemContainer]}
+                style={{
+                    ...styles.itemContainer,
+                }}
                 centerV
                 paddingH-10
             >
                 <View flex row spread centerV>
                     <View flex row centerV>
                         <CustomCheckbox />
-                        <Text center $textDefault style={{ maxWidth: 200 }}>
+                        <Text
+                            center
+                            $textDefault
+                            style={{
+                                maxWidth: 200,
+                                // textDecorationLine: 'line-through',
+                            }}
+                        >
                             {item.note}
                         </Text>
                     </View>
@@ -60,20 +76,23 @@ export const CustomSortableList = ({
         return item.id
     }, [])
 
-    const onOrderChange = useCallback(async (newData) => {
-        const mappedData = rootData.map((item) => {
-            if (item.categoryId === categoryId) {
-                item.details.items = newData
-            }
-            return item
-        })
+    const onOrderChange = useCallback(
+        async (newData) => {
+            const mappedData = rootData.map((item) => {
+                if (item.categoryId === categoryId) {
+                    item.details.items = newData
+                }
+                return item
+            })
 
-        updateData(mappedData)
+            updateData(mappedData)
 
-        await Haptics.notificationAsync(
-            Haptics.NotificationFeedbackType.Success
-        )
-    }, [])
+            await Haptics.notificationAsync(
+                Haptics.NotificationFeedbackType.Success
+            )
+        },
+        [categoryId, rootData, updateData]
+    )
 
     return (
         <SortableList

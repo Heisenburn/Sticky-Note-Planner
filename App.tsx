@@ -10,7 +10,7 @@ import { loadDemoConfigurations } from './configuration'
 import * as Font from 'expo-font'
 import * as SplashScreen from 'expo-splash-screen'
 import FontAwesome from '@expo/vector-icons/FontAwesome'
-import { useEffect, useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { MaterialIcons } from '@expo/vector-icons'
 
 const cacheFonts = (

@@ -1,13 +1,7 @@
 import FloatingButton from '../../Shared/FloatingButton/FloatingButton'
-import { Alert, Dimensions } from 'react-native'
-import React, {
-    useState,
-    useRef,
-    useMemo,
-    useCallback,
-    useContext,
-} from 'react'
-import { View, ActionSheet, Toast, Text } from 'react-native-ui-lib'
+import { Alert } from 'react-native'
+import React, { useState, useRef, useCallback, useContext } from 'react'
+import { View, ActionSheet } from 'react-native-ui-lib'
 import { ACTIONS } from '../../Shared/constants'
 import type { Item } from './types'
 import { CustomSortableList } from './Components/CustomSortableList'
@@ -36,7 +30,7 @@ const ListViewScreen = ({ navigation, route }) => {
     ] = useState(false)
     const editedElement = useRef<Item | null>(null)
 
-    const handleRemove = () => {
+    const handleRemove = useCallback(() => {
         const dataWithoutRemovedElement = data.filter((categoryItem) => {
             if (categoryItem.categoryId === categoryId) {
                 categoryItem.details.items = categoryItem.details.items.filter(
@@ -47,7 +41,7 @@ const ListViewScreen = ({ navigation, route }) => {
         })
 
         updateData(dataWithoutRemovedElement)
-    }
+    }, [categoryId, data, updateData])
 
     const getActionSheetOption = useCallback(() => {
         return [
@@ -95,12 +89,10 @@ const ListViewScreen = ({ navigation, route }) => {
     const actionSheetOptions = getActionSheetOption()
     const closeActionSheetOptionsIndex = actionSheetOptions.length
 
-    const MIN_HEIGHT = useMemo(() => Dimensions.get('window').height - 100, [])
-
     return (
         <View
             style={{
-                minHeight: MIN_HEIGHT - 20,
+                minHeight: '100%',
             }}
         >
             <CustomSortableList
@@ -111,6 +103,7 @@ const ListViewScreen = ({ navigation, route }) => {
                 editedElement={editedElement}
                 categoryId={categoryId}
             />
+
             <ActionSheet
                 title={'Opcje'}
                 message={'Wybierz właściwą akcje'}
@@ -121,7 +114,6 @@ const ListViewScreen = ({ navigation, route }) => {
                 useNativeIOS={true}
                 onDismiss={() => setIsListingItemOptionsModalVisible(false)}
             />
-
             <FloatingButton
                 navigation={navigation}
                 categoryId={categoryId}

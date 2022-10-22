@@ -21,3 +21,5 @@ export const ACTION_PHRASES = {
     [ACTIONS.ADD_NOTE]: 'Dodawanie notatki',
     [ACTIONS.EDIT_NOTE]: 'Edytowanie notatki',
 }
+
+export const FLOATING_BUTTON_HEIGHT = 100
