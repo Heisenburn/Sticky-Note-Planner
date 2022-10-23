@@ -106,7 +106,7 @@ const SettingsScreen = ({ route, navigation }) => {
                         <Button
                             title="Zapisz"
                             onPress={() => handleSubmit()}
-                            color={'orange'}
+                            color={'#1457EB'}
                         />
                     </View>
                 </View>

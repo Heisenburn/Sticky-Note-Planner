@@ -23,10 +23,14 @@ export const CustomSortableList = ({
     categoryId,
 }: Props) => {
     const sortedByCheckedState = data.sort((item) => (item.checked ? 1 : -1))
-    const [listItems] = useState(sortedByCheckedState)
+    const [listItems, setListItems] = useState(sortedByCheckedState)
 
     const { getData, updateData } = useContext(CategoriesWithNotesContext)
     const allData = getData()
+
+    useEffect(() => {
+        setListItems(data)
+    }, [data])
 
     const renderItem = ({
         item,

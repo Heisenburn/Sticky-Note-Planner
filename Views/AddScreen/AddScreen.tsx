@@ -1,4 +1,4 @@
-import { SafeAreaView, TextInput, View, Alert, Button } from 'react-native'
+import { Alert, Button, SafeAreaView, TextInput, View } from 'react-native'
 import React, { useContext, useState } from 'react'
 import styles from './AddScreen.styles'
 import { CategoriesWithNotesContext } from '../../Context/CategoriesWithNotesContext'
@@ -132,7 +132,7 @@ const AddScreen = ({ route, navigation }) => {
                     <Button
                         title="Zapisz"
                         onPress={() => handleSubmit()}
-                        color={'orange'}
+                        color={'#1457EB'}
                     />
                 </View>
             </View>
