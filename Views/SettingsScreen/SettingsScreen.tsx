@@ -92,7 +92,6 @@ const SettingsScreen = ({ route, navigation }) => {
                     margin: 10,
                 }}
             />
-            {/*TODO: to wynieść do osobnego komponentu*/}
             <View
                 style={{
                     display: 'flex',

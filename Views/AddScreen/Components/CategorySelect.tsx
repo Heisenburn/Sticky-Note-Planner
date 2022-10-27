@@ -1,25 +1,25 @@
 import { FlatList, Pressable, Text } from 'react-native'
-import { useEffect, useState } from 'react'
-import { getAllKeys } from '../../../AsyncStorage/getDataAfterAddingNoteOrCategory'
 import { CATEGORY_KEY_PREFIX } from '../../../Shared/constants'
+import { CategoryWithNotesType } from '../../../types/types'
 
-const CategorySelect = ({ setCategoryInput, categoryInput, categoryId }) => {
-    const [categories, setCategories] = useState([])
+const CategorySelect = ({
+    setCategoryInput,
+    categoryInput,
+    categoryId: categoryOfItem,
+    data,
+}: {
+    data: CategoryWithNotesType[]
+}) => {
+    const keysWithCategoryKeyword = data.filter((categoryItem) => {
+        if (
+            categoryItem.categoryId !== categoryOfItem &&
+            categoryItem.categoryId.includes(CATEGORY_KEY_PREFIX)
+        ) {
+            return categoryItem
+        }
+    })
 
-    //TODO: ten useEffect chyba niepotrzebny?
-    useEffect(() => {
-        ;(async () => {
-            const availableKeys = await getAllKeys()
-            const keysWithCategoryKeyword = availableKeys.filter((item) => {
-                if (item !== categoryId && item.includes(CATEGORY_KEY_PREFIX)) {
-                    return item
-                }
-            })
-            setCategories(keysWithCategoryKeyword)
-        })()
-    }, [categoryId])
-
-    const renderCategoryButton = (item) => {
+    const renderCategoryButton = (item: CategoryWithNotesType) => {
         return (
             <Pressable
                 key={item}
@@ -36,7 +36,7 @@ const CategorySelect = ({ setCategoryInput, categoryInput, categoryId }) => {
                         color: 'white',
                     }}
                 >
-                    {item}
+                    {item.categoryId}
                 </Text>
             </Pressable>
         )
@@ -47,9 +47,9 @@ const CategorySelect = ({ setCategoryInput, categoryInput, categoryId }) => {
             style={{
                 maxHeight: 200,
             }}
-            data={categories}
+            data={keysWithCategoryKeyword}
             renderItem={({ item }) => renderCategoryButton(item)}
-            keyExtractor={(item) => item}
+            keyExtractor={(item) => item.categoryId}
         />
     )
 }

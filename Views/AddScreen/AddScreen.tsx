@@ -124,6 +124,7 @@ const AddScreen = ({ route, navigation }) => {
                             setCategoryInput={setSelectedCategory}
                             categoryInput={selectedCategory}
                             categoryId={category?.categoryId}
+                            data={data}
                         />
                     </>
                 ) : null}
