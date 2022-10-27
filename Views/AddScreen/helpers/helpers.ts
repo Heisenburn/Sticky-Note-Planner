@@ -4,7 +4,6 @@ import type {
     ItemInCategoryType,
 } from '../../../types/types'
 import { ACTION_PHRASES, ACTIONS } from '../../../Shared/constants'
-import { v4 as uuidv4 } from 'uuid'
 
 export const updateAsyncLocalStorageData = async ({
     action,
@@ -56,18 +55,13 @@ export const updateAsyncLocalStorageData = async ({
                 const updatedDataArray = data.map((categoryItem) => {
                     //move element to destination category
                     if (categoryItem.categoryId == destinationCategoryId) {
-                        const newItem: ItemInCategoryType = {
-                            note: textFieldInput,
-                            id: uuidv4(),
-                            checked: false,
-                        }
                         const existingItems = categoryItem.details.items
 
                         return {
                             ...categoryItem,
                             details: {
                                 ...categoryItem.details,
-                                items: [...existingItems, newItem],
+                                items: [...existingItems, noteToBeEdited],
                             },
                         }
                     }
@@ -78,7 +72,7 @@ export const updateAsyncLocalStorageData = async ({
                             details: {
                                 ...categoryItem.details,
                                 items: categoryItem.details.items.filter(
-                                    (item) => item.note !== textFieldInput
+                                    (item) => item.id !== noteToBeEdited.id
                                 ),
                             },
                         }

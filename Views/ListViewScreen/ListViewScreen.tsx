@@ -94,11 +94,8 @@ const ListViewScreen = ({ navigation, route }) => {
     const actionSheetOptions = getActionSheetOption()
     const closeActionSheetOptionsIndex = actionSheetOptions.length
 
-    const itemsNotFinished = items.filter((item) => item.checked === false)
-    const itemsFinished = items.filter((item) => item.checked === true)
-
-    console.log({ itemsNotFinished })
-    console.log({ itemsFinished })
+    const notFinishedItems = items.filter((item) => item.checked === false)
+    const finishedItems = items.filter((item) => item.checked === true)
 
     return (
         <View
@@ -107,14 +104,14 @@ const ListViewScreen = ({ navigation, route }) => {
             }}
         >
             <CustomSortableList
-                data={itemsNotFinished}
+                data={notFinishedItems}
                 setIsListingItemOptionsModalVisible={
                     setIsListingItemOptionsModalVisible
                 }
                 editedElement={editedElement}
                 categoryId={categoryId}
             />
-            <FinishedNotesList data={itemsFinished} />
+            <FinishedNotesList data={finishedItems} />
             <ActionSheet
                 title={'Opcje'}
                 message={'Wybierz właściwą akcje'}

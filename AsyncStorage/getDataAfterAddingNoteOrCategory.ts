@@ -40,19 +40,28 @@ export const getDataAfterAddingNoteOrCategory = async ({
     if (noteValue) {
         //append if there are existing notes for this category
 
-        const randomCategoryKey = '@CATEGORY-PREDEFINED-RANDOM'
-        const category = categoryId || randomCategoryKey
+        const randomCategoryKeyId = '@CATEGORY-PREDEFINED-RANDOM'
+        const calculatedCategoryId = categoryId || randomCategoryKeyId
 
-        return existingData.map((item) => {
-            if (item.categoryId === category) {
-                item.details.items.push({
+        return existingData.map((categoryItem) => {
+            if (categoryItem.categoryId === calculatedCategoryId) {
+                const newElement = {
                     note: noteValue,
                     id: uuidv4(),
                     checked: false,
-                })
-                return item
+                }
+
+                const existingItems = categoryItem.details.items
+
+                return {
+                    ...categoryItem,
+                    details: {
+                        ...categoryItem.details,
+                        items: [...existingItems, newElement],
+                    },
+                }
             }
-            return item
+            return categoryItem
         })
 
         //2. saving category
