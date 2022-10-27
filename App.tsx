@@ -12,6 +12,7 @@ import * as SplashScreen from 'expo-splash-screen'
 import FontAwesome from '@expo/vector-icons/FontAwesome'
 import React, { useEffect, useState } from 'react'
 import { MaterialIcons } from '@expo/vector-icons'
+import { PREDEFINED_CATEGORIES_KEY_SUFFIX } from './Shared/constants'
 
 const cacheFonts = (
     fonts: { [x: string]: any }[] | (string | Record<string, Font.FontSource>)[]
@@ -88,6 +89,13 @@ export default function App() {
                                     //     placeholder: 'Wpisz treść notatki',
                                     // },
                                     headerRight: () => {
+                                        if (
+                                            categoryId.includes(
+                                                PREDEFINED_CATEGORIES_KEY_SUFFIX
+                                            )
+                                        ) {
+                                            return null
+                                        }
                                         return (
                                             <MaterialIcons
                                                 name="settings"

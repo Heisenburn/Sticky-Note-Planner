@@ -2,7 +2,6 @@ import { Alert, Button, Pressable, Text, TextInput, View } from 'react-native'
 import React, { useContext, useState } from 'react'
 import styles from '../AddScreen/AddScreen.styles'
 import { CategoriesWithNotesContext } from '../../Context/CategoriesWithNotesContext'
-import { PREDEFINED_CATEGORIES_KEY_SUFFIX } from '../../Shared/constants'
 
 const SettingsScreen = ({ route, navigation }) => {
     const { passedPropsFromPreviousScreen } = route.params
@@ -22,19 +21,7 @@ const SettingsScreen = ({ route, navigation }) => {
                 // The "Yes" button
                 {
                     text: 'Tak',
-                    onPress: () => {
-                        if (
-                            categoryId.includes(
-                                PREDEFINED_CATEGORIES_KEY_SUFFIX
-                            )
-                        ) {
-                            Alert.alert(
-                                'Predefined categories are not possible to be removed'
-                            )
-                        } else {
-                            handleRemove()
-                        }
-                    },
+                    onPress: () => handleRemove(),
                 },
                 // The "No" button
                 // Does nothing but dismiss the dialog when tapped
@@ -46,16 +33,17 @@ const SettingsScreen = ({ route, navigation }) => {
     }
 
     const handleSubmit = () => {
-        const dataWithChangedCategoryName = data.map((CategoryItem) => {
-            if (CategoryItem.categoryId === categoryId) {
+        const dataWithChangedCategoryName = data.map((categoryItem) => {
+            if (categoryItem.categoryId === categoryId) {
                 return {
-                    ...CategoryItem,
+                    ...categoryItem,
                     details: {
+                        ...categoryItem.details,
                         categoryTitle: categoryNameInput,
                     },
                 }
             }
-            return categoryId
+            return categoryItem
         })
         updateData(dataWithChangedCategoryName)
         navigation.navigate('HomeScreen')
