@@ -1,7 +1,6 @@
 import AsyncStorage from '@react-native-async-storage/async-storage'
 import { CATEGORY_KEY_PREFIX } from '../Shared/constants'
 import type { CategoryWithNotesType } from '../types/types'
-import { getKeysForExistingCategories } from './getKeysForExistingCategories'
 import 'react-native-get-random-values'
 import { v4 as uuidv4 } from 'uuid'
 

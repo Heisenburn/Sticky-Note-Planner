@@ -46,12 +46,16 @@ const SettingsScreen = ({ route, navigation }) => {
     }
 
     const handleSubmit = () => {
-        const dataWithChangedCategoryName = data.map((item) => {
-            if (item.categoryId === categoryId) {
-                item.details.categoryTitle = categoryNameInput
-                return item
+        const dataWithChangedCategoryName = data.map((CategoryItem) => {
+            if (CategoryItem.categoryId === categoryId) {
+                return {
+                    ...CategoryItem,
+                    details: {
+                        categoryTitle: categoryNameInput,
+                    },
+                }
             }
-            return item
+            return categoryId
         })
         updateData(dataWithChangedCategoryName)
         navigation.navigate('HomeScreen')

@@ -1,9 +1,11 @@
 import { getDataAfterAddingNoteOrCategory } from '../../../AsyncStorage/getDataAfterAddingNoteOrCategory'
 import type {
-    ItemInCategoryType,
     CategoryWithNotesType,
+    ItemInCategoryType,
 } from '../../../types/types'
 import { ACTION_PHRASES, ACTIONS } from '../../../Shared/constants'
+import categoryItem from '../../HomeScreen/Components/CategoryItem/CategoryItem'
+import { v4 as uuidv4 } from 'uuid'
 
 export const updateAsyncLocalStorageData = async ({
     action,
@@ -52,36 +54,56 @@ export const updateAsyncLocalStorageData = async ({
                 const originCategoryId = categoryId
                 const destinationCategoryId = categoryInput
 
-                const updatedDataArray = data.map((item) => {
+                const updatedDataArray = data.map((CategoryItem) => {
                     //move element to destination category
-                    if (item.categoryId == destinationCategoryId) {
-                        item.details.items.push({
+                    if (CategoryItem.categoryId == destinationCategoryId) {
+                        const newItem = {
                             note: textFieldInput,
-                            id: `${item.details.items.length + 1}`,
-                        })
-                        return item
+                            id: uuidv4(),
+                        }
+
+                        const existingItems = CategoryItem.details.items
+                        return {
+                            ...categoryItem,
+                            details: {
+                                items: [...existingItems, newItem],
+                            },
+                        }
                     }
                     //remove element from origin category
-                    if (item.categoryId === originCategoryId) {
-                        item.details.items = item.details.items.filter(
-                            (item) => item.note !== textFieldInput
-                        )
-                        return item
+                    if (CategoryItem.categoryId === originCategoryId) {
+                        return {
+                            ...CategoryItem,
+                            details: {
+                                items: CategoryItem.details.items.filter(
+                                    (item) => item.note !== textFieldInput
+                                ),
+                            },
+                        }
                     }
-                    return item
+                    return CategoryItem
                 })
                 return updateData(updatedDataArray)
             } else {
                 //only note value was edited
-
                 const updatedDataArray = data.map((categoryItem) => {
                     if (categoryItem.categoryId === categoryId) {
-                        const elementToBeUpdated =
-                            categoryItem.details.items.find(
-                                (item) => item.id === noteToBeEdited.id
-                            )
-
-                        elementToBeUpdated.note = textFieldInput
+                        return {
+                            ...categoryItem,
+                            details: {
+                                items: categoryItem.details.items.map(
+                                    (item) => {
+                                        if (item.id === noteToBeEdited.id) {
+                                            return {
+                                                ...item,
+                                                note: textFieldInput,
+                                            }
+                                        }
+                                        return item
+                                    }
+                                ),
+                            },
+                        }
                     }
                     return categoryItem
                 })

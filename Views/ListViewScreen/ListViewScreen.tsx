@@ -1,11 +1,12 @@
 import FloatingButton from '../../Shared/FloatingButton/FloatingButton'
 import { Alert } from 'react-native'
-import React, { useState, useRef, useCallback, useContext } from 'react'
-import { View, ActionSheet } from 'react-native-ui-lib'
+import React, { useCallback, useContext, useRef, useState } from 'react'
+import { ActionSheet, View } from 'react-native-ui-lib'
 import { ACTIONS } from '../../Shared/constants'
-import type { Item } from './types'
 import { CustomSortableList } from './Components/CustomSortableList'
 import { CategoriesWithNotesContext } from '../../Context/CategoriesWithNotesContext'
+import { FinishedNotesList } from './Components/FinishedNotesList'
+import { ItemInCategoryType } from '../../types/types'
 
 const ListViewScreen = ({ navigation, route }) => {
     const { getData, updateData } = useContext(CategoriesWithNotesContext)
@@ -26,14 +27,19 @@ const ListViewScreen = ({ navigation, route }) => {
         setIsListingItemOptionsModalVisible,
     ] = useState(false)
 
-    const editedElement = useRef<Item | null>(null)
+    const editedElement = useRef<ItemInCategoryType | null>(null)
 
     const handleRemove = useCallback(() => {
         const dataWithoutRemovedElement = data.filter((categoryItem) => {
             if (categoryItem.categoryId === categoryId) {
-                categoryItem.details.items = categoryItem.details.items.filter(
-                    (item) => item.id !== editedElement.current.id
-                )
+                return {
+                    ...categoryItem,
+                    details: {
+                        items: categoryItem.details.items.filter(
+                            (item) => item.id !== editedElement.current.id
+                        ),
+                    },
+                }
             }
             return categoryItem
         })
@@ -87,6 +93,12 @@ const ListViewScreen = ({ navigation, route }) => {
     const actionSheetOptions = getActionSheetOption()
     const closeActionSheetOptionsIndex = actionSheetOptions.length
 
+    const itemsNotFinished = items.filter((item) => item.checked === false)
+    const itemsFinished = items.filter((item) => item.checked === true)
+
+    console.log({ itemsNotFinished })
+    console.log({ itemsFinished })
+
     return (
         <View
             style={{
@@ -94,14 +106,14 @@ const ListViewScreen = ({ navigation, route }) => {
             }}
         >
             <CustomSortableList
-                data={items}
+                data={itemsNotFinished}
                 setIsListingItemOptionsModalVisible={
                     setIsListingItemOptionsModalVisible
                 }
                 editedElement={editedElement}
                 categoryId={categoryId}
             />
-
+            <FinishedNotesList data={itemsFinished} />
             <ActionSheet
                 title={'Opcje'}
                 message={'Wybierz właściwą akcje'}

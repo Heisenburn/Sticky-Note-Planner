@@ -22,8 +22,7 @@ export const CustomSortableList = ({
     editedElement,
     categoryId,
 }: Props) => {
-    const sortedByCheckedState = data.sort((item) => (item.checked ? 1 : -1))
-    const [listItems, setListItems] = useState(sortedByCheckedState)
+    const [listItems, setListItems] = useState(data)
 
     const { getData, updateData } = useContext(CategoriesWithNotesContext)
     const allData = getData()
@@ -60,9 +59,6 @@ export const CustomSortableList = ({
                             $textDefault
                             style={{
                                 maxWidth: 200,
-                                textDecorationLine: item.checked
-                                    ? 'line-through'
-                                    : 'none',
                             }}
                         >
                             {item.note}
@@ -87,12 +83,17 @@ export const CustomSortableList = ({
     }, [])
 
     const onOrderChange = useCallback(
-        async (newData) => {
-            const mappedData = allData.map((item) => {
-                if (item.categoryId === categoryId) {
-                    item.details.items = newData
+        async (dataAfterOrderChange) => {
+            const mappedData = allData.map((categoryItem) => {
+                if (categoryItem.categoryId === categoryId) {
+                    return {
+                        ...categoryItem,
+                        details: {
+                            items: dataAfterOrderChange,
+                        },
+                    }
                 }
-                return item
+                return categoryItem
             })
 
             updateData(mappedData)

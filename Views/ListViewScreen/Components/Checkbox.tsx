@@ -13,12 +13,14 @@ interface Props {
 }
 
 export const CustomCheckbox = ({
-    item,
+    item: noteItemForCheckbox,
     updateData,
     rootData,
     categoryId,
 }: Props) => {
-    const [isChecked, setIsChecked] = useState(item.checked || false)
+    const [isChecked, setIsChecked] = useState(
+        noteItemForCheckbox.checked || false
+    )
 
     const handleCheckboxClick = (checkboxState) => {
         setIsChecked(checkboxState)
@@ -28,16 +30,21 @@ export const CustomCheckbox = ({
             if (categoryItem.categoryId === categoryId) {
                 const arrayOfItemsWithoutCheckedElement =
                     categoryItem.details.items.filter(
-                        (iteratedItem) => iteratedItem !== item
+                        (iteratedItem) => iteratedItem !== noteItemForCheckbox
                     )
 
-                categoryItem.details.items = [
-                    ...arrayOfItemsWithoutCheckedElement,
-                    {
-                        ...item,
-                        checked: checkboxState,
+                return {
+                    ...categoryItem,
+                    details: {
+                        items: [
+                            ...arrayOfItemsWithoutCheckedElement,
+                            {
+                                ...noteItemForCheckbox,
+                                checked: checkboxState,
+                            },
+                        ],
                     },
-                ]
+                }
             }
             return categoryItem
         })

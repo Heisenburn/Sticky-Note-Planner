@@ -6,6 +6,7 @@ import { CATEGORY_KEY_PREFIX } from '../../../Shared/constants'
 const CategorySelect = ({ setCategoryInput, categoryInput, categoryId }) => {
     const [categories, setCategories] = useState([])
 
+    //TODO: ten useEffect chyba niepotrzebny?
     useEffect(() => {
         ;(async () => {
             const availableKeys = await getAllKeys()
@@ -16,7 +17,7 @@ const CategorySelect = ({ setCategoryInput, categoryInput, categoryId }) => {
             })
             setCategories(keysWithCategoryKeyword)
         })()
-    }, [])
+    }, [categoryId])
 
     const renderCategoryButton = (item) => {
         return (
