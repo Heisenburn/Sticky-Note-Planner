@@ -1,9 +1,19 @@
 import { FlatList } from 'react-native'
 import { ItemInCategoryType } from '../../../types/types'
-import React from 'react'
-import { Button, Text, TouchableOpacity, View } from 'react-native-ui-lib'
+import React, { useState } from 'react'
+import {
+    Button,
+    ExpandableSection,
+    Text,
+    TouchableOpacity,
+    View,
+} from 'react-native-ui-lib'
+import { Entypo } from '@expo/vector-icons'
 
 export const FinishedNotesList = ({ data }: { data: ItemInCategoryType[] }) => {
+    const [isFinishedNotesListingVisible, setIsFinishedNotesListingVisible] =
+        useState(false)
+
     const renderItem = ({ item }: { item: ItemInCategoryType }) => (
         <TouchableOpacity
             style={{
@@ -59,10 +69,38 @@ export const FinishedNotesList = ({ data }: { data: ItemInCategoryType[] }) => {
     )
 
     return (
-        <FlatList
-            data={data}
-            renderItem={renderItem}
-            keyExtractor={(item) => item.id}
-        />
+        <>
+            <ExpandableSection
+                top={true}
+                expanded={isFinishedNotesListingVisible}
+                sectionHeader={
+                    <View
+                        style={{
+                            display: 'flex',
+                            flexDirection: 'row',
+                            marginTop: 10,
+                            marginBottom: 10,
+                        }}
+                    >
+                        <Text blue10 text60>
+                            {isFinishedNotesListingVisible
+                                ? 'Ukryj'
+                                : 'Zobacz ukończone'}
+                        </Text>
+                        <Entypo name="chevron-down" size={24} color="black" />
+                    </View>
+                }
+                onPress={() =>
+                    setIsFinishedNotesListingVisible((prevState) => !prevState)
+                }
+            />
+            {isFinishedNotesListingVisible ? (
+                <FlatList
+                    data={data}
+                    renderItem={renderItem}
+                    keyExtractor={(item) => item.id}
+                />
+            ) : null}
+        </>
     )
 }

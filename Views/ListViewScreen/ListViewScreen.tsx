@@ -111,7 +111,9 @@ const ListViewScreen = ({ navigation, route }) => {
                 editedElement={editedElement}
                 categoryId={categoryId}
             />
-            <FinishedNotesList data={finishedItems} />
+            {finishedItems.length > 0 ? (
+                <FinishedNotesList data={finishedItems} />
+            ) : null}
             <ActionSheet
                 title={'Opcje'}
                 message={'Wybierz właściwą akcje'}

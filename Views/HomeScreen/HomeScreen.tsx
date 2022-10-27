@@ -20,8 +20,6 @@ export default function HomeScreen({ navigation }) {
     const { getData } = useContext(CategoriesWithNotesContext)
     const data = getData()
 
-    console.log({ data })
-
     return (
         <SafeAreaView style={styles.container}>
             <FloatingButton navigation={navigation} />
