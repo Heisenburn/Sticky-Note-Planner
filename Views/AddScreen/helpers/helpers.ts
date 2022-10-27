@@ -4,7 +4,6 @@ import type {
     ItemInCategoryType,
 } from '../../../types/types'
 import { ACTION_PHRASES, ACTIONS } from '../../../Shared/constants'
-import categoryItem from '../../HomeScreen/Components/CategoryItem/CategoryItem'
 import { v4 as uuidv4 } from 'uuid'
 
 export const updateAsyncLocalStorageData = async ({
@@ -54,34 +53,38 @@ export const updateAsyncLocalStorageData = async ({
                 const originCategoryId = categoryId
                 const destinationCategoryId = categoryInput
 
-                const updatedDataArray = data.map((CategoryItem) => {
+                const updatedDataArray = data.map((categoryItem) => {
                     //move element to destination category
-                    if (CategoryItem.categoryId == destinationCategoryId) {
-                        const newItem = {
+                    if (categoryItem.categoryId == destinationCategoryId) {
+                        const newItem: ItemInCategoryType = {
                             note: textFieldInput,
                             id: uuidv4(),
+                            checked: false,
                         }
+                        const existingItems = categoryItem.details.items
 
-                        const existingItems = CategoryItem.details.items
                         return {
                             ...categoryItem,
                             details: {
+                                ...categoryItem.details,
                                 items: [...existingItems, newItem],
                             },
                         }
                     }
                     //remove element from origin category
-                    if (CategoryItem.categoryId === originCategoryId) {
+                    if (categoryItem.categoryId === originCategoryId) {
                         return {
-                            ...CategoryItem,
+                            ...categoryItem,
                             details: {
-                                items: CategoryItem.details.items.filter(
+                                ...categoryItem.details,
+                                items: categoryItem.details.items.filter(
                                     (item) => item.note !== textFieldInput
                                 ),
                             },
                         }
                     }
-                    return CategoryItem
+
+                    return categoryItem
                 })
                 return updateData(updatedDataArray)
             } else {
@@ -91,6 +94,7 @@ export const updateAsyncLocalStorageData = async ({
                         return {
                             ...categoryItem,
                             details: {
+                                ...categoryItem.details,
                                 items: categoryItem.details.items.map(
                                     (item) => {
                                         if (item.id === noteToBeEdited.id) {

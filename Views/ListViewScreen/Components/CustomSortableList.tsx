@@ -5,7 +5,7 @@ import { CustomCheckbox } from './Checkbox'
 import { Entypo } from '@expo/vector-icons'
 import * as Haptics from 'expo-haptics'
 import { CategoriesWithNotesContext } from '../../../Context/CategoriesWithNotesContext'
-import { ItemInCategoryType } from '../../../types/types'
+import { CategoryWithNotesType, ItemInCategoryType } from '../../../types/types'
 
 interface Props {
     data: ItemInCategoryType[]
@@ -84,17 +84,20 @@ export const CustomSortableList = ({
 
     const onOrderChange = useCallback(
         async (dataAfterOrderChange) => {
-            const mappedData = allData.map((categoryItem) => {
-                if (categoryItem.categoryId === categoryId) {
-                    return {
-                        ...categoryItem,
-                        details: {
-                            items: dataAfterOrderChange,
-                        },
+            const mappedData = allData.map(
+                (categoryItem: CategoryWithNotesType) => {
+                    if (categoryItem.categoryId === categoryId) {
+                        return {
+                            ...categoryItem,
+                            details: {
+                                ...categoryItem.details,
+                                items: dataAfterOrderChange,
+                            },
+                        }
                     }
+                    return categoryItem
                 }
-                return categoryItem
-            })
+            )
 
             updateData(mappedData)
 

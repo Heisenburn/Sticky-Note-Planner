@@ -5,7 +5,6 @@ import { ActionSheet, View } from 'react-native-ui-lib'
 import { ACTIONS } from '../../Shared/constants'
 import { CustomSortableList } from './Components/CustomSortableList'
 import { CategoriesWithNotesContext } from '../../Context/CategoriesWithNotesContext'
-import { FinishedNotesList } from './Components/FinishedNotesList'
 import { ItemInCategoryType } from '../../types/types'
 
 const ListViewScreen = ({ navigation, route }) => {
@@ -35,6 +34,7 @@ const ListViewScreen = ({ navigation, route }) => {
                 return {
                     ...categoryItem,
                     details: {
+                        ...categoryItem.details.items,
                         items: categoryItem.details.items.filter(
                             (item) => item.id !== editedElement.current.id
                         ),
@@ -113,7 +113,7 @@ const ListViewScreen = ({ navigation, route }) => {
                 editedElement={editedElement}
                 categoryId={categoryId}
             />
-            <FinishedNotesList data={itemsFinished} />
+            {/*<FinishedNotesList data={itemsFinished} />*/}
             <ActionSheet
                 title={'Opcje'}
                 message={'Wybierz właściwą akcje'}
