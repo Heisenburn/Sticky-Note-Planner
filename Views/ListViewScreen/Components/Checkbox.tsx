@@ -36,6 +36,7 @@ export const CustomCheckbox = ({
                 return {
                     ...categoryItem,
                     details: {
+                        ...categoryItem.details,
                         items: [
                             ...arrayOfItemsWithoutCheckedElement,
                             {

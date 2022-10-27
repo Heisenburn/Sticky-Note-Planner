@@ -6,6 +6,7 @@ import { ACTIONS } from '../../Shared/constants'
 import { CustomSortableList } from './Components/CustomSortableList'
 import { CategoriesWithNotesContext } from '../../Context/CategoriesWithNotesContext'
 import { ItemInCategoryType } from '../../types/types'
+import { FinishedNotesList } from './Components/FinishedNotesList'
 
 const ListViewScreen = ({ navigation, route }) => {
     const { getData, updateData } = useContext(CategoriesWithNotesContext)
@@ -113,7 +114,7 @@ const ListViewScreen = ({ navigation, route }) => {
                 editedElement={editedElement}
                 categoryId={categoryId}
             />
-            {/*<FinishedNotesList data={itemsFinished} />*/}
+            <FinishedNotesList data={itemsFinished} />
             <ActionSheet
                 title={'Opcje'}
                 message={'Wybierz właściwą akcje'}
