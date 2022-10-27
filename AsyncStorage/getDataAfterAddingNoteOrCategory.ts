@@ -1,21 +1,7 @@
-import AsyncStorage from '@react-native-async-storage/async-storage'
 import { CATEGORY_KEY_PREFIX } from '../Shared/constants'
 import type { CategoryWithNotesType } from '../types/types'
 import 'react-native-get-random-values'
 import { v4 as uuidv4 } from 'uuid'
-
-export const getAllKeys = async () => {
-    let keys = []
-    try {
-        keys = await AsyncStorage.getAllKeys()
-        return keys
-    } catch (e) {
-        // read key error
-    }
-
-    // example console.log result:
-    // ['@MyApp_user', '@MyApp_key']
-}
 
 const getNewCategoryKeyWithId = async (category) => {
     const categoryId = uuidv4()

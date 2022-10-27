@@ -39,12 +39,13 @@ const AddScreen = ({ route, navigation }) => {
             Alert.alert('Notatka', 'Treść notatki nie może być pusta')
             return
         }
+
         await updateAsyncLocalStorageData({
             action,
             updateData,
             textFieldInput,
             categoryInput: selectedCategory,
-            categoryId: category?.categoryId,
+            categoryId: category.categoryId,
             data,
             noteToBeEdited,
             shouldDisplayCategorySelect,

@@ -18,7 +18,7 @@ export const updateAsyncLocalStorageData = async ({
     action: keyof typeof ACTIONS
     updateData: (newState: CategoryWithNotesType[]) => void
     textFieldInput: string
-    categoryInput: string
+    categoryInput: CategoryWithNotesType
     categoryId: string
     data: CategoryWithNotesType[]
     noteToBeEdited: ItemInCategoryType
@@ -54,7 +54,10 @@ export const updateAsyncLocalStorageData = async ({
 
                 const updatedDataArray = data.map((categoryItem) => {
                     //move element to destination category
-                    if (categoryItem.categoryId == destinationCategoryId) {
+                    if (
+                        categoryItem.categoryId ==
+                        destinationCategoryId.categoryId
+                    ) {
                         const existingItems = categoryItem.details.items
 
                         return {
