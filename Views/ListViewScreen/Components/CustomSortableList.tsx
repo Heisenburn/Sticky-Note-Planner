@@ -12,7 +12,7 @@ interface Props {
     setIsListingItemOptionsModalVisible: React.Dispatch<
         React.SetStateAction<boolean>
     >
-    editedElement: React.MutableRefObject<any>
+    editedElement: React.MutableRefObject<ItemInCategoryType>
     categoryId: string
 }
 
@@ -69,8 +69,8 @@ export const CustomSortableList = ({
                         size={24}
                         color="black"
                         onPress={() => {
-                            setIsListingItemOptionsModalVisible(true)
                             editedElement.current = item
+                            setIsListingItemOptionsModalVisible(true)
                         }}
                     />
                 </View>

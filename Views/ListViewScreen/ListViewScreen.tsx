@@ -30,12 +30,12 @@ const ListViewScreen = ({ navigation, route }) => {
     const editedElement = useRef<ItemInCategoryType | null>(null)
 
     const handleRemove = useCallback(() => {
-        const dataWithoutRemovedElement = data.filter((categoryItem) => {
+        const dataWithoutRemovedElement = data.map((categoryItem) => {
             if (categoryItem.categoryId === categoryId) {
                 return {
                     ...categoryItem,
                     details: {
-                        ...categoryItem.details.items,
+                        ...categoryItem.details,
                         items: categoryItem.details.items.filter(
                             (item) => item.id !== editedElement.current.id
                         ),

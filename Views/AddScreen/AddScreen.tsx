@@ -45,7 +45,7 @@ const AddScreen = ({ route, navigation }) => {
             updateData,
             textFieldInput,
             categoryInput: selectedCategory,
-            categoryId: category.categoryId,
+            categoryId: category?.categoryId,
             data,
             noteToBeEdited,
             shouldDisplayCategorySelect,
