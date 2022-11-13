@@ -39,7 +39,7 @@ export const updateAsyncLocalStorageData = async ({
             const filteredArray = await getDataAfterAddingNoteOrCategory({
                 noteValue: textFieldInput,
                 categoryId: shouldDisplayCategorySelect
-                    ? categoryInput.categoryId
+                    ? categoryInput?.categoryId
                     : categoryId,
                 existingData: data,
             })

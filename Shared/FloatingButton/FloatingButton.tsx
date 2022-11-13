@@ -31,7 +31,7 @@ const FloatingButton = ({
                     {
                         text: ACTION_PHRASES[ACTIONS.ADD_NOTE],
                         icon: (
-                            <AntDesign name="addfile" size={24} color="white" />
+                            <AntDesign name="addfile" size={16} color="white" />
                         ),
                         name: ACTIONS.ADD_NOTE,
                     },
@@ -40,7 +40,7 @@ const FloatingButton = ({
                         icon: (
                             <AntDesign
                                 name="addfolder"
-                                size={24}
+                                size={16}
                                 color="white"
                             />
                         ),

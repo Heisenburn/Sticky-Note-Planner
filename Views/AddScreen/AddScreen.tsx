@@ -20,7 +20,7 @@ const AddScreen = ({ route, navigation }: AddScreenProps) => {
     } = passedPropsFromPreviousScreen
 
     const [textFieldInput, setTextFieldInput] = useState(
-        noteToBeEdited.note || ''
+        noteToBeEdited?.note || ''
     )
     const [selectedCategory, setSelectedCategory] =
         useState<CategoryWithNotesType | null>(null)
@@ -126,7 +126,7 @@ const AddScreen = ({ route, navigation }: AddScreenProps) => {
                         <CategorySelect
                             setSelectedCategory={setSelectedCategory}
                             categoryInput={selectedCategory}
-                            categoryId={category.categoryId}
+                            categoryId={category?.categoryId}
                             data={data}
                         />
                     </>
