@@ -4,12 +4,24 @@ import { View } from 'react-native'
 import React, { useRef } from 'react'
 import { ACTION_PHRASES, ACTIONS, FLOATING_BUTTON_HEIGHT } from '../constants'
 import { AntDesign } from '@expo/vector-icons'
+import { NativeStackNavigationProp } from '@react-navigation/native-stack'
+import { StackParamList } from '../../types/types'
+
+interface Props {
+    navigation: NativeStackNavigationProp<
+        StackParamList,
+        'ListViewScreen' | 'HomeScreen',
+        undefined
+    >
+    categoryId?: string
+    categoryTitle?: string
+}
 
 const FloatingButton = ({
     navigation,
     categoryId = null,
     categoryTitle = null,
-}) => {
+}: Props) => {
     const floatingButtonRef = useRef(null)
 
     return (

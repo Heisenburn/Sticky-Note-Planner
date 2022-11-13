@@ -115,12 +115,6 @@ export const CustomSortableList = ({
             keyExtractor={keyExtractor}
             onOrderChange={onOrderChange}
             scale={1.12}
-            enableHaptic={true}
-            style={
-                {
-                    // maxHeight: Dimensions.get('window').height - 300,
-                }
-            }
         />
     )
 }

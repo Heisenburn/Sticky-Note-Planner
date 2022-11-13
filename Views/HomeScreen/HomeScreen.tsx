@@ -5,6 +5,7 @@ import styles from './HomeScreen.styles'
 import { useContext } from 'react'
 import AsyncStorage from '@react-native-async-storage/async-storage'
 import { CategoriesWithNotesContext } from '../../Context/CategoriesWithNotesContext'
+import { HomeScreenProps } from '../../types/types'
 
 const clearAll = async () => {
     try {
@@ -16,7 +17,7 @@ const clearAll = async () => {
     console.log('Done.')
 }
 
-export default function HomeScreen({ navigation }) {
+export default function HomeScreen({ navigation }: HomeScreenProps) {
     const { getData } = useContext(CategoriesWithNotesContext)
     const data = getData()
 

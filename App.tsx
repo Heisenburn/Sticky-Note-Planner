@@ -7,23 +7,16 @@ import { CategoriesWithNotesContextProvider } from './Context/CategoriesWithNote
 import { SafeAreaView } from 'react-native'
 import SettingsScreen from './Views/SettingsScreen/SettingsScreen'
 import { loadDemoConfigurations } from './configuration'
-import * as Font from 'expo-font'
 import * as SplashScreen from 'expo-splash-screen'
 import FontAwesome from '@expo/vector-icons/FontAwesome'
 import React, { useEffect, useState } from 'react'
-import { MaterialIcons } from '@expo/vector-icons'
-import { PREDEFINED_CATEGORIES_KEY_SUFFIX } from './Shared/constants'
-
-const cacheFonts = (
-    fonts: { [x: string]: any }[] | (string | Record<string, Font.FontSource>)[]
-) => {
-    return fonts.map((font: string | Record<string, Font.FontSource>) =>
-        Font.loadAsync(font)
-    )
-}
+import { cacheFonts } from './Shared/helpers'
+import type { StackParamList } from './types/types'
+import { SettingForCategory } from './Views/ListViewScreen/Components/SettingForCategory'
 
 loadDemoConfigurations()
-const Stack = createNativeStackNavigator()
+
+const Stack = createNativeStackNavigator<StackParamList>()
 
 export default function App() {
     const [appIsReady, setAppIsReady] = useState(false)
@@ -80,7 +73,7 @@ export default function App() {
                             options={({ route, navigation }) => {
                                 const { passedPropsFromPreviousScreen } =
                                     route.params
-                                const { categoryTitle, categoryId } =
+                                const { categoryTitle } =
                                     passedPropsFromPreviousScreen
 
                                 return {
@@ -88,36 +81,12 @@ export default function App() {
                                     // headerSearchBarOptions: {
                                     //     placeholder: 'Wpisz treść notatki',
                                     // },
-                                    headerRight: () => {
-                                        if (
-                                            categoryId.includes(
-                                                PREDEFINED_CATEGORIES_KEY_SUFFIX
-                                            )
-                                        ) {
-                                            return null
-                                        }
-                                        return (
-                                            <MaterialIcons
-                                                name="settings"
-                                                size={24}
-                                                color="black"
-                                                onPress={() => {
-                                                    navigation.navigate(
-                                                        'SettingsScreen',
-                                                        {
-                                                            passedPropsFromPreviousScreen:
-                                                                {
-                                                                    category: {
-                                                                        categoryTitle,
-                                                                        categoryId,
-                                                                    },
-                                                                },
-                                                        }
-                                                    )
-                                                }}
-                                            />
-                                        )
-                                    },
+                                    headerRight: () => (
+                                        <SettingForCategory
+                                            route={route}
+                                            navigation={navigation}
+                                        />
+                                    ),
                                 }
                             }}
                         />

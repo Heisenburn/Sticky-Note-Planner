@@ -5,10 +5,10 @@ import { ActionSheet, View } from 'react-native-ui-lib'
 import { ACTIONS } from '../../Shared/constants'
 import { CustomSortableList } from './Components/CustomSortableList'
 import { CategoriesWithNotesContext } from '../../Context/CategoriesWithNotesContext'
-import { ItemInCategoryType } from '../../types/types'
+import { ItemInCategoryType, ListViewScreenProps } from '../../types/types'
 import { FinishedNotesList } from './Components/FinishedNotesList'
 
-const ListViewScreen = ({ navigation, route }) => {
+const ListViewScreen = ({ navigation, route }: ListViewScreenProps) => {
     const { getData, updateData } = useContext(CategoriesWithNotesContext)
     const data = getData()
 

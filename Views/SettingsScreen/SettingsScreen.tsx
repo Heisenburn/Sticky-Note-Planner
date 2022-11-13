@@ -2,8 +2,9 @@ import { Alert, Button, Pressable, Text, TextInput, View } from 'react-native'
 import React, { useContext, useState } from 'react'
 import styles from '../AddScreen/AddScreen.styles'
 import { CategoriesWithNotesContext } from '../../Context/CategoriesWithNotesContext'
+import { SettingsScreenProps } from '../../types/types'
 
-const SettingsScreen = ({ route, navigation }) => {
+const SettingsScreen = ({ route, navigation }: SettingsScreenProps) => {
     const { passedPropsFromPreviousScreen } = route.params
     const { category } = passedPropsFromPreviousScreen
     const { categoryId, categoryTitle } = category

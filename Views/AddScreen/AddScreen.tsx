@@ -7,13 +7,14 @@ import CategorySelect from './Components/CategorySelect'
 import { getHeading, updateAsyncLocalStorageData } from './helpers/helpers'
 import { ExpandableSection, Text } from 'react-native-ui-lib'
 import { Entypo } from '@expo/vector-icons'
+import { AddScreenProps } from '../../types/types'
 
-const AddScreen = ({ route, navigation }) => {
+const AddScreen = ({ route, navigation }: AddScreenProps) => {
     const { passedPropsFromPreviousScreen } = route.params
     const {
         category,
         noteToBeEdited,
-        action = null,
+        action,
         triggeredFromHomeScreen = false,
     } = passedPropsFromPreviousScreen
 
