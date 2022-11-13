@@ -1,14 +1,22 @@
 import { Pressable, Text } from 'react-native'
-import { CategoryWithNotesType } from '../../../../types/types'
+import type {
+    CategoryWithNotesType,
+    StackParamList,
+} from '../../../../types/types'
 import styles from '../../HomeScreen.styles'
 import { View } from 'react-native-ui-lib'
+import { NativeStackNavigationProp } from '@react-navigation/native-stack'
 
 const CategoryItem = ({
     item,
     navigation,
 }: {
     item: CategoryWithNotesType
-    navigation: any
+    navigation: NativeStackNavigationProp<
+        StackParamList,
+        'HomeScreen',
+        undefined
+    >
 }) => {
     const { categoryTitle, items } = item.details
 

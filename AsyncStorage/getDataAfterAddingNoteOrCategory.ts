@@ -19,7 +19,7 @@ export const getDataAfterAddingNoteOrCategory = async ({
     existingData,
 }: {
     noteValue: null | string
-    categoryId: null | string
+    categoryId: string
     existingData: CategoryWithNotesType[]
 }): Promise<CategoryWithNotesType[]> => {
     //1. saving note to category

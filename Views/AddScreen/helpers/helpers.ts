@@ -5,6 +5,17 @@ import type {
 } from '../../../types/types'
 import { ACTION_PHRASES, ACTIONS } from '../../../Shared/constants'
 
+interface Props {
+    action: keyof typeof ACTIONS
+    updateData: (newState: CategoryWithNotesType[]) => void
+    textFieldInput: string
+    categoryInput: CategoryWithNotesType
+    categoryId: string
+    data: CategoryWithNotesType[]
+    noteToBeEdited: ItemInCategoryType
+    shouldDisplayCategorySelect: boolean
+}
+
 export const updateAsyncLocalStorageData = async ({
     action,
     updateData,
@@ -14,16 +25,7 @@ export const updateAsyncLocalStorageData = async ({
     data,
     noteToBeEdited,
     shouldDisplayCategorySelect,
-}: {
-    action: keyof typeof ACTIONS
-    updateData: (newState: CategoryWithNotesType[]) => void
-    textFieldInput: string
-    categoryInput: CategoryWithNotesType
-    categoryId: string
-    data: CategoryWithNotesType[]
-    noteToBeEdited: ItemInCategoryType
-    shouldDisplayCategorySelect: boolean
-}) => {
+}: Props) => {
     switch (action) {
         case ACTIONS.ADD_CATEGORY: {
             const filteredArray = await getDataAfterAddingNoteOrCategory({
@@ -37,7 +39,7 @@ export const updateAsyncLocalStorageData = async ({
             const filteredArray = await getDataAfterAddingNoteOrCategory({
                 noteValue: textFieldInput,
                 categoryId: shouldDisplayCategorySelect
-                    ? categoryInput
+                    ? categoryInput.categoryId
                     : categoryId,
                 existingData: data,
             })
@@ -116,7 +118,10 @@ export const updateAsyncLocalStorageData = async ({
     }
 }
 
-export const getHeading = (action: any, categoryTitle: string) => {
+export const getHeading = (
+    action: keyof typeof ACTIONS,
+    categoryTitle: string
+) => {
     switch (action) {
         case ACTIONS.EDIT_NOTE:
             return ACTION_PHRASES[ACTIONS.EDIT_NOTE]

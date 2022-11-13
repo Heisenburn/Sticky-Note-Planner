@@ -15,7 +15,6 @@ import type { StackParamList } from './types/types'
 import { SettingForCategory } from './Views/ListViewScreen/Components/SettingForCategory'
 
 loadDemoConfigurations()
-
 const Stack = createNativeStackNavigator<StackParamList>()
 
 export default function App() {
@@ -36,6 +35,7 @@ export default function App() {
             }
         }
 
+        // eslint-disable-next-line @typescript-eslint/no-extra-semi
         ;(async () => {
             await loadResourcesAndDataAsync()
         })()

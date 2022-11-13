@@ -2,14 +2,21 @@ import { FlatList, Pressable, Text } from 'react-native'
 import { CATEGORY_KEY_PREFIX } from '../../../Shared/constants'
 import { CategoryWithNotesType } from '../../../types/types'
 
+interface Props {
+    setSelectedCategory: React.Dispatch<
+        React.SetStateAction<CategoryWithNotesType>
+    >
+    categoryInput: CategoryWithNotesType | null
+    categoryId: string
+    data: CategoryWithNotesType[]
+}
+
 const CategorySelect = ({
-    setCategoryInput,
+    setSelectedCategory,
     categoryInput,
     categoryId: categoryOfItem,
     data,
-}: {
-    data: CategoryWithNotesType[]
-}) => {
+}: Props) => {
     const keysWithCategoryKeyword = data.filter((categoryItem) => {
         if (
             categoryItem.categoryId !== categoryOfItem &&
@@ -22,8 +29,8 @@ const CategorySelect = ({
     const renderCategoryButton = (item: CategoryWithNotesType) => {
         return (
             <Pressable
-                key={item}
-                onPress={() => setCategoryInput(item)}
+                key={item.categoryId}
+                onPress={() => setSelectedCategory(item)}
                 style={{
                     backgroundColor: item === categoryInput ? 'black' : 'blue',
                     borderRadius: 20,

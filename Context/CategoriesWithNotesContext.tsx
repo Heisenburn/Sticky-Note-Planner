@@ -14,7 +14,11 @@ export const CategoriesWithNotesContext =
         getData: (): CategoryWithNotesType[] => undefined,
     })
 
-export const CategoriesWithNotesContextProvider = ({ children }) => {
+export const CategoriesWithNotesContextProvider = ({
+    children,
+}: {
+    children: JSX.Element
+}) => {
     const [categoriesWithNotes, setCategoriesWithNotes] = useState<
         CategoryWithNotesType[] | null
     >(null)
@@ -27,6 +31,7 @@ export const CategoriesWithNotesContextProvider = ({ children }) => {
 
     useEffect(() => {
         if (categoriesWithNotes?.length > 0) {
+            // eslint-disable-next-line @typescript-eslint/no-extra-semi
             ;(async () => {
                 //first remove old data
                 const arrayOfCategories = await getKeysForExistingCategories()
@@ -35,10 +40,12 @@ export const CategoriesWithNotesContextProvider = ({ children }) => {
                 // then save new data
                 if (categoriesWithNotes.length > 0) {
                     try {
-                        const mappedData = categoriesWithNotes.map((item) => {
-                            return [item.categoryId, JSON.stringify(item)]
-                        })
-                        await AsyncStorage.multiSet(mappedData)
+                        await AsyncStorage.multiSet(
+                            categoriesWithNotes.map((item) => [
+                                item.categoryId,
+                                JSON.stringify(item),
+                            ])
+                        )
                     } catch (error) {
                         Alert.alert(`error: ${error}`)
                         throw error
@@ -51,6 +58,7 @@ export const CategoriesWithNotesContextProvider = ({ children }) => {
     //get initial data
     useEffect(() => {
         //IIFE format to avoid adding async to useEffect
+        // eslint-disable-next-line @typescript-eslint/no-extra-semi
         ;(async () => {
             //add predefined categories
             const keysWithCategoryKeyword = await AsyncStorage.getAllKeys()

@@ -7,7 +7,8 @@ import CategorySelect from './Components/CategorySelect'
 import { getHeading, updateAsyncLocalStorageData } from './helpers/helpers'
 import { ExpandableSection, Text } from 'react-native-ui-lib'
 import { Entypo } from '@expo/vector-icons'
-import { AddScreenProps } from '../../types/types'
+import type { AddScreenProps } from '../../types/types'
+import { CategoryWithNotesType } from '../../types/types'
 
 const AddScreen = ({ route, navigation }: AddScreenProps) => {
     const { passedPropsFromPreviousScreen } = route.params
@@ -19,9 +20,12 @@ const AddScreen = ({ route, navigation }: AddScreenProps) => {
     } = passedPropsFromPreviousScreen
 
     const [textFieldInput, setTextFieldInput] = useState(
-        noteToBeEdited?.note || ''
+        noteToBeEdited.note || ''
     )
-    const [selectedCategory, setSelectedCategory] = useState(null)
+    const [selectedCategory, setSelectedCategory] =
+        useState<CategoryWithNotesType | null>(null)
+    const [isCategorySelectionVisible, setIsCategorySelectionVisible] =
+        useState(false)
 
     const { getData, updateData } = useContext(CategoriesWithNotesContext)
     const data = getData()
@@ -29,9 +33,6 @@ const AddScreen = ({ route, navigation }: AddScreenProps) => {
     const shouldDisplayCategorySelect =
         action == ACTIONS.EDIT_NOTE ||
         (triggeredFromHomeScreen && action === ACTIONS.ADD_NOTE)
-
-    const [isCategorySelectionVisible, setIsCategorySelectionVisible] =
-        useState(false)
 
     const handleSubmit = async () => {
         const isNoteEmpty = !textFieldInput.trim().length
@@ -123,9 +124,9 @@ const AddScreen = ({ route, navigation }: AddScreenProps) => {
                         ) : null}
 
                         <CategorySelect
-                            setCategoryInput={setSelectedCategory}
+                            setSelectedCategory={setSelectedCategory}
                             categoryInput={selectedCategory}
-                            categoryId={category?.categoryId}
+                            categoryId={category.categoryId}
                             data={data}
                         />
                     </>

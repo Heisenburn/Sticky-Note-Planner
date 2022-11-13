@@ -89,7 +89,6 @@ const SettingsScreen = ({ route, navigation }: SettingsScreenProps) => {
                 }}
             >
                 <View
-                    testID={'basicButtons'}
                     style={{
                         height: '50%',
                     }}
@@ -103,7 +102,6 @@ const SettingsScreen = ({ route, navigation }: SettingsScreenProps) => {
                     </View>
                 </View>
                 <View
-                    testID={'dangerZone'}
                     style={{
                         height: '50%',
                     }}

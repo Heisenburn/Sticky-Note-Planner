@@ -1,9 +1,17 @@
 import CategoryItem from '../CategoryItem/CategoryItem'
 import { FlatList } from 'react-native'
-import type { CategoryWithNotesType } from '../../../../types/types'
+import type {
+    CategoryWithNotesType,
+    StackParamList,
+} from '../../../../types/types'
+import { NativeStackNavigationProp } from '@react-navigation/native-stack'
 
 interface Props {
-    navigation: any
+    navigation: NativeStackNavigationProp<
+        StackParamList,
+        'HomeScreen',
+        undefined
+    >
     categories: CategoryWithNotesType[]
 }
 
