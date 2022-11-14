@@ -1,15 +1,15 @@
 import {
     Assets,
     Colors,
-    Typography,
-    Spacings,
     Incubator,
+    Spacings,
+    Typography,
 } from 'react-native-ui-lib'
 
 export const loadDemoConfigurations = () => {
     Assets.loadAssetsGroup('icons.demo', {
-        chevronRight: require('./assets/icons/chevronRight.png'),
-        drag: require('./assets/icons/drag.png'),
+        chevronRight: require('./src/assets/icons/chevronRight.png'),
+        drag: require('./src/assets/icons/drag.png'),
     })
 
     Typography.loadTypographies({

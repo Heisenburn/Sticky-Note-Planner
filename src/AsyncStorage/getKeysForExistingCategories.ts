@@ -7,9 +7,8 @@ import { Alert } from 'react-native'
 
 export const getKeysForExistingCategories = async (): Promise<string[]> => {
     //get all available keys in AsyncStorage
-    let availableKeys = []
     try {
-        availableKeys = await AsyncStorage.getAllKeys()
+        const availableKeys = await AsyncStorage.getAllKeys()
         //get only keys with category prefix
         return availableKeys.filter((item) => {
             if (
