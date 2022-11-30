@@ -120,7 +120,7 @@ export const updateAsyncLocalStorageData = async ({
 
 export const getHeading = (
     action: keyof typeof ACTIONS,
-    categoryTitle: string
+    categoryTitle?: string
 ) => {
     switch (action) {
         case ACTIONS.EDIT_NOTE:
